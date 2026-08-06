@@ -4,6 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NeuralFin 金融 NBTI —— 投资人格测试</title>
+<meta name="description" content="48 道题，5 分钟，测出你的投资人格。金融 NBTI —— 为刷屏一代而生的投资人格测试。">
+<meta property="og:site_name" content="NeuralFin">
+<meta property="og:title" content="金融 NBTI —— 你是哪种投资人格？">
+<meta property="og:description" content="48 道题，5 分钟，测出你的投资人格。">
+<meta property="og:image" content="https://www.neuralfin.ai/NeuralFin.png">
+<meta property="og:url" content="https://www.neuralfin.ai/index.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.neuralfin.ai/NeuralFin.png">
+<link rel="canonical" href="https://www.neuralfin.ai/index.html">
+<link rel="alternate" hreflang="zh" href="https://www.neuralfin.ai/index.html">
+<link rel="alternate" hreflang="en" href="https://www.neuralfin.ai/index-en.html">
+<link rel="icon" type="image/png" href="/NeuralFin.png">
 <style>
   :root {
     /* App 设计规范(给定) */
@@ -14,7 +29,7 @@
     --accent-dim: rgba(0,217,160,0.15);
     --text-primary: #FFFFFF;
     --text-secondary: #9B9B9F;
-    --text-disabled: #6E6E73;
+    --text-disabled: #8A8A8F;
     --border-subtle: #2C2C2E;
     /* 派生变量:同色系明暗/透明变体(等价映射用) */
     --accent-deep: #00B88A;
@@ -90,11 +105,8 @@
   .sec-sub { color: var(--text-secondary); font-size: 13.5px; text-align: center; margin-bottom: 26px; line-height: 1.9; }
   .dim-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .dim-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 18px 14px; text-align: center; }
-  .dim-letter { font-size: 40px; font-weight: 900; color: var(--accent-primary); letter-spacing: 2px; }
-  .dim-name { display: block; color: var(--text-primary); font-weight: 700; font-size: 16px; margin: 6px 0 10px; }
-  .dim-simple { color: var(--text-primary); font-weight: 700; font-size: 15px; letter-spacing: 1px; padding: 22px 10px; }
-  .dim-poles { color: var(--text-secondary); font-size: 12.5px; line-height: 2; }
-  .dim-poles b { color: var(--text-primary); }
+      .dim-simple { color: var(--text-primary); font-weight: 700; font-size: 15px; letter-spacing: 1px; padding: 22px 10px; }
+    .dim-poles b { color: var(--text-primary); }
   /* ---- 四种气质族群板块 ---- */
   .clan-showcase-section { padding: 64px 16px; max-width: 900px; margin: 0 auto; text-align: center; }
   .clan-section-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
@@ -177,8 +189,7 @@
   .prev-question-btn:hover, .back-to-home-inline-btn:hover {
     background: var(--bg-card-alt); border-color: var(--accent-primary);
   }
-  .prev-question-btn:disabled { opacity: .4; cursor: not-allowed; }
-  .home-link { display: block; width: 100%; margin-top: 12px; padding: 16px;
+    .home-link { display: block; width: 100%; margin-top: 12px; padding: 16px;
     background: transparent; border: 1px solid var(--border-subtle); border-radius: 14px;
     color: var(--text-secondary); font-size: 18px; font-weight: 600; cursor: pointer;
     transition: background .2s, border-color .2s; }
@@ -295,19 +306,17 @@
   .match-ring { position: relative; width: 84px; height: 84px; margin: 0 auto; }
   .match-ring svg { width: 84px; height: 84px; display: block; }
   .mr-track { fill: none; stroke: var(--border-subtle); stroke-width: 7; }
-  .mr-fill { fill: none; stroke: var(--accent-primary); stroke-width: 7; stroke-linecap: round; }
+  .mr-fill { fill: none; stroke: var(--accent-primary); stroke-width: 7; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; }
   .mr-num { position: absolute; left: 0; right: 0; top: 20px; text-align: center;
     font-size: 22px; font-weight: 900; color: var(--text-primary); }
   .mr-label { position: absolute; left: 0; right: 0; bottom: 16px; text-align: center;
     font-size: 12px; letter-spacing: 1px; color: var(--text-secondary); }
   @keyframes charTextIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
-  /* ---- 分享卡预览 ---- */
 
 
   /* ---- 分享卡 DOM 模板(离屏,html2canvas 导出 750x1200) ---- */
-  .gold { color: var(--brand-gold); font-weight: 800; }
-  .share-card-template { position: fixed; left: -9999px; top: 0; width: 750px; min-height: 1250px;
+    .share-card-template { position: fixed; left: -9999px; top: 0; width: 750px; min-height: 1250px;
     display: flex; flex-direction: column; padding: 16px 44px 0; box-sizing: border-box;
     background: var(--bg-primary);
     font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
@@ -468,7 +477,7 @@ var _hmt = _hmt || [];
   var preferredLang = localStorage.getItem('nbti_preferred_lang');
   var isFirstVisit = !localStorage.getItem('nbti_visited');
   if (preferredLang === 'en') {
-    window.location.href = '/index-en.html';
+    window.location.href = '/index-en.html' + location.search;
   } else if (isFirstVisit) {
     var browserLang = navigator.language || navigator.userLanguage;
     if (browserLang && !browserLang.toLowerCase().startsWith('zh')) {
@@ -505,7 +514,6 @@ var _hmt = _hmt || [];
       <div class="meta">48 题 · 10 分钟 · 16 种投资人格</div>
       <button class="btn" onclick="startQuiz()">开始测试</button>
       <div class="points">无需注册 · 纯属娱乐</div>
-      <p class="note">本测试仅供娱乐，别拿它相亲。</p>
     </div>
 
     <div class="home-section reveal" id="sec-dims">
@@ -4695,8 +4703,9 @@ function score() {
 /* ============ 彩蛋检测 ============ */
 function eggDetect() {
   var sel = userAnswers.map(function(a) { return a ? a.selectedOptionIndex : null; });
+  if (!sel.length) return null; /* 空答案防御 */
   var first = sel[0];
-  if (sel.every(function(a) { return a === first; })) return 'allSameAnswer';
+  if (first === 4 && sel.every(function(a) { return a === first; })) return 'allSameAnswer'; /* 仅全选中性选项(第 5 项)触发彩蛋,认真作答不受影响 */
   if (sel.every(function(a, i) { return a === (i % 4); })) return 'abcdCycle';
   return null;
 }
@@ -4758,7 +4767,7 @@ function renderResult(persona, s) {
       '<div class="char-glow"></div>' +
       '<img class="result-character-img" loading="eager" alt="' + persona.name + '" ' +
         'src="/' + imgKey + '.webp" ' +
-        'onerror="this.onerror=null;console.error(\'[img] 加载失败:\',this.src);this.src=\'' + '/' + imgKey + '.png\';">' +
+        'onerror="this.onerror=null;console.error(\'[img] load failed:\',this.src);this.src=\'' + '/' + imgKey + '.png\';">' +
     '</div>' : '';
   document.getElementById('result-body').innerHTML =
     '<div class="result-layout">' +
@@ -4822,14 +4831,14 @@ function unlockDeepDive() {
   if (locked) locked.classList.add('unlocked'); /* 修复:展开后容器自适应高度,防二维码被 overflow 裁切 */
   ov.innerHTML = '<div class="qr-panel">' +
     '<img class="deep-dive-qrcode" src="' + QR_APP_IMG + '" alt="NeuralFin 二维码">' +
-    '<p>扫码下载 NeuralFin App<br>解锁完整深度解读</p>' +
+    '<p>截图保存后长按识别二维码<br>下载 NeuralFin App，解锁完整深度解读</p>' +
     '<span class="collapse" onclick="collapseDeepDive()">收起</span></div>';
   var qimg = ov.querySelector('.deep-dive-qrcode');
   if (qimg) {
     /* 二维码:加载完成前透明,防加载中间态误判为显示不全;含调试日志 */
     qimg.style.opacity = '0';
-    qimg.onload = function() { this.style.opacity = '1'; console.log('[qr] 加载完成', this.naturalWidth, this.naturalHeight); };
-    qimg.onerror = function() { console.log('[qr] 加载失败'); };
+    qimg.onload = function() { this.style.opacity = '1'; console.log('[qr] loaded', this.naturalWidth, this.naturalHeight); };
+    qimg.onerror = function() { console.log('[qr] load failed'); };
     qimg.addEventListener('click', function() {
       if (window.gtag) { gtag('event', 'deep_dive_qrcode_click', { 'test_version': '48题版', 'persona_result': lastPersonaCode }); } /* GA4:点击二维码 */
     });
@@ -4918,7 +4927,7 @@ function generateShareCard(persona, match) {
   char.style.display = imgKey ? '' : 'none';
   if (imgKey) {
     char.src = '/' + imgKey + '.webp';
-    char.onerror = function() { this.onerror = null; console.error('[shareCard] 角色图加载失败:', this.src); this.src = '/' + imgKey + '.png'; };
+    char.onerror = function() { this.onerror = null; console.error('[shareCard] char image load failed:', this.src); this.src = '/' + imgKey + '.png'; };
   }
   var wordEl = tpl.querySelector('.share-card-word');
   wordEl.textContent = persona.word;
@@ -4942,7 +4951,7 @@ function generateShareCard(persona, match) {
   }).catch(function(e) {
     shareCardUrl = null;
     /* 详细错误日志(开发排障用) */
-    console.error('[shareCard] 生成失败:', e);
+    console.error('[shareCard] generation failed:', e);
     if (window.gtag) { gtag('event', 'share_card_generate_failed', { 'test_version': '48题版' }); } /* GA4:生成失败 */
     return false;
   });
@@ -5008,14 +5017,14 @@ function downloadCard() {
   if (!shareCardUrl) { toast('分享卡生成中，稍等片刻…'); return; }
   if (isWechat) { openSharePreview(); return; } /* 微信:download 不稳定,引导长按保存 */
   var a = document.createElement('a');
-  a.download = 'neuralfin-mbti.png';
+  a.download = 'neuralfin-nbti.png';
   a.href = shareCardUrl;
   a.click();
   toast('图片已保存，可在相册中找到，打开微信发送给好友吧');
 }
 
 /* ============ 进度保存与续答(确认弹层) ============ */
-var PROGRESS_KEY = 'nbti_progress_' + QUESTIONS.questions.length; /* 16/48 版独立 key */
+var PROGRESS_KEY = 'nbti_progress_' + QUESTIONS.questions.length + '_' + (document.documentElement.lang || 'zh').split('-')[0]; /* 16/48 版 + 语言独立 key */
 function showConfirm(opts) {
   document.getElementById('confirmTitle').textContent = opts.title;
   document.getElementById('confirmDesc').textContent = opts.desc;
@@ -5072,14 +5081,11 @@ function toast(msg) {
 
 /* ============ 全局错误捕获（排障用） ============ */
 window.onerror = function(msg, src, line, col, err) {
-  var t = document.getElementById('toast');
-  if (t) {
-    t.textContent = 'ERROR: ' + msg + ' @' + (line || '?') + ':' + (col || '?');
-    t.classList.add('show');
-  }
+  /* 仅记录到控制台,不向用户界面暴露原始错误 */
+  if (window.console && window.console.error) window.console.error('[error]', msg, '@' + (line || '?') + ':' + (col || '?'));
   var nb = document.getElementById('result-body');
   if (nb && !nb.innerHTML) {
-    nb.innerHTML = '<div class="card"><p style="color:#f87171;">SCRIPT ERROR: ' + msg + ' @' + (line || '?') + ':' + (col || '?') + '<br>Please send this text to the developer.</p></div>';
+    nb.innerHTML = '<div class="card"><p style="text-align:center;line-height:2;">出错了，请刷新页面重试。</p></div>';
   }
 };
 
