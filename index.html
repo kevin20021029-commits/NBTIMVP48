@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-Hans-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,17 +8,22 @@
 <meta property="og:site_name" content="NeuralFin">
 <meta property="og:title" content="金融 NBTI —— 你是哪种投资人格？">
 <meta property="og:description" content="48 道题，5 分钟，测出你的投资人格。">
-<meta property="og:image" content="https://www.neuralfin.ai/NeuralFin.png">
-<meta property="og:url" content="https://www.neuralfin.ai/index.html">
+<meta property="og:image" content="https://nbtimvp-48.vercel.app/NeuralFin.png">
+<meta property="og:url" content="https://nbtimvp-48.vercel.app/index.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:locale:alternate" content="zh_HK">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.neuralfin.ai/NeuralFin.png">
-<link rel="canonical" href="https://www.neuralfin.ai/index.html">
-<link rel="alternate" hreflang="zh" href="https://www.neuralfin.ai/index.html">
-<link rel="alternate" hreflang="en" href="https://www.neuralfin.ai/index-en.html">
-<link rel="icon" type="image/png" href="/NeuralFin.png">
+<meta name="twitter:image" content="https://nbtimvp-48.vercel.app/NeuralFin.png">
+<!-- hreflang 三版互指;noindex 期間(index-hk.html)被搜尋引擎忽略屬預期狀態,勿改 -->
+<link rel="canonical" href="https://nbtimvp-48.vercel.app/index.html">
+<link rel="alternate" hreflang="zh-Hans"    href="https://nbtimvp-48.vercel.app/index.html">
+<link rel="alternate" hreflang="zh-Hant"    href="https://nbtimvp-48.vercel.app/index-hk.html">
+<link rel="alternate" hreflang="zh-Hant-HK" href="https://nbtimvp-48.vercel.app/index-hk.html">
+<link rel="alternate" hreflang="en"         href="https://nbtimvp-48.vercel.app/index-en.html">
+<link rel="alternate" hreflang="x-default"  href="https://nbtimvp-48.vercel.app/index-en.html">
+<link rel="icon" type="image/png" href="NeuralFin.png">
 <style>
   :root {
     /* App 设计规范(给定) */
@@ -75,10 +80,20 @@
 
   /* ---- 首页（滑动式） ---- */
   .header-right { display: flex; align-items: center; gap: 12px; }
-  .lang-switcher { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-  .lang-option { color: var(--text-secondary); text-decoration: none; cursor: pointer; }
-  .lang-option.active { color: var(--accent-primary); font-weight: 700; }
-  .lang-divider { color: var(--border-subtle); }
+        .lang-switcher { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+      .lang-option {
+        color: var(--text-secondary); text-decoration: none; cursor: pointer;
+        padding: 4px 10px; border-radius: 999px; border: 1px solid transparent;
+        transition: background .2s, color .2s;
+      }
+      .lang-option:hover { color: var(--text-primary); border-color: var(--border-subtle); }
+      .lang-option:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
+      .lang-option[aria-current="page"] {
+        background: var(--accent-primary); color: var(--bg-primary); font-weight: 800;
+        border-color: var(--accent-primary);
+      }
+      .lang-option[aria-current="page"]:hover { color: var(--bg-primary); }
+      .lang-divider { color: var(--border-subtle); }
   .home-hero { text-align: center; padding: 30px 0 40px; }
   .eyebrow { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 16px;
     border: 1px solid var(--accent-25); border-radius: 999px; padding: 8px 14px;
@@ -472,21 +487,246 @@ var _hmt = _hmt || [];
   gtag('config', 'G-8TGVEPYX0E');
 </script>
 <script>
+/* ============================================================
+ * NeuralFin NBTI 三語路由與狀態(v1)
+ * 三版共用同一段,靠 document.documentElement.lang 判別當前語言
+ * 16/48 題版零差異:題數一律運行時取自 QUESTIONS.questions.length
+ * ============================================================ */
+var ENABLE_AUTO_REDIRECT = true; /* 回滾開關:false = 停用瀏覽器語言自動分流,手動切換/偏好/參數/進度照常 */
+
+var LANG_MAP = { zh: 'index.html', hk: 'index-hk.html', en: 'index-en.html' }; /* cleanUrls 開啟時需改為無擴展名形式(index-hk) */
+var LANG_HREF = { zh: 'zh-Hans', hk: 'zh-Hant-HK', en: 'en' };
+var CURRENT_LANG = (function() {
+  var l = document.documentElement.lang || '';
+  if (l.toLowerCase().indexOf('en') === 0) return 'en';
+  if (l.indexOf('Hant') > -1) return 'hk';
+  return 'zh';
+})();
+
+/* 彩蛋映射:hash / 彩蛋key / 渲染word 三者合一,finish() 與降級路徑共用 */
+var EGG_MAP = {
+  'egg-atm': { key: 'allSameAnswer', word: 'ATM', hash: 'egg-atm' },
+  'egg-ocd': { key: 'abcdCycle',     word: 'OCD', hash: 'egg-ocd' }
+};
+function eggWordByKey(key) {
+  for (var h in EGG_MAP) { if (EGG_MAP.hasOwnProperty(h) && EGG_MAP[h].key === key) return EGG_MAP[h].word; }
+  return 'OCD'; /* 保持原有 finish() 的 fallback 行為 */
+}
+function eggHashByWord(word) {
+  for (var h in EGG_MAP) { if (EGG_MAP.hasOwnProperty(h) && EGG_MAP[h].word === word) return EGG_MAP[h].hash; }
+  return null;
+}
+
+/* ---------- storage 安全層:各自獨立 try,絕不影響控制流 ---------- */
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+
+/* ---------- 純計算:只返回目標 URL 或 null,不做任何跳轉 ---------- */
+function resolveRedirectTarget() {
+  /* 顯式 ?lang= 覆蓋:寫入偏好並從 URL 抹掉(不混進 KOL 分享鏈接) */
+  var explicit = (location.search.match(/[?&]lang=(zh|hk|en)(?=&|$)/i) || [])[1];
+  if (explicit) {
+    lsSet('nbti_preferred_lang', explicit.toLowerCase());
+    stripLangParam(); /* 抹掉後,下面用的 location.search 已是乾淨版 */
+  }
+  var preferred = lsGet('nbti_preferred_lang');
+
+  if (preferred && LANG_MAP[preferred] && preferred !== CURRENT_LANG) {
+    return LANG_MAP[preferred] + location.search + location.hash; /* 偏好優先(不受回滾開關影響) */
+  }
+  if (preferred === CURRENT_LANG) { lsSet('nbti_visited', '1'); return null; }
+  if (!ENABLE_AUTO_REDIRECT)      { lsSet('nbti_visited', '1'); return null; }
+  if (lsGet('nbti_visited'))      { return null; }          /* truthy 判斷,兼容舊值 'true' */
+  if (ssGet('nbti_redirect_done') === '1') { return null; } /* 每會話只分流一次 */
+
+  var detected = detectLang();
+  lsSet('nbti_visited', '1');             /* 「分流已決」語義;拋錯也不影響下面 */
+  if (detected === CURRENT_LANG) return null;
+  ssSet('nbti_redirect_done', '1');
+  return LANG_MAP[detected] + location.search + location.hash;
+}
+
+/* ---------- 執行層:bot guard 第一行;replace 不在任何 try 內 ---------- */
 (function() {
-  /* 双语站自动跳转:尊重用户已保存的语言偏好;首次访问按浏览器语言分流 */
-  var preferredLang = localStorage.getItem('nbti_preferred_lang');
-  var isFirstVisit = !localStorage.getItem('nbti_visited');
-  if (preferredLang === 'en') {
-    window.location.href = '/index-en.html' + location.search;
-  } else if (isFirstVisit) {
-    var browserLang = navigator.language || navigator.userLanguage;
-    if (browserLang && !browserLang.toLowerCase().startsWith('zh')) {
-      localStorage.setItem('nbti_visited', 'true');
-      window.location.href = '/index-en.html';
+  /* 【BLOCKING-1】爬蟲與社交預覽跳過分流:Googlebot 無持久化 storage 會導致三版索引塌陷;
+   * 社交爬蟲被分流會抓錯 og:image 並長期緩存。
+   * 日後若有服務端能力,應改 302 + Vary: Accept-Language;或改用「頂部建議橫幅」方案。 */
+  var ua = (navigator.userAgent || '').toLowerCase();
+  if (/bot|crawl|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|twitterbot|linkedinbot|embedly|discordbot|pinterest|applebot|quora link preview/i.test(ua)) return;
+  var target = null;
+  try { target = resolveRedirectTarget(); } catch (e) { target = null; }
+  if (target) location.replace(target); /* 本 IIFE 內不存在任何會跳過此行 replace 的 return(全部 return 僅出現在 resolveRedirectTarget 內,與執行層分離) */
+})();
+
+/* 讀 navigator.languages 陣列,逐項判斷;統一正規化 + 前綴匹配(ES5) */
+function detectLang() {
+  var langs = (navigator.languages && navigator.languages.length)
+    ? navigator.languages
+    : [navigator.language || navigator.userLanguage || ''];
+  for (var i = 0; i < langs.length; i++) {
+    var l = String(langs[i] || '').toLowerCase().replace(/_/g, '-');
+    if (l.indexOf('yue') === 0) return 'hk';                          /* 粵語 */
+    if (l.indexOf('zh') !== 0) continue;                              /* 非中文:跳過,看下一項 */
+    if (l === 'zh-hk' || l === 'zh-mo'
+        || l.indexOf('zh-hant-hk') === 0 || l.indexOf('zh-hant-mo') === 0) return 'hk';
+    if (l === 'zh-tw' || l.indexOf('zh-hant') === 0) return 'hk';     /* 台灣暫導繁(集中一處,日後拆台版改這行) */
+    if (l === 'zh-cn' || l === 'zh-sg' || l.indexOf('zh-hans') === 0) return 'zh';
+    if (l === 'zh') return 'zh';
+  }
+  return 'en';
+}
+
+/* ---------- 參數保持 ---------- */
+/* 保留 search 中除 lang 以外的全部參數 + hash;清理殘留 ? / & */
+function buildLangUrl(targetLang) {
+  var target = LANG_MAP[targetLang];
+  if (!target) return location.href;
+  var params = [];
+  var q = (location.search || '').replace(/^\?/, '');
+  if (q) {
+    q.split('&').forEach(function(pair) {
+      if (!/^lang=/i.test(pair)) params.push(pair);
+    });
+  }
+  return target + (params.length ? '?' + params.join('&') : '') + location.hash;
+}
+/* 從 URL 抹掉 ?lang=(消費後調用) */
+function stripLangParam() {
+  try {
+    var params = [];
+    var q = (location.search || '').replace(/^\?/, '');
+    if (q) {
+      q.split('&').forEach(function(pair) { if (!/^lang=/i.test(pair)) params.push(pair); });
+    }
+    history.replaceState(null, '', location.pathname + (params.length ? '?' + params.join('&') : '') + location.hash);
+  } catch (e) { /* file:// 或極舊 WebView 的 replaceState 限制,忽略 */ }
+}
+/* 寫結果頁 hash(replaceState 不觸發 hashchange,避免循環) */
+function setResultHash(hashStr) {
+  try {
+    history.replaceState(null, '', location.pathname + location.search + hashStr);
+  } catch (e) { location.hash = hashStr; }
+}
+
+/* ---------- 切換器 ---------- */
+/* ES5:NodeList.forEach 在舊 WebView/IE11 不存在,統一用索引循環 */
+function eachLangOption(fn) {
+  var list = document.querySelectorAll('.lang-option');
+  for (var i = 0; i < list.length; i++) fn(list[i], i);
+}
+/* 同步三個連結:href(帶參數)/ hreflang / EN 加 lang="en"(讀屏發音)/ 唯一 aria-current。
+ * 可重複調用(DOMContentLoaded / hashchange / 結果頁寫 hash 後)。 */
+function syncLangLinks() {
+  eachLangOption(function(link) {
+    var lang = link.getAttribute('data-lang');
+    link.href = buildLangUrl(lang);
+    link.setAttribute('hreflang', LANG_HREF[lang] || '');
+    if (lang === 'en') link.setAttribute('lang', 'en');
+    if (lang === CURRENT_LANG) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+}
+/* 偏好寫入綁定:只綁一次(DOMContentLoaded 內),syncLangLinks 可重複調用不重複綁定 */
+function initLangSwitcher() {
+  eachLangOption(function(link) {
+    link.addEventListener('click', function() {
+      lsSet('nbti_preferred_lang', this.getAttribute('data-lang'));
+    });
+  });
+}
+
+/* ---------- 進度 key(v1:語言解耦,保留題數維度) ---------- */
+function getQuizLen() {
+  return (typeof QUESTIONS !== 'undefined' && QUESTIONS.questions) ? QUESTIONS.questions.length : 0;
+}
+function getProgressKey() {
+  return 'nbti_progress_v1_' + getQuizLen();   /* 16 版 → nbti_progress_v1_16;48 版 → nbti_progress_v1_48 */
+}
+/* 遷移舊語言後綴 key → v1(冪等:已有新 key 不覆蓋;只遷同題數;遷後刪舊) */
+function migrateProgress() {
+  try {
+    var len = getQuizLen();
+    if (!len) return;
+    var OLD = ['nbti_progress_' + len + '_zh', 'nbti_progress_' + len + '_en'];
+    var fresh = lsGet(getProgressKey());
+    if (!fresh) {
+      for (var i = 0; i < OLD.length; i++) {
+        var v = lsGet(OLD[i]);
+        if (v) { lsSet(getProgressKey(), v); break; }
+      }
+    }
+    for (var j = 0; j < OLD.length; j++) { try { localStorage.removeItem(OLD[j]); } catch (e) {} }
+  } catch (e) { /* 隱私模式忽略 */ }
+}
+
+/* ---------- 結果頁跨語言恢復 ---------- */
+var __hashRestored = false; /* 冪等:僅渲染成功才置位;hash 不合法保持 false */
+/* 渲染結果/彩蛋時寫入(renderResult / renderEgg 內調用) */
+function saveResultToSession(d) {
+  try { sessionStorage.setItem('nbti_last_result', JSON.stringify(d)); } catch (e) {}
+}
+function restoreFromHash() {
+  if (__hashRestored) return;
+  var raw = '';
+  try { raw = decodeURIComponent(location.hash || ''); } catch (e) { raw = location.hash || ''; }
+  if (raw.indexOf('#result=') !== 0) return;
+  var spec = raw.slice(8);
+  var code = spec, match = null;
+  var dash = spec.lastIndexOf('-');                       /* 分隔符用 -,| 會被編碼成 %7C */
+  if (dash > 0 && /^\d+$/.test(spec.slice(dash + 1))) {
+    code = spec.slice(0, dash);
+    match = parseInt(spec.slice(dash + 1), 10);
+  }
+  if (!/^[a-z]{4}$/i.test(code) && !EGG_MAP[code]) return; /* 不合法:靜默回落正常流程 */
+
+  var ok = false;
+  /* ① 同 tab:sessionStorage 完整數據(結構校驗,不信任內容) */
+  try {
+    var saved = sessionStorage.getItem('nbti_last_result');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (d && d.v === 1) {
+        if (d.isEgg === true && EGG_MAP[d.eggKey]) {
+          renderEgg(d.eggName, d.eggNote, d.eggWord);
+          ok = true;
+        } else if (d.isEgg === false && typeof d.code === 'string') {
+          var p0 = null;
+          for (var i = 0; i < RESULTS.results.length; i++) {
+            if (RESULTS.results[i].code === d.code) { p0 = RESULTS.results[i]; break; }
+          }
+          if (p0) { renderResult(p0, d); ok = true; }
+        }
+      }
+    }
+  } catch (e) {}
+  /* ② 降級:僅憑 hash(彩蛋走獨立分支,否則 RESULTS 過濾必然落空 → 白屏) */
+  if (!ok && EGG_MAP[code]) {
+    var egg = RESULTS.easterEggs[EGG_MAP[code].key];
+    if (egg) { renderEgg(egg.persona, egg.note, EGG_MAP[code].word); ok = true; }
+  }
+  if (!ok && /^[a-z]{4}$/i.test(code)) {
+    var persona = null;
+    for (var j = 0; j < RESULTS.results.length; j++) {
+      if (RESULTS.results[j].code.toUpperCase() === code.toUpperCase()) { persona = RESULTS.results[j]; break; }
+    }
+    if (persona) {
+      /* match 拿不到真值 → 隱藏匹配環(渲染層處理),不顯示假數字 */
+      renderResult(persona, { code: persona.code, match: undefined, edges: [] });
+      ok = true;
     }
   }
-  localStorage.setItem('nbti_visited', 'true');
-})();
+  if (ok) { __hashRestored = true; syncLangLinks(); } /* R5:恢復後同步一次切換器 */
+}
+
+/* ---------- 初始化(唯一綁定點;hash 恢復在應用 script 執行後才安全) ---------- */
+document.addEventListener('DOMContentLoaded', function() {
+  initLangSwitcher();   /* click 綁定,只此一處 */
+  syncLangLinks();      /* href 覆寫為帶參數版本 */
+  restoreFromHash();    /* 冪等:應用 script 初始化區已調用過則跳過 */
+});
+window.addEventListener('hashchange', syncLangLinks);
 </script>
 </head>
 <body>
@@ -494,14 +734,16 @@ var _hmt = _hmt || [];
 
   <header class="app-header">
     <div class="brand">
-      <img class="logo-image" id="brand-sign" src="/NeuralFin.png" alt="NeuralFin">
+      <img class="logo-image" id="brand-sign" src="NeuralFin.png" alt="NeuralFin">
     </div>
     <div class="header-right">
       <span class="version">金融 NBTI v1.0</span>
-      <div class="lang-switcher">
-        <a href="/index.html"  class="lang-option active" data-lang="zh">中文</a>
+            <div class="lang-switcher">
+        <a href="index.html"    class="lang-option" data-lang="zh" aria-current="page">簡</a>
         <span class="lang-divider">|</span>
-        <a href="/index-en.html"  class="lang-option" data-lang="en">EN</a>
+        <a href="index-hk.html"    class="lang-option" data-lang="hk">繁</a>
+        <span class="lang-divider">|</span>
+        <a href="index-en.html"    class="lang-option" data-lang="en">EN</a>
       </div>
     </div>
   </header>
@@ -517,7 +759,7 @@ var _hmt = _hmt || [];
     </div>
 
     <div class="home-section reveal" id="sec-dims">
-      <h2 class="sec-title">四个维度，<b>测出你的投资本能</b></h2>
+      <h2 class="sec-title">四个维度，<b>测出你藏不住的投资本能</b></h2>
       <p class="sec-sub">通过这四个方面的问题，测试你的投资本能。<br>答完不会得到生硬的代码——而是<b>中英文称号</b>，<br>比如「YOLO 梭哈战神」。</p>
       <div class="dim-cards" id="dim-cards"></div>
     </div>
@@ -528,28 +770,28 @@ var _hmt = _hmt || [];
       <p class="clan-section-subtitle">每一种派系，都是一种鲜明的投资性格画像</p>
       <div class="clan-grid">
         <div class="clan-card" data-accent="red">
-          <img src="/clan-1.jpg" alt="冲动冒险派" class="clan-photo" loading="lazy">
+          <img src="clan-1.jpg" alt="冲动冒险派" class="clan-photo" loading="lazy">
           <div class="clan-overlay">
             <h3 class="clan-name">冲动冒险派</h3>
             <p class="clan-tagline">跟着感觉走，敢想敢做，爱那种心跳的感觉</p>
           </div>
         </div>
         <div class="clan-card" data-accent="blue">
-          <img src="/clan-2.jpg" alt="理性分析派" class="clan-photo" loading="lazy">
+          <img src="clan-2.jpg" alt="理性分析派" class="clan-photo" loading="lazy">
           <div class="clan-overlay">
             <h3 class="clan-name">理性分析派</h3>
             <p class="clan-tagline">数据说话，逻辑至上，决策前必有一张Excel</p>
           </div>
         </div>
         <div class="clan-card" data-accent="green">
-          <img src="/clan-3.jpg" alt="佛系情感派" class="clan-photo" loading="lazy">
+          <img src="clan-3.jpg" alt="佛系情感派" class="clan-photo" loading="lazy">
           <div class="clan-overlay">
             <h3 class="clan-name">佛系情感派</h3>
             <p class="clan-tagline">随缘随性，不争不抢，情绪稳定是超能力</p>
           </div>
         </div>
         <div class="clan-card" data-accent="gold">
-          <img src="/clan-4.jpg" alt="务实尽责派" class="clan-photo" loading="lazy">
+          <img src="clan-4.jpg" alt="务实尽责派" class="clan-photo" loading="lazy">
           <div class="clan-overlay">
             <h3 class="clan-name">务实尽责派</h3>
             <p class="clan-tagline">稳扎稳打，说到做到，靠谱到让人放心</p>
@@ -562,14 +804,14 @@ var _hmt = _hmt || [];
       <p class="sec-sub">每种人格，都是一句扎心的真相。</p>
       <div class="p-cards" id="p-cards"></div>
       <button class="btn" onclick="startQuiz()" style="margin-top:26px;">开始测试</button>
-      <p class="note">本测试仅供娱乐，别拿它相亲。</p>
+      <p class="note">本测试仅供娱乐，别拿它相亲，不构成任何投资建议。</p>
     </div>
   </section>
 
   <section id="page-quiz">
     <div class="quiz-top">
-      <div class="left"><div class="nav-button-area" id="nav-button-area"></div><span id="q-count">QUESTION 01 / 48</span></div>
-      <span class="pct" id="q-pct">0%</span>
+      <div class="left"><div class="nav-button-area" id="nav-button-area"></div><span id="q-count">第 01 题 / 共 48 题</span></div>
+      <span class="pct" id="q-pct">已完成 0%</span>
     </div>
     <div id="progress"><div id="progress-fill"></div></div>
     <div class="quiz-note">世界已经够乱了，起码把题做完整——反正你也不敢提前平仓。</div>
@@ -588,8 +830,8 @@ var _hmt = _hmt || [];
   <section id="page-result">
     <div id="result-body"></div>
     <div class="footer-brand">
-      <img id="logo-blue-foot" src="/NeuralFin.png" alt="NeuralFin">
-      <p>AI 驱动的投资社区 · www.neuralfin.ai</p>
+      <img id="logo-blue-foot" src="NeuralFin.png" alt="NeuralFin">
+      <p>AI 驱动的投资社区 · www.neuralfin.ai<br>本测试不构成任何投资建议</p>
     </div>
   </section>
 
@@ -614,7 +856,7 @@ var _hmt = _hmt || [];
     <div class="sc-card share-card-tagline"></div>
     <div class="sc-card share-card-social-proof"></div>
     <div class="share-card-footer">
-      <div class="share-card-brand"><img class="share-card-brand-logo" src="/NeuralFin.png" alt="NeuralFin"> 金融 NBTI</div>
+      <div class="share-card-brand"><img class="share-card-brand-logo" src="NeuralFin.png" alt="NeuralFin"> 金融 NBTI</div>
       <div class="share-card-qrcode"><img alt="NeuralFin 二维码" crossorigin="anonymous"></div>
     </div>
   </div>
@@ -4582,8 +4824,8 @@ function freshStart() {
 function renderQuestion() {
   var q = QUESTIONS.questions[current];
   var n = String(current + 1).padStart(2, '0'), total = String(QUESTIONS.questions.length).padStart(2, '0');
-  document.getElementById('q-count').textContent = 'QUESTION ' + n + ' / ' + total;
-  document.getElementById('q-pct').textContent = Math.round(current / QUESTIONS.questions.length * 100) + '%';
+  document.getElementById('q-count').textContent = '第 ' + n + ' 题 / 共 ' + total + ' 题';
+  document.getElementById('q-pct').textContent = '已完成 ' + Math.round(current / QUESTIONS.questions.length * 100) + '%';
   document.getElementById('q-title').textContent = q.question;
   document.getElementById('progress-fill').style.width = ((current) / QUESTIONS.questions.length * 100) + '%';
   var box = document.getElementById('q-options');
@@ -4716,7 +4958,7 @@ function finish() {
   var egg = eggDetect();
   if (egg) {
     var e = RESULTS.easterEggs[egg];
-    renderEgg(e.persona, e.note, egg === 'allSameAnswer' ? 'ATM' : 'OCD');
+    renderEgg(e.persona, e.note, eggWordByKey(egg)); /* 与降级路径共用 EGG_MAP,日后加彩蛋只改一处 */
     return;
   }
   var s = score();
@@ -4743,6 +4985,9 @@ function renderEgg(name, note, word) {
       '<button class="home-link" onclick="goHome()">返回首页</button>' +
     '</div>';
   lastShareReq = { persona: { word: word, name: name, tagline: note }, match: 100 };
+  setResultHash('#result=' + eggHashByWord(word));
+  saveResultToSession({ v: 1, isEgg: true, eggKey: eggHashByWord(word), eggName: name, eggNote: note, eggWord: word });
+  syncLangLinks();
 }
 
 function renderResult(persona, s) {
@@ -4752,7 +4997,7 @@ function renderResult(persona, s) {
   var proofHtml = '';
   if (proof) proofHtml = '<div class="card proof-bar">' + proofSentence(persona, proof) + '</div>';
   var dimLabels = { 'D': ['研究派', '直觉派'], 'R': ['激进', '保守'], 'H': ['长持', '短线'], 'F': ['冷静', '上头'] };
-  var dimsHtml = s.edges.map(function(e) {
+  var dimsHtml = (s.edges || []).map(function(e) {
     var tot = e.left + e.right;
     var lp = tot === 0 ? 50 : Math.round(e.left / tot * 100), rp = 100 - lp;
     return '<div class="dim-row">' +
@@ -4761,12 +5006,14 @@ function renderResult(persona, s) {
       '<span class="dim-label r">' + rp + '% ' + dimLabels[e.d][1] + '</span>' +
     '</div>';
   }).join('');
+  var hasMatch = (typeof s.match === 'number' && !isNaN(s.match) && s.match >= 0);
+  var matchHtml = hasMatch ? '<div class="match">' + matchRing(s.match) + '</div>' : '';
   var imgKey = PERSONA_IMG[persona.word];
   var charHtml = imgKey ?
     '<div class="char-stage">' +
       '<div class="char-glow"></div>' +
       '<img class="result-character-img" loading="eager" alt="' + persona.name + '" ' +
-        'src="/' + imgKey + '.webp" ' +
+        'src="' + imgKey + '.webp" ' +
         'onerror="this.onerror=null;console.error(\'[img] load failed:\',this.src);this.src=\'' + '/' + imgKey + '.png\';">' +
     '</div>' : '';
   document.getElementById('result-body').innerHTML =
@@ -4776,7 +5023,7 @@ function renderResult(persona, s) {
           charHtml +
           '<div class="type-badge">经AI认证，你就是—— ' + persona.word + '</div>' +
           '<div class="persona">' + persona.name + '</div>' +
-          '<div class="match">' + matchRing(s.match) + '</div>' +
+          matchHtml +
         '</div>' +
         '<div class="card"><p>' + persona.tagline + '</p></div>' +
         proofHtml +
@@ -4786,15 +5033,16 @@ function renderResult(persona, s) {
         deepDiveHtml(persona) +
       '</div>' +
       '<div class="result-side">' +
-        '<div class="share-card-wrap">' +
+        (hasMatch ? '<div class="share-card-wrap">' +
           '<button class="btn" id="btn-gen-share" onclick="generateShareFlow()">生成分享卡片</button>' +
           '<p class="hint">生成后可长按保存或发送给好友</p>' +
-        '</div>' +
+        '</div>' : '') +
         '<button class="btn ghost" onclick="restart()">重新测试</button>' +
         '<button class="home-link" onclick="goHome()">返回首页</button>' +
       '</div>' +
     '</div>';
-  lastShareReq = { persona: persona, match: s.match };
+  if (hasMatch) { lastShareReq = { persona: persona, match: s.match }; } /* 降级时不设 lastShareReq,防止以 0% 生成分享卡 */
+  if (hasMatch) { setResultHash('#result=' + persona.code + '-' + s.match); saveResultToSession({ v: 1, code: persona.code, match: s.match, edges: s.edges || [], isEgg: false }); syncLangLinks(); }
   track('deep_dive_preview_view', { personaCode: lastPersonaCode });
 }
 
@@ -4854,9 +5102,13 @@ function collapseDeepDive() {
 /* 轻量埋点：本地收集 + console，接入后端时替换上报实现即可 */
 window.__events = window.__events || [];
 function track(name, payload) {
-  var ev = { name: name, payload: payload || {}, ts: Date.now() };
+  var p = payload || {};
+  p.lang = CURRENT_LANG; /* 三语维度:按语言拆分漏斗 */
+  var fm = (location.search.match(/[?&]from=([A-Za-z0-9_-]{1,64})(?:&|$)/) || [])[1];
+  if (fm) p.from = fm; /* KOL 归因白名单 */
+  var ev = { name: name, payload: p, ts: Date.now() };
   window.__events.push(ev);
-  if (window.console && window.console.log) window.console.log('[track]', name, JSON.stringify(payload || {}));
+  if (window.console && window.console.log) window.console.log('[track]', name, JSON.stringify(p));
 }
 if (typeof location !== 'undefined' && location.search && location.search.indexOf('from=') > -1) {
   track('share_card_click_from_friend', {});
@@ -4882,6 +5134,7 @@ function proofTextPlain(persona, proof) {
   return s + '。';
 }
 function matchRing(pct) {
+  if (typeof pct !== 'number' || isNaN(pct) || pct < 0) return ''; /* 降级路径:隐藏匹配环,不显示假数字 */
   var r = 34, circ = 2 * Math.PI * r;
   var off = circ * (1 - Math.max(0, Math.min(100, pct)) / 100);
   return '<div class="match-ring">' +
@@ -4926,8 +5179,8 @@ function generateShareCard(persona, match) {
   var char = tpl.querySelector('.share-card-character');
   char.style.display = imgKey ? '' : 'none';
   if (imgKey) {
-    char.src = '/' + imgKey + '.webp';
-    char.onerror = function() { this.onerror = null; console.error('[shareCard] char image load failed:', this.src); this.src = '/' + imgKey + '.png'; };
+    char.src = imgKey + '.webp';
+    char.onerror = function() { this.onerror = null; console.error('[shareCard] char image load failed:', this.src); this.src = imgKey + '.png'; };
   }
   var wordEl = tpl.querySelector('.share-card-word');
   wordEl.textContent = persona.word;
@@ -4936,8 +5189,8 @@ function generateShareCard(persona, match) {
   tpl.querySelector('.share-card-tagline').textContent = persona.tagline || '';
   var proof = PERSONA_STATS[persona.word];
   tpl.querySelector('.share-card-social-proof').textContent = proof ? proofTextPlain(persona, proof) : '';
-  tpl.querySelector('.share-card-qrcode img').src = '/qrcode-48.png'; /* 静态二维码,同域无需 CORS */
-  tpl.querySelector('.share-card-logo').src = '/NeuralFin.png';
+  tpl.querySelector('.share-card-qrcode img').src = 'qrcode-48.png'; /* 静态二维码,同域无需 CORS */
+  tpl.querySelector('.share-card-logo').src = 'NeuralFin.png';
   tpl.querySelector('#shareCardMatch').innerHTML = matchRing(match);
   return waitForImagesLoaded(tpl).then(function() {
     /* 按原始比例精算显式尺寸,防 html2canvas object-fit 渲染变形 */
@@ -5024,7 +5277,8 @@ function downloadCard() {
 }
 
 /* ============ 进度保存与续答(确认弹层) ============ */
-var PROGRESS_KEY = 'nbti_progress_' + QUESTIONS.questions.length + '_' + (document.documentElement.lang || 'zh').split('-')[0]; /* 16/48 版 + 语言独立 key */
+var PROGRESS_KEY = getProgressKey(); /* v1:语言解耦,保留题数维度 */
+  migrateProgress(); /* 迁移旧语言后缀 key(幂等) */
 function showConfirm(opts) {
   document.getElementById('confirmTitle').textContent = opts.title;
   document.getElementById('confirmDesc').textContent = opts.desc;
@@ -5049,7 +5303,7 @@ function loadProgress() {
     var raw = localStorage.getItem(PROGRESS_KEY);
     if (!raw) return null;
     var d = JSON.parse(raw);
-    if (!d || !d.answers || !d.answers.length) return null;
+    if (!d || !Array.isArray(d.answers) || !d.answers.length) return null;
     if (d.answers.length > QUESTIONS.questions.length) return null;
     return d;
   } catch (e) { return null; }
@@ -5090,21 +5344,12 @@ window.onerror = function(msg, src, line, col, err) {
 };
 
 /* ============ 初始化 ============ */
-document.getElementById('brand-sign').src = '/NeuralFin.png';
+document.getElementById('brand-sign').src = 'NeuralFin.png';
 document.getElementById('sign-load').src = LOGO_SIGN;
-document.getElementById('logo-blue-foot').src = '/NeuralFin.png';
+document.getElementById('logo-blue-foot').src = 'NeuralFin.png';
 initTicker();
 initHome();
-</script>
-<script>
-/* 记录用户语言偏好(点击切换时),下次访问记住选择 */
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.lang-option').forEach(function(link) {
-    link.addEventListener('click', function() {
-      localStorage.setItem('nbti_preferred_lang', this.getAttribute('data-lang'));
-    });
-  });
-});
+restoreFromHash(); /* 幂等:head 的 DOMContentLoaded 亦会调用,已渲染则跳过 */
 </script>
 </body>
 </html>
