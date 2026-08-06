@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>NeuralFin 金融 NBTI —— 投资人格测试</title>
+<title>NeuralFin 金融 NBTI —— 投資人格測試</title>
 <meta name="robots" content="noindex">  <!-- TODO(港版文案定稿日): 必须摘除,否则港版永不被索引 -->
 <!-- TODO(港版上線日): 換成 og-hk.png 1200×630;換完須手動刷新 FB Sharing Debugger / Twitter Card Validator 緩存 -->
-<meta name="description" content="48 道题，5 分钟，测出你的投资人格。金融 NBTI —— 为刷屏一代而生的投资人格测试。">
+<meta name="description" content="48 條題 · 10 分鐘 · 測出你嘅投資人格。金融 NBTI —— 為刷屏一代而設嘅投資人格測試。">
 <meta property="og:site_name" content="NeuralFin">
-<meta property="og:title" content="金融 NBTI —— 你是哪种投资人格？">
-<meta property="og:description" content="48 道题，5 分钟，测出你的投资人格。">
+<meta property="og:title" content="金融 NBTI —— 你係邊一型投資人格？">
+<meta property="og:description" content="48 條題 · 10 分鐘 · 測出你嘅投資人格。">
 <meta property="og:image" content="https://nbtimvp-48.vercel.app/NeuralFin.png">
 <meta property="og:url" content="https://nbtimvp-48.vercel.app/index-hk.html">
 <meta property="og:type" content="website">
@@ -272,7 +272,7 @@
   .card h3 { font-size: 14px; color: var(--accent-primary); letter-spacing: 1px; margin-bottom: 12px; font-weight: 700; }
   .card p { font-size: 15px; line-height: 1.8; color: var(--text-primary); word-break: break-word; overflow-wrap: break-word; }
 
-  /* ---- 结果页：社交钩子 + 深度解读截断 ---- */
+  /* ---- 结果页：社交钩子 + 深度解讀截断 ---- */
   .proof-bar { color: var(--text-primary); font-size: 15px; line-height: 1.9; word-break: break-word; overflow-wrap: break-word; }
   .proof-bar b { color: var(--accent-primary); font-weight: 800; }
   .deepdive .dd-free { font-size: 15px; line-height: 1.9; color: var(--text-primary); margin-bottom: 14px; word-break: break-word; overflow-wrap: break-word; }
@@ -433,6 +433,29 @@
   .confirm-secondary { background: transparent; border: 1px solid var(--border-subtle);
     color: var(--text-secondary); font-weight: 600; margin-top: 10px; box-shadow: none; }
 
+
+  /* ---- 港版字體棧(scope 嚴格限定,不改全局) ---- */
+  html[lang="zh-Hant-HK"] {
+    --font-sans: -apple-system, BlinkMacSystemFont,
+      "PingFang HK", "PingFang TC", "PingFang SC",
+      "Microsoft JhengHei", "Noto Sans HK", "Noto Sans TC",
+      "Microsoft YaHei", sans-serif;
+  }
+  /* ---- 港版 320px 溢出修復 ---- */
+  html[lang="zh-Hant-HK"] .result-head .persona {
+    font-size: clamp(40px, 12vw, 52px); word-break: keep-all;
+  }
+  html[lang="zh-Hant-HK"] #toast {
+    white-space: normal; max-width: 88vw; line-height: 1.5;
+  }
+
+
+
+  /* ---- 320px 系列 header 溢出修復(三態切換器;全局,非語言特例) ---- */
+  @media (max-width: 480px) {
+    .version { display: none; }
+    .lang-option { padding: 10px 8px; min-height: 44px; box-sizing: border-box; }
+  }
   /* ============ 桌面版(>=768px) ============ */
   @media (min-width: 768px) {
     #app { max-width: 1120px; padding: 24px 48px 80px; }
@@ -752,71 +775,71 @@ window.addEventListener('hashchange', syncLangLinks);
 
   <section id="page-home" class="active">
     <div class="home-hero">
-      <div class="eyebrow"><span class="eyebrow-dot"></span>AI 驱动投资社区</div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span>AI 驅動投資社區</div>
       <h1>金融 <b>NBTI</b></h1>
-      <div class="slogan">MBTI 已经过时，<b>NBTI</b> 来了。</div>
-      <div class="meta">48 题 · 10 分钟 · 16 种投资人格</div>
-      <button class="btn" onclick="startQuiz()">开始测试</button>
-      <div class="points">无需注册 · 纯属娱乐</div>
+      <div class="slogan">MBTI 已經過時，<b>NBTI</b> 嚟喇。</div>
+      <div class="meta">48 條題 · 10 分鐘 · 16 種投資人格</div>
+      <button class="btn" onclick="startQuiz()">開始測試</button>
+      <div class="points">無需註冊 · 純屬娛樂</div>
     </div>
 
     <div class="home-section reveal" id="sec-dims">
-      <h2 class="sec-title">四个维度，<b>测出你藏不住的投资本能</b></h2>
-      <p class="sec-sub">通过这四个方面的问题，测试你的投资本能。<br>答完不会得到生硬的代码——而是<b>中英文称号</b>，<br>比如「YOLO 梭哈战神」。</p>
+      <h2 class="sec-title">四個維度，<b>測出你藏唔住嘅投資本能</b></h2>
+      <p class="sec-sub">透過四個方面嘅問題，測出你嘅投資本能。<br>答完唔會得到生硬嘅代碼——而係一個<b>中英雙語稱號</b>，<br>好似「YOLO 一鋪清袋戰神」。</p>
       <div class="dim-cards" id="dim-cards"></div>
     </div>
 
 
     <div class="home-section reveal" id="sec-clans">
-      <h2 class="clan-section-title">四种气质，<span class="highlight">你是哪一派</span></h2>
-      <p class="clan-section-subtitle">每一种派系，都是一种鲜明的投资性格画像</p>
+      <h2 class="clan-section-title">四種氣質，<span class="highlight">你係邊一派</span></h2>
+      <p class="clan-section-subtitle">每一種派系，都係一種鮮明嘅投資性格畫像</p>
       <div class="clan-grid">
         <div class="clan-card" data-accent="red">
-          <img src="clan-1.jpg" alt="冲动冒险派" class="clan-photo" loading="lazy">
+          <img src="clan-1.jpg" alt="衝動冒險派" class="clan-photo" loading="lazy">
           <div class="clan-overlay">
-            <h3 class="clan-name">冲动冒险派</h3>
-            <p class="clan-tagline">跟着感觉走，敢想敢做，爱那种心跳的感觉</p>
+            <h3 class="clan-name">衝動冒險派</h3>
+            <p class="clan-tagline">跟住感覺走，敢想敢做，鍾意嗰種心跳嘅感覺</p>
           </div>
         </div>
         <div class="clan-card" data-accent="blue">
           <img src="clan-2.jpg" alt="理性分析派" class="clan-photo" loading="lazy">
           <div class="clan-overlay">
             <h3 class="clan-name">理性分析派</h3>
-            <p class="clan-tagline">数据说话，逻辑至上，决策前必有一张Excel</p>
+            <p class="clan-tagline">數據說話，邏輯至上，決策前必有一張 Excel</p>
           </div>
         </div>
         <div class="clan-card" data-accent="green">
-          <img src="clan-3.jpg" alt="佛系情感派" class="clan-photo" loading="lazy">
+          <img src="clan-3.jpg" alt="隨緣情感派" class="clan-photo" loading="lazy">
           <div class="clan-overlay">
-            <h3 class="clan-name">佛系情感派</h3>
-            <p class="clan-tagline">随缘随性，不争不抢，情绪稳定是超能力</p>
+            <h3 class="clan-name">隨緣情感派</h3>
+            <p class="clan-tagline">隨緣隨性，唔爭唔搶，情緒穩定係超能力</p>
           </div>
         </div>
         <div class="clan-card" data-accent="gold">
-          <img src="clan-4.jpg" alt="务实尽责派" class="clan-photo" loading="lazy">
+          <img src="clan-4.jpg" alt="務實盡責派" class="clan-photo" loading="lazy">
           <div class="clan-overlay">
-            <h3 class="clan-name">务实尽责派</h3>
-            <p class="clan-tagline">稳扎稳打，说到做到，靠谱到让人放心</p>
+            <h3 class="clan-name">務實盡責派</h3>
+            <p class="clan-tagline">穩紮穩打，講到做到，可靠到令人放心</p>
           </div>
         </div>
       </div>
     </div>
     <div class="home-section reveal" id="sec-personas">
-      <h2 class="sec-title">16 种投资人格，<b>你是哪一型？</b></h2>
-      <p class="sec-sub">每种人格，都是一句扎心的真相。</p>
+      <h2 class="sec-title">16 種投資人格，<b>你係邊一型？</b></h2>
+      <p class="sec-sub">每種人格，都係一句篤心嘅真相。</p>
       <div class="p-cards" id="p-cards"></div>
-      <button class="btn" onclick="startQuiz()" style="margin-top:26px;">开始测试</button>
-      <p class="note">本测试仅供娱乐，别拿它相亲，不构成任何投资建议。</p>
+      <button class="btn" onclick="startQuiz()" style="margin-top:26px;">開始測試</button>
+      <p class="note">本測試純屬娛樂，不構成任何投資建議。</p>
     </div>
   </section>
 
   <section id="page-quiz">
     <div class="quiz-top">
-      <div class="left"><div class="nav-button-area" id="nav-button-area"></div><span id="q-count">第 01 题 / 共 48 题</span></div>
+      <div class="left"><div class="nav-button-area" id="nav-button-area"></div><span id="q-count">第 01 題 / 共 48 題</span></div>
       <span class="pct" id="q-pct">已完成 0%</span>
     </div>
     <div id="progress"><div id="progress-fill"></div></div>
-    <div class="quiz-note">世界已经够乱了，起码把题做完整——反正你也不敢提前平仓。</div>
+    <div class="quiz-note">世界已經夠亂，起碼將啲題答完先——反正你都唔敢提早平倉。</div>
     <div class="q-title" id="q-title"></div>
     <div id="q-options"></div>
   </section>
@@ -824,16 +847,16 @@ window.addEventListener('hashchange', syncLangLinks);
   <section id="page-loading">
     <img class="load-sign" id="sign-load" alt="">
     <div class="load-title">AI 深度分析中</div>
-    <div class="load-text" id="load-text">扫描交易 DNA……</div>
+    <div class="load-text" id="load-text">掃描交易 DNA……</div>
     <div class="load-dots"><i></i><i></i><i></i></div>
-    <div class="load-foot">准确率 100%——不准是因为你撒谎了<br>点击屏幕可打断验算（真的）</div>
+    <div class="load-foot">準確率 100%——唔準係因為你講大話<br>撳屏幕可以打斷驗算（真嘅）</div>
   </section>
 
   <section id="page-result">
     <div id="result-body"></div>
     <div class="footer-brand">
       <img id="logo-blue-foot" src="NeuralFin.png" alt="NeuralFin">
-      <p>AI 驱动的投资社区 · www.neuralfin.ai<br>本测试不构成任何投资建议</p>
+      <p>AI 驅動嘅投資社區 · www.neuralfin.ai<br>本測試不構成任何投資建議</p>
     </div>
   </section>
 
@@ -859,7 +882,7 @@ window.addEventListener('hashchange', syncLangLinks);
     <div class="sc-card share-card-social-proof"></div>
     <div class="share-card-footer">
       <div class="share-card-brand"><img class="share-card-brand-logo" src="NeuralFin.png" alt="NeuralFin"> 金融 NBTI</div>
-      <div class="share-card-qrcode"><img alt="NeuralFin 二维码" crossorigin="anonymous"></div>
+      <div class="share-card-qrcode"><img alt="NeuralFin 二維碼" crossorigin="anonymous"></div>
     </div>
   </div>
 
@@ -868,9 +891,9 @@ window.addEventListener('hashchange', syncLangLinks);
     <div class="share-preview-overlay" onclick="closeSharePreview()"></div>
     <div class="share-preview-content">
       <button class="share-preview-close" onclick="closeSharePreview()">✕</button>
-      <img class="share-preview-image" id="sharePreviewImg" alt="分享卡片预览">
+      <img class="share-preview-image" id="sharePreviewImg" alt="分享卡片預覽">
       <p class="share-preview-hint" id="sharePreviewHint"></p>
-      <button class="share-preview-download-btn btn" id="sharePreviewDl" onclick="sharePreviewAction()">下载分享图</button>
+      <button class="share-preview-download-btn btn" id="sharePreviewDl" onclick="sharePreviewAction()">下載分享圖</button>
     </div>
   </div>
 <div id="confirmModal" class="confirm-overlay" style="display:none;">
@@ -3214,39 +3237,40 @@ var LOGO_SIGN = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAYAAAB/H
 /* ============ 数据（内嵌；生产部署时替换为 fetch questions.json / results.json） ============ */
 var QUESTIONS = {
   "meta": {
-    "title": "NeuralFin 金融 NBTI —— 投资人格测试",
+    "title": "NeuralFin 金融 NBTI —— 投資人格測試",
     "scoring": {
       "dimensions": {
         "D": {
-          "label": "决策",
+          "label": "決策",
           "poles": {
             "R": "研究派",
-            "F": "直觉派"
+            "F": "直覺派"
           }
         },
         "R": {
-          "label": "风险",
+          "label": "風險",
           "poles": {
-            "G": "激进",
+            "G": "進取",
             "S": "保守"
           }
         },
         "H": {
-          "label": "持仓",
+          "label": "持倉",
           "poles": {
-            "H": "长持",
-            "T": "短线"
+            "H": "長揸",
+            "T": "短炒"
           }
         },
         "F": {
-          "label": "心态",
+          "label": "心態",
           "poles": {
-            "C": "冷静",
-            "P": "上头"
+            "C": "冷靜",
+            "P": "上頭"
           }
         }
       },
-      "personaMap": {
+        /* personaMap:死數據(定義但無任何代碼讀取;實際計分映射走 RESULTS.results.filter by code)。保留以維持數據結構,勿刪;若日後啟用,須同步港化其中人格名 */
+  "personaMap": {
         "RGHC": "猎手",
         "RSHC": "龟仙人",
         "RGTC": "量化猎人",
@@ -3266,1255 +3290,1255 @@ var QUESTIONS = {
       }
     },
     "neutral": {
-      "label": "说不清，好像都沾一点",
+      "label": "講唔清，好似都沾啲",
       "halfVote": "两维各极各记 0.5 票"
     }
   },
   "questions": [
     {
       "id": 1,
-      "question": "群里有人喊\"XX 要涨停，速上车！\"你的反应是——",
+      "question": "群組有人嗌「XX 就嚟爆升，快啲上車！」你嘅反應係——",
       "options": [
         {
-          "text": "打开财报、翻公告、查机构持仓，30 分钟出结论",
+          "text": "開年報、翻公告、查機構持倉，30 分鐘出結論",
           "code": "DR"
         },
         {
-          "text": "\"这波感觉对，冲\"",
+          "text": "「今次個感覺啱，衝」",
           "code": "DF"
         },
         {
-          "text": "直接满仓干，跌了就当没看见",
+          "text": "直接全倉，跌咗當冇睇到",
           "code": "RG"
         },
         {
-          "text": "先看自己账户余额够不够塞牙缝",
+          "text": "先睇吓自己戶口夠唔夠塞牙罅",
           "code": "RS"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+RG/RS"
         }
       ]
     },
     {
       "id": 2,
-      "question": "你决定买入一只股票的\"压死骆驼的最后一根稻草\"通常是——",
+      "question": "你決定買入一隻股票嘅「壓死駱駝嘅最後一條稻草」通常係——",
       "options": [
         {
-          "text": "三张 Excel 交叉验证后的估值模型",
+          "text": "三張 Excel 交叉驗證過嘅估值模型",
           "code": "DR"
         },
         {
-          "text": "某个大 V 突然\"转发点赞\"了它",
+          "text": "某個大 V 突然「轉發點讚」咗佢",
           "code": "DF"
         },
         {
-          "text": "\"反正就这点钱，亏了当交学费\"",
+          "text": "「反正都係咁多錢，蝕咗當交學費」",
           "code": "RG"
         },
         {
-          "text": "\"先买一点点，试试水\"",
+          "text": "「買住少少先，試吓水溫」",
           "code": "RS"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+RG/RS"
         }
       ]
     },
     {
       "id": 3,
-      "question": "你复盘一笔亏损交易时，最常说的一句话是——",
+      "question": "你覆盤一筆虧損交易嗰陣，最常講嘅一句係——",
       "options": [
         {
-          "text": "\"逻辑是对的，只是市场还没反应过来\"",
+          "text": "「邏輯係啱嘅，只係市場未反應得切」",
           "code": "DR"
         },
         {
-          "text": "\"凭感觉进的，也不知道哪里出了问题\"",
+          "text": "「憑感覺入嘅，都唔知邊度出咗問題」",
           "code": "DF"
         },
         {
-          "text": "\"亏就亏了，下一个\"",
+          "text": "「蝕就蝕，下一個」",
           "code": "RG"
         },
         {
-          "text": "\"以后再也不进这种妖股了\"",
+          "text": "「以後都唔入呢啲妖股」",
           "code": "RS"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+RG/RS"
         }
       ]
     },
     {
       "id": 4,
-      "question": "别人问你\"你为什么买这只\"，你的标准答案是——",
+      "question": "人哋問你「點解買呢隻」，你嘅標準答案係——",
       "options": [
         {
-          "text": "甩出一份 20 页 PPT，从行业逻辑讲到财务模型",
+          "text": "掟出一份 20 頁 PPT，由行業邏輯講到財務模型",
           "code": "DR"
         },
         {
-          "text": "\"我梦里看见的，不信算了\"",
+          "text": "「我發夢見到嘅，唔信就算」",
           "code": "DF"
         },
         {
-          "text": "\"涨得猛啊，不买等什么\"",
+          "text": "「升得咁癲呀，唔買等幾時」",
           "code": "RG"
         },
         {
-          "text": "\"稳，它十年没跌过 50%\"",
+          "text": "「穩陣，佢十年都未跌過 50%」",
           "code": "RS"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+RG/RS"
         }
       ]
     },
     {
       "id": 5,
-      "question": "你的自选股列表里，占比最大的类型是——",
+      "question": "你嘅自選股入面，佔比最大嘅類型係——",
       "options": [
         {
-          "text": "一堆你研究过财报但还没敢买的\"候选股\"",
+          "text": "一堆你研究過年報但仲未敢買嘅「候選股」",
           "code": "DR"
         },
         {
-          "text": "抖音刷到的、名字听起来很厉害的股票",
+          "text": "喺抖音刷到、個名聽落好勁嘅股票",
           "code": "DF"
         },
         {
-          "text": "涨得最猛、最容易上头的题材股",
+          "text": "升得最癲、最容易上頭嘅題材股",
           "code": "RG"
         },
         {
-          "text": "银行、公用事业这种\"躺平股\"",
+          "text": "銀行、公用事業呢啲「穩陣股」",
           "code": "RS"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+RG/RS"
         }
       ]
     },
     {
       "id": 6,
-      "question": "当你的分析和市场走势完全相反时，你的第一反应是——",
+      "question": "當你嘅分析同市場走勢完全相反，你第一個反應係——",
       "options": [
         {
-          "text": "重新检查模型哪里出了 bug",
+          "text": "重新檢查個模型邊度出咗 bug",
           "code": "DR"
         },
         {
-          "text": "\"可能我这次感觉不准\"",
+          "text": "「可能今次我個感覺唔準」",
           "code": "DF"
         },
         {
-          "text": "\"加仓，越跌越买，市场早晚会懂我\"",
+          "text": "「加倉，越跌越買，市場遲早會明我」",
           "code": "RG"
         },
         {
-          "text": "\"算了，认怂，落袋为安\"",
+          "text": "「算啦，認輸，袋住先」",
           "code": "RS"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+RG/RS"
         }
       ]
     },
     {
       "id": 7,
-      "question": "你决定\"今天不看盘\"的理由最可能是——",
+      "question": "你決定「今日唔睇市」嘅理由最可能係——",
       "options": [
         {
-          "text": "\"反正逻辑没变，看不看盘不影响结论\"",
+          "text": "「反正邏輯冇變，睇唔睇都唔影響結論」",
           "code": "DR"
         },
         {
-          "text": "\"感觉今天不宜看盘\"",
+          "text": "「覺得今日唔啱睇市」",
           "code": "DF"
         },
         {
-          "text": "\"已经全仓了，看了也改变不了什么\"",
+          "text": "「已經全倉啦，睇咗都改變唔到啲咩」",
           "code": "RG"
         },
         {
-          "text": "\"本来仓位就轻，看不看无所谓\"",
+          "text": "「本來倉位就輕，睇唔睇都冇所謂」",
           "code": "RS"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+RG/RS"
         }
       ]
     },
     {
       "id": 8,
-      "question": "如果给你的投资风格拍一部电影，片名最可能是——",
+      "question": "如果幫你嘅投資風格拍一部戲，片名最可能係——",
       "options": [
         {
-          "text": "《数字之下》——一部全是财报特写的纪录片",
+          "text": "《數字之下》——淨係影住年報嘅紀錄片",
           "code": "DR"
         },
         {
-          "text": "《跟着感觉走》——剧情全靠玄学推进",
+          "text": "《跟住感覺走》——劇情全靠玄學推進",
           "code": "DF"
         },
         {
-          "text": "《All-in》——高潮迭起，心脏病患者慎看",
+          "text": "《All-in》——高潮迭起，心臟病人慎入",
           "code": "RG"
         },
         {
-          "text": "《稳稳的幸福》——节奏堪比养老院纪录片",
+          "text": "《穩穩陣陣》——節奏似足老人院紀錄片",
           "code": "RS"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+RG/RS"
         }
       ]
     },
     {
       "id": 9,
-      "question": "你对一只股票\"彻底放弃跟踪\"的时间点是——",
+      "question": "你對一隻股票「徹底放棄跟蹤」嘅時間點係——",
       "options": [
         {
-          "text": "财报连续两季不达预期，逻辑证伪",
+          "text": "年報連續兩季唔達標，邏輯證偽",
           "code": "DR"
         },
         {
-          "text": "大 V 不吹了，我也就没兴趣了",
+          "text": "大 V 唔再吹，我都冇晒興趣",
           "code": "DF"
         },
         {
-          "text": "跌了 3 天，直接删自选",
+          "text": "跌咗 3 日，直接刪自選",
           "code": "HT"
         },
         {
-          "text": "忘了……我压根不知道我买了它",
+          "text": "唔記得咗……我根本唔知我買咗佢",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 10,
-      "question": "你买入前的\"最后一步\"通常是——",
+      "question": "你買入之前嘅「最後一步」通常係——",
       "options": [
         {
-          "text": "打开研报库，横向对比三家机构观点",
+          "text": "開研報庫，橫向對比三家機構觀點",
           "code": "DR"
         },
         {
-          "text": "刷到第 5 条\"稳赚不亏\"的短视频",
+          "text": "碌到第 5 條「穩賺唔蝕」嘅短片",
           "code": "DF"
         },
         {
-          "text": "看分钟线，找个\"起爆点\"",
+          "text": "睇分鐘線，搵個「起爆點」",
           "code": "HT"
         },
         {
-          "text": "随便看一眼，买了就打算忘掉它",
+          "text": "求其睇一眼，買咗就打算忘記佢",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 11,
-      "question": "你手机里装着几个炒股 App？",
+      "question": "你部手機裝咗幾個炒股 App？",
       "options": [
         {
-          "text": "一个，配合三个财务分析工具",
+          "text": "一個，配三個財務分析工具",
           "code": "DR"
         },
         {
-          "text": "十几个，哪个荐股准就信哪个",
+          "text": "十幾個，邊個薦股準就信邊個",
           "code": "DF"
         },
         {
-          "text": "一个专门盯盘、每秒刷新的",
+          "text": "一個專門盯盤、每秒刷新嘅",
           "code": "HT"
         },
         {
-          "text": "一个，还常年挂着\"未读消息 999+\"",
+          "text": "一個，仲長年掛住「未讀訊息 999+」",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 12,
-      "question": "别人问\"这股你拿了多久\"，你的回答风格是——",
+      "question": "人哋問「呢隻你揸咗幾耐」，你嘅回答風格係——",
       "options": [
         {
-          "text": "\"从它上市第一天研究到现在，买了半年\"",
+          "text": "「由佢上市第一日研究到而家，買咗半年」",
           "code": "DR"
         },
         {
-          "text": "\"忘了，反正是感觉对就买的\"",
+          "text": "「唔記得啦，總之係感覺啱就買」",
           "code": "DF"
         },
         {
-          "text": "\"昨天买的，今天准备卖\"",
+          "text": "「琴日買，今日準備賣」",
           "code": "HT"
         },
         {
-          "text": "\"久到我都快忘了当初为啥买它\"",
+          "text": "「耐到我差啲唔記得當初點解買佢」",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 13,
-      "question": "你最信任的\"消息来源\"是——",
+      "question": "你最信嘅「消息來源」係——",
       "options": [
         {
-          "text": "招股书、审计报告、行业白皮书",
+          "text": "招股書、核數報告、行業白皮書",
           "code": "DR"
         },
         {
-          "text": "朋友圈里那个\"消息很准\"的神秘人",
+          "text": "朋友圈嗰個「消息好準」嘅神秘人",
           "code": "DF"
         },
         {
-          "text": "分时图上突然放量的那一根柱子",
+          "text": "分時圖突然放量嗰一支嘢",
           "code": "HT"
         },
         {
-          "text": "反正我也不太看消息，随缘",
+          "text": "反正我都唔係好睇消息，隨緣",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 14,
-      "question": "如果有人问你\"你这套交易系统是怎么形成的\"，你的答案是——",
+      "question": "如果有人問你「你套交易系統點樣形成」，你嘅答案係——",
       "options": [
         {
-          "text": "十年财报堆出来的方法论，逻辑严谨到能发论文",
+          "text": "十年年報堆出嚟嘅方法論，嚴謹到可以出論文",
           "code": "DR"
         },
         {
-          "text": "\"玄学，说不清，但就是准\"",
+          "text": "「玄學，講唔清，但就係準」",
           "code": "DF"
         },
         {
-          "text": "高抛低吸练出来的手速，全靠盘感",
+          "text": "高沽低揸練出嚟嘅手速，全靠盤感",
           "code": "HT"
         },
         {
-          "text": "系统？我连自己上次买了啥都想不起来",
+          "text": "系統？我連自己上次買咗啲咩都諗唔起",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 15,
-      "question": "如果让你给\"新手\"一句建议，你会说——",
+      "question": "如果叫你俾「新手」一句建議，你會話——",
       "options": [
         {
-          "text": "\"先学会看财报，别听消息瞎买\"",
+          "text": "「先學識睇年報，咪聽消息亂咁買」",
           "code": "DR"
         },
         {
-          "text": "\"相信直觉，市场有时候比逻辑更诚实\"",
+          "text": "「相信直覺，市場有時比邏輯更誠實」",
           "code": "DF"
         },
         {
-          "text": "\"快进快出，别恋战，恋战的都是亏的\"",
+          "text": "「快入快出，咪戀戰，戀戰嘅都係輸」",
           "code": "HT"
         },
         {
-          "text": "\"买了就忘了它，回本全靠命\"",
+          "text": "「買咗就忘記佢，回本全靠命水」",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 16,
-      "question": "你最骄傲的一笔交易是——",
+      "question": "你最驕傲嘅一筆交易係——",
       "options": [
         {
-          "text": "靠深度研究提前埋伏、精准兑现的一战",
+          "text": "靠深度研究提早埋伏、精準兌現嘅一仗",
           "code": "DR"
         },
         {
-          "text": "凭直觉买入、事后想想都后怕的神来之笔",
+          "text": "憑直覺買入、事後諗起都後怕嘅神來之筆",
           "code": "DF"
         },
         {
-          "text": "当天买当天卖、吃到一口肉就跑的短打",
+          "text": "即日買即日賣、食到一啖肉就走嘅短打",
           "code": "HT"
         },
         {
-          "text": "买了忘了、几年后翻出来发现翻倍的意外之喜",
+          "text": "買咗唔記得、幾年後摷返出嚟發現翻倍嘅意外之喜",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 17,
-      "question": "你持仓突然暴跌 10%，第一件事是——",
+      "question": "你持倉突然插水 10%，第一件事係——",
       "options": [
         {
-          "text": "冷静打开财报重新核对逻辑是否成立",
+          "text": "冷靜打開份年報，重新核對邏輯仲成唔成立",
           "code": "DR+FC"
         },
         {
-          "text": "\"不管了，感觉它还会涨回来\"",
+          "text": "「唔理啦，覺得佢會升返」",
           "code": "DF+FC"
         },
         {
-          "text": "心跳加速，疯狂刷新页面看跌了多少",
+          "text": "心跳加速，狂撳 refresh 睇跌咗幾多",
           "code": "DF+FP"
         },
         {
-          "text": "一边骂一边翻研报找\"到底哪里错了\"",
+          "text": "一邊鬧一邊翻研報搵「到底錯喺邊」",
           "code": "DR+FP"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+FC/FP"
         }
       ]
     },
     {
       "id": 18,
-      "question": "你在决定\"是否加仓\"时的心理状态是——",
+      "question": "你決定「使唔使加倉」嗰陣嘅心理狀態係——",
       "options": [
         {
-          "text": "冷静列出加仓的三个理由再动手",
+          "text": "冷靜列出加倉三個理由先郁手",
           "code": "DR"
         },
         {
-          "text": "\"感觉现在正是时候\"，然后就冲了",
+          "text": "「覺得而家啱時候」，然後就衝咗",
           "code": "DF"
         },
         {
-          "text": "手抖着按下确认键，嘴里念叨\"别慌别慌\"",
+          "text": "手震住撳確認鍵，口噏噏「唔好慌唔好慌」",
           "code": "FP"
         },
         {
-          "text": "边加仓边后悔，加完还在纠结要不要撤",
+          "text": "邊加倉邊後悔，加完仲諗緊要唔要撤",
           "code": "FP"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+FC/FP"
         }
       ]
     },
     {
       "id": 19,
-      "question": "你对\"利好消息\"的第一反应通常是——",
+      "question": "你對「利好消息」嘅第一反應通常係——",
       "options": [
         {
-          "text": "先查证消息真实性，再评估影响幅度",
+          "text": "先查證消息真偽，再評估影響有幾大",
           "code": "DR+FC"
         },
         {
-          "text": "\"太好了！冲！\"——虽然还没看懂具体是啥",
+          "text": "「正呀！衝！」——雖然未睇明係咩嚟",
           "code": "DF+FP"
         },
         {
-          "text": "\"这是真的吗？会不会是诱多\"",
+          "text": "「係咪堅㗎？會唔會係誘多」",
           "code": "DR+FP"
         },
         {
-          "text": "淡定收下，反正利好利空我都无所谓",
+          "text": "淡定收下，利好利空我都冇所謂",
           "code": "DF+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+FC/FP"
         }
       ]
     },
     {
       "id": 20,
-      "question": "深夜突然想到自己的持仓，你的状态是——",
+      "question": "深夜突然諗起自己嘅持倉，你嘅狀態係——",
       "options": [
         {
-          "text": "打开电脑重新核算一遍估值模型才能安心睡觉",
+          "text": "開電腦重新計一次估值模型先瞓得着",
           "code": "DR+FP"
         },
         {
-          "text": "\"随便吧，睡了睡了\"，翻身继续睡",
+          "text": "「是但啦，瞓啦瞓啦」，翻身繼續瞓",
           "code": "DF+FC"
         },
         {
-          "text": "盯着天花板，脑子里循环播放今天的 K 线",
+          "text": "望住天花板，腦入面 loop 住今日條 K 線",
           "code": "DF+FP"
         },
         {
-          "text": "平静地想\"逻辑没变，睡吧\"",
+          "text": "平靜咁諗「邏輯冇變，瞓啦」",
           "code": "DR+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+FC/FP"
         }
       ]
     },
     {
       "id": 21,
-      "question": "你在直播间/群里看到\"所有人都在喊涨\"，你的反应是——",
+      "question": "你喺直播間/群組見到「所有人都在嗌升」，你嘅反應係——",
       "options": [
         {
-          "text": "冷静怀疑：\"人多的地方是不是不能去\"",
+          "text": "冷靜懷疑：「人逼埋一齊嘅地方係咪唔應該去」",
           "code": "DR+FC"
         },
         {
-          "text": "血液沸腾，感觉自己也要发财了",
+          "text": "血脈沸騰，覺得自己就嚟發達",
           "code": "DF+FP"
         },
         {
-          "text": "心里打鼓但嘴上说\"淡定，都是纸面富贵\"",
+          "text": "心入面打鼓但口講「淡定，都係紙上富貴」",
           "code": "DR+FP"
         },
         {
-          "text": "\"氛围到位了，冲就对了\"",
+          "text": "「氣氛到位，衝就啱」",
           "code": "DF+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+FC/FP"
         }
       ]
     },
     {
       "id": 22,
-      "question": "当你的分析被市场证明是错的，你的第一情绪是——",
+      "question": "當你嘅分析被市場證明係錯，你第一個情緒係——",
       "options": [
         {
-          "text": "平静接受，修正模型继续前进",
+          "text": "平靜接受，修正模型繼續行",
           "code": "DR+FC"
         },
         {
-          "text": "\"无所谓，反正靠感觉，蒙错了也正常\"",
+          "text": "「冇所謂，反正靠感覺，估錯都好正常」",
           "code": "DF+FC"
         },
         {
-          "text": "恼羞成怒，觉得是市场不识货",
+          "text": "惱羞成怒，覺得係市場唔識貨",
           "code": "DR+FP"
         },
         {
-          "text": "情绪崩溃，怀疑自己是不是不适合炒股",
+          "text": "情緒崩潰，懷疑自己係咪唔啱炒股",
           "code": "DF+FP"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+FC/FP"
         }
       ]
     },
     {
       "id": 23,
-      "question": "你决定卖出的那一刻，内心的画外音是——",
+      "question": "你決定賣出嗰一刻，心入面嘅畫外音係——",
       "options": [
         {
-          "text": "\"模型显示估值已经到顶，卖\"",
+          "text": "「模型話估值到頂，賣」",
           "code": "DR+FC"
         },
         {
-          "text": "\"就是感觉不对了，溜\"",
+          "text": "「就係覺得唔對路，閃」",
           "code": "DF+FC"
         },
         {
-          "text": "手心冒汗，\"卖了会不会后悔啊\"",
+          "text": "手心冒汗，「賣咗會唔會後悔呀」",
           "code": "DF+FP"
         },
         {
-          "text": "反复核对数据到最后一秒才按下卖出",
+          "text": "反覆核對數據到最後一秒先撳賣出",
           "code": "DR+FP"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+FC/FP"
         }
       ]
     },
     {
       "id": 24,
-      "question": "如果给你的心态配一句风格描述，会是——",
+      "question": "如果幫你嘅心態配一句風格描述，會係——",
       "options": [
         {
-          "text": "平静如水，专业冷静，理性至上",
+          "text": "平靜如水，專業冷靜，理性至上",
           "code": "DR+FC"
         },
         {
-          "text": "跟着感觉走，紧抓住感觉的手",
+          "text": "跟住感覺走，揸實感覺隻手",
           "code": "DF+FC"
         },
         {
-          "text": "心跳快到炸，数据说了都不算",
+          "text": "心跳快到爆，數據講咗都唔算",
           "code": "DR+FP"
         },
         {
-          "text": "不问理由，只问涨不涨，慌得一批",
+          "text": "唔問理由，只問升唔升，慌到震",
           "code": "DF+FP"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+FC/FP"
         }
       ]
     },
     {
       "id": 25,
-      "question": "你的杠杆使用习惯是——",
+      "question": "你嘅孖展使用習慣係——",
       "options": [
         {
-          "text": "从不用杠杆，本金打底才安心",
+          "text": "從唔用孖展，本金打底先安樂",
           "code": "RS"
         },
         {
-          "text": "该用就用，杠杆是加速器",
+          "text": "該用就用，孖展係加速器",
           "code": "RG"
         },
         {
-          "text": "用了杠杆就得快进快出，绝不留隔夜仓",
+          "text": "用咗孖展就要快入快出，絕不留過夜倉",
           "code": "HT"
         },
         {
-          "text": "杠杆和长持我都想要，虽然风险经理不同意",
+          "text": "孖展同長揸我都想要，雖然風險經理唔同意",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+HT/HH"
         }
       ]
     },
     {
       "id": 26,
-      "question": "你理想的\"持仓结构\"是——",
+      "question": "你理想嘅「持倉結構」係——",
       "options": [
         {
-          "text": "90% 稳健蓝筹 + 10% 娱乐资金",
+          "text": "90% 穩陣藍籌 + 10% 娛樂資金",
           "code": "RS+HH"
         },
         {
-          "text": "All-in 一个\"梦想赛道\"",
+          "text": "All-in 一個「夢想賽道」",
           "code": "RG+HH"
         },
         {
-          "text": "每天换股，追热点，绝不恋战",
+          "text": "日日換股，追熱點，絕不戀戰",
           "code": "RG+HT"
         },
         {
-          "text": "保守型选手，只做超短T，赚了就跑",
+          "text": "保守型選手，只做即日鮮，賺咗就走",
           "code": "RS+HT"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+HT/HH"
         }
       ]
     },
     {
       "id": 27,
-      "question": "面对\"新股申购可加 20 倍杠杆\"的诱惑，你会——",
+      "question": "面對「抽新股可以加 20 倍孖展」嘅誘惑，你會——",
       "options": [
         {
-          "text": "直接拉满杠杆，赌一把大的",
+          "text": "直接孖展拉滿，賭鋪大",
           "code": "RG"
         },
         {
-          "text": "用自己的本金老老实实打新",
+          "text": "用自己本金老老實實抽",
           "code": "RS"
         },
         {
-          "text": "中签就当天卖，绝不留过夜",
+          "text": "中咗籤就即日賣，絕不過夜",
           "code": "HT"
         },
         {
-          "text": "中签了就当纪念品，压箱底",
+          "text": "中咗籤當紀念品，壓箱底",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+HT/HH"
         }
       ]
     },
     {
       "id": 28,
-      "question": "你对\"满仓一只股票，拿三年不动\"这种操作的态度是——",
+      "question": "你對「全倉一隻股票，揸足三年唔郁」呢種操作嘅態度係——",
       "options": [
         {
-          "text": "\"疯了吧，鸡蛋不能放一个篮子\"",
+          "text": "「癲咗呀？雞蛋唔可以放喺一個籃」",
           "code": "RS"
         },
         {
-          "text": "\"这才叫信仰，稳了\"",
+          "text": "「呢啲先係信仰，穩喇」",
           "code": "RG+HH"
         },
         {
-          "text": "\"拿三年？我三天都嫌久\"",
+          "text": "「揸三年？我三日都嫌耐」",
           "code": "HT"
         },
         {
-          "text": "\"可以试试，反正闲钱\"",
+          "text": "「可以試吓，反正都係閒錢」",
           "code": "RS+HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+HT/HH"
         }
       ]
     },
     {
       "id": 29,
-      "question": "你持有时间最长的资产和最短的资产，分别是——",
+      "question": "你揸得最耐嘅資產同最短嘅資產，分別係——",
       "options": [
         {
-          "text": "长：从未卖出的\"压箱底\"蓝筹；短：从没拿过隔夜仓的题材股",
+          "text": "最長：從未賣出嘅「壓箱底」藍籌；最短：從未過夜嘅題材股",
           "code": "HH+HT"
         },
         {
-          "text": "长：All-in 押上的梦想股；短：几乎不做短线，太伤肝",
+          "text": "最長：All-in 押上嘅夢想股；最短：幾乎唔做短線，太傷肝",
           "code": "RG+HH"
         },
         {
-          "text": "长：几乎没有，我信仰的是\"T\"；短：我全部资产",
+          "text": "最長：幾乎冇，我信嘅係「T」；最短：我全部身家",
           "code": "HT+RG/RS"
         },
         {
-          "text": "长：国债，稳到发霉；短：偶尔手痒做的超短",
+          "text": "最長：政府債券，穩到發霉；最短：間中手痕做嘅即日鮮",
           "code": "RS+HT"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+HT/HH"
         }
       ]
     },
     {
       "id": 30,
-      "question": "当行情剧烈震荡，别人纷纷离场时，你的操作是——",
+      "question": "當行情劇烈震盪，人哋紛紛離場嗰陣，你嘅操作係——",
       "options": [
         {
-          "text": "加大杠杆，越跌越买，抄底就要抄得狠",
+          "text": "加大孖展，越跌越買，撈底就要撈得狠",
           "code": "RG"
         },
         {
-          "text": "把仓位降到最低，先保命再谈赚钱",
+          "text": "將倉位降到最低，保命先，賺錢後",
           "code": "RS"
         },
         {
-          "text": "高抛低吸，趁机多做几次差价",
+          "text": "高沽低揸，趁機做多幾轉",
           "code": "HT"
         },
         {
-          "text": "关掉软件，假装什么都没发生，继续长持",
+          "text": "熄咗個 App，當冇事發生，繼續長揸",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+HT/HH"
         }
       ]
     },
     {
       "id": 31,
-      "question": "你对\"All-in 一个概念股，拿到天荒地老\"的看法是——",
+      "question": "你對「All-in 一隻概念股，揸到天荒地老」嘅睇法係——",
       "options": [
         {
-          "text": "\"要玩就玩大的，All-in 才是真爱\"",
+          "text": "「要玩就玩大，All-in 先係真愛」",
           "code": "RG+HH"
         },
         {
-          "text": "\"疯了，鸡蛋不能放一个篮子里放三年\"",
+          "text": "「癲咗，雞蛋唔可以放一個籃放足三年」",
           "code": "RS"
         },
         {
-          "text": "\"拿这么久？早就该做T了\"",
+          "text": "「揸咁耐？一早應該做咗 T 啦」",
           "code": "HT"
         },
         {
-          "text": "\"小仓位可以试试，别赌上全部\"",
+          "text": "「細倉可以試吓，唔好賭晒成副身家」",
           "code": "RS+HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+HT/HH"
         }
       ]
     },
     {
       "id": 32,
-      "question": "你的账户曲线如果画成心电图，最贴切的描述是——",
+      "question": "你嘅戶口曲線如果畫成心電圖，最貼切嘅形容係——",
       "options": [
         {
-          "text": "剧烈起伏，医生看了都要抢救",
+          "text": "劇烈起伏，醫生睇到都要急救",
           "code": "RG"
         },
         {
-          "text": "平静如深睡状态，几乎没波动",
+          "text": "平靜如深睡狀態，幾乎冇波動",
           "code": "RS"
         },
         {
-          "text": "高频抽动，一天能画出十条线",
+          "text": "高頻抽搐，一日畫得出十條線",
           "code": "HT"
         },
         {
-          "text": "长期平线，偶尔一个尖峰然后又归零",
+          "text": "長期平線，間中一個尖峰然後又歸零",
           "code": "HH"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+HT/HH"
         }
       ]
     },
     {
       "id": 33,
-      "question": "你的持仓集体暴跌、账户直接腰斩的那一刻，你的内心状态是——",
+      "question": "你嘅持倉集體暴跌、戶口直接腰斬嗰一刻，你心入面係——",
       "options": [
         {
-          "text": "激昂亢奋，\"机会来了，冲！\"",
+          "text": "激昂亢奮，「機會嚟喇，衝！」",
           "code": "RG+FP"
         },
         {
-          "text": "平静，\"都在计划之内\"",
+          "text": "平靜，「都喺計劃入面」",
           "code": "RS+FC"
         },
         {
-          "text": "恐惧，\"完了完了要跳楼了\"",
+          "text": "恐懼，「死喇死喇要跳樓喇」",
           "code": "RS+FP"
         },
         {
-          "text": "冷静但压抑，\"加仓，逻辑没变\"",
+          "text": "冷靜但壓抑，「加倉，邏輯冇變」",
           "code": "RG+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+FC/FP"
         }
       ]
     },
     {
       "id": 34,
-      "question": "你在别人恐慌抛售时的真实心理是——",
+      "question": "你喺人哋恐慌拋售嗰陣嘅真實心理係——",
       "options": [
         {
-          "text": "\"机会来了\"，兴奋地开始扫货",
+          "text": "「機會嚟喇」，興奮咁開始掃貨",
           "code": "RG+FP"
         },
         {
-          "text": "\"先别急，等确认企稳再说\"",
+          "text": "「咪急，等確認企穩先講」",
           "code": "RS+FC"
         },
         {
-          "text": "\"大家都在跑，我是不是也该跑\"",
+          "text": "「個個都走，我係咪都應該走」",
           "code": "RS+FP"
         },
         {
-          "text": "淡定补仓，嘴上说\"淡定\"，手却很快",
+          "text": "淡定補倉，口講「淡定」，隻手卻好快",
           "code": "RG+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+FC/FP"
         }
       ]
     },
     {
       "id": 35,
-      "question": "你重仓一只股票后，晚上做梦最可能梦到——",
+      "question": "你重倉一隻股票之後，夜晚發夢最可能夢到——",
       "options": [
         {
-          "text": "涨停敲锣的画面，笑醒",
+          "text": "爆升敲鑼嘅畫面，笑醒",
           "code": "RG+FP"
         },
         {
-          "text": "什么都没梦到，睡得很香",
+          "text": "乜都冇夢到，瞓得好冧",
           "code": "RS+FC"
         },
         {
-          "text": "它跌停的画面，惊醒查手机",
+          "text": "佢插水嘅畫面，嚇醒即刻攞手機",
           "code": "RS+FP"
         },
         {
-          "text": "冷静地梦到自己在看财报",
+          "text": "冷靜咁夢到自己喺度睇年報",
           "code": "RG+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+FC/FP"
         }
       ]
     },
     {
       "id": 36,
-      "question": "你对\"All-in\"这件事的态度是——",
+      "question": "你對「All-in」呢件事嘅態度係——",
       "options": [
         {
-          "text": "\"人生就是要 All-in，不 All-in 枉少年\"",
+          "text": "「人生就係要 All-in，唔 All-in 枉少年」",
           "code": "RG+FP"
         },
         {
-          "text": "\"All-in？我连重仓都要想三天\"",
+          "text": "「All-in？我連重倉都要諗三日」",
           "code": "RS+FC"
         },
         {
-          "text": "\"All-in 过，后悔过，但还想再 All-in 一次\"",
+          "text": "「All-in 過，後悔過，但仲想再 All-in 一次」",
           "code": "RG+FP"
         },
         {
-          "text": "\"小仓位可以，All-in？想都不敢想\"",
+          "text": "「細倉可以，All-in？諗都唔敢諗」",
           "code": "RS+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+FC/FP"
         }
       ]
     },
     {
       "id": 37,
-      "question": "当你看到\"别人满仓杠杆抓到十倍股\"的新闻，你的反应是——",
+      "question": "當你見到「人哋滿倉孖展捉到十倍股」嘅新聞，你嘅反應係——",
       "options": [
         {
-          "text": "热血沸腾，摩拳擦掌准备复刻",
+          "text": "熱血沸騰，磨拳擦掌準備複製",
           "code": "RG+FP"
         },
         {
-          "text": "\"运气好而已，别学\"，然后继续定投",
+          "text": "「好彩啫，唔好學」，然後繼續月供",
           "code": "RS+FC"
         },
         {
-          "text": "羡慕到失眠，但自己不敢下手",
+          "text": "羨慕到瞓唔着，但自己唔敢郁",
           "code": "RS+FP"
         },
         {
-          "text": "冷静分析他的逻辑，看能不能复制",
+          "text": "冷靜分析佢嘅邏輯，睇吓能唔能夠複製",
           "code": "RG+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+FC/FP"
         }
       ]
     },
     {
       "id": 38,
-      "question": "你持仓\"浮亏 50%\"时最真实的状态是——",
+      "question": "你持倉「浮虧 50%」嗰陣最真實嘅狀態係——",
       "options": [
         {
-          "text": "血压飙升但依然嘴硬\"这是黄金坑\"",
+          "text": "血壓飆升但依然死撐「呢個係黃金坑」",
           "code": "RG+FP"
         },
         {
-          "text": "心如止水，\"亏了就亏了，本来就是闲钱\"",
+          "text": "心如止水，「蝕咗就蝕咗，反正都係閒錢」",
           "code": "RS+FC"
         },
         {
-          "text": "半夜盯盘到 3 点，脸色发白",
+          "text": "半夜盯市盯到 3 點，塊面青晒",
           "code": "RS+FP"
         },
         {
-          "text": "冷静补仓，边补边告诉自己\"稳住\"",
+          "text": "冷靜補倉，邊補邊話自己「鎮定」",
           "code": "RG+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+FC/FP"
         }
       ]
     },
     {
       "id": 39,
-      "question": "你对\"割肉\"这个动作的心理负担是——",
+      "question": "你對「止蝕」呢個動作嘅心理負擔係——",
       "options": [
         {
-          "text": "几乎没有，该割就割，不纠结",
+          "text": "幾乎冇，該止就止，唔糾結",
           "code": "RG+FC"
         },
         {
-          "text": "每次割肉都像割自己的肉，纠结到手抖",
+          "text": "每次止蝕都似割自己肉，糾結到手震",
           "code": "RS+FP"
         },
         {
-          "text": "从不割肉，\"扛住就是胜利\"",
+          "text": "從不止蝕，「頂住就係勝利」",
           "code": "RG+FP"
         },
         {
-          "text": "割肉前会先算好各种情景，冷静决策",
+          "text": "止蝕前會計好晒各種情景，冷靜決定",
           "code": "RS+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+FC/FP"
         }
       ]
     },
     {
       "id": 40,
-      "question": "如果用一种天气形容你的投资心态，会是——",
+      "question": "如果要用一種天氣形容你嘅投資心態，會係——",
       "options": [
         {
-          "text": "暴风雨中依然冲浪的疯子",
+          "text": "暴風雨中依然衝浪嘅癲佬",
           "code": "RG+FP"
         },
         {
-          "text": "晴空万里，永远云淡风轻",
+          "text": "晴空萬里，永遠雲淡風輕",
           "code": "RS+FC"
         },
         {
-          "text": "随时可能地震的心理状态",
+          "text": "隨時可能地震嘅心理狀態",
           "code": "RS+FP"
         },
         {
-          "text": "表面平静，内心是龙卷风",
+          "text": "表面平靜，內裡係龍捲風",
           "code": "RG+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "RG/RS+FC/FP"
         }
       ]
     },
     {
       "id": 41,
-      "question": "你持仓超过一年后回看，最真实的感受是——",
+      "question": "你揸倉超過一年之後返睇，最真實嘅感受係——",
       "options": [
         {
-          "text": "\"淡定，逻辑一直没变\"",
+          "text": "「淡定，邏輯一直冇變」",
           "code": "HH+FC"
         },
         {
-          "text": "\"天天看盘天天心慌，但就是不想卖\"",
+          "text": "「日日睇市日日心慌，但就係唔想賣」",
           "code": "HH+FP"
         },
         {
-          "text": "\"早就换了十几只了，哪有什么一年\"",
+          "text": "「早就換咗十幾隻啦，邊有咩一年」",
           "code": "HT+FC"
         },
         {
-          "text": "\"天天T，天天慌，但就是停不下来\"",
+          "text": "「日日 T，日日慌，但就係停唔到」",
           "code": "HT+FP"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "HT/HH+FC/FP"
         }
       ]
     },
     {
       "id": 42,
-      "question": "你对\"隔夜仓\"的态度是——",
+      "question": "你對「過夜倉」嘅態度係——",
       "options": [
         {
-          "text": "从不留隔夜仓，睡不着",
+          "text": "從不留過夜倉，瞓唔着",
           "code": "HT+FP"
         },
         {
-          "text": "隔夜仓算什么，隔年仓都不怕",
+          "text": "過夜倉算咩，隔年倉都唔怕",
           "code": "HH+FC"
         },
         {
-          "text": "留了但整晚做梦都是它的走势",
+          "text": "留咗但成晚發夢都係佢嘅走勢",
           "code": "HH+FP"
         },
         {
-          "text": "收盘前必平仓，图个心安",
+          "text": "收市前必平倉，求個心安",
           "code": "HT+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "HT/HH+FC/FP"
         }
       ]
     },
     {
       "id": 43,
-      "question": "一只股票放了三年终于回本，你的反应是——",
+      "question": "一隻股票放咗三年終於返家鄉，你嘅反應係——",
       "options": [
         {
-          "text": "\"早就忘了这事，回本了都不知道\"",
+          "text": "「早就唔記得咗，返咗家鄉都唔知」",
           "code": "HH+FC"
         },
         {
-          "text": "\"天啊终于活过来了\"，激动落泪",
+          "text": "「嘩終於生返！」感動到流眼淚",
           "code": "HH+FP"
         },
         {
-          "text": "\"三年？我早就换了几十轮仓了\"",
+          "text": "「三年？我早就轉咗幾十輪倉啦」",
           "code": "HT+FC"
         },
         {
-          "text": "\"三年天天心慌，现在总算能睡个好觉\"",
+          "text": "「三年日日心慌，今晚終於瞓得安樂」",
           "code": "HT+FP"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "HT/HH+FC/FP"
         }
       ]
     },
     {
       "id": 44,
-      "question": "你对\"今天大盘暴跌 5%\"这件事的反应速度是——",
+      "question": "你對「今日大市暴跌 5%」呢件事嘅反應速度係——",
       "options": [
         {
-          "text": "完全不知道，因为我根本不常看盘",
+          "text": "完全唔知，因為我根本唔係成日睇市",
           "code": "HH+FC"
         },
         {
-          "text": "知道了，但心态很稳，该干嘛干嘛",
+          "text": "知道咗，但心態好穩，照樣做自己嘢",
           "code": "HH+FP"
         },
         {
-          "text": "秒知道，心跳瞬间加速，手心冒汗",
+          "text": "秒知，心跳即刻加速，手心冒汗",
           "code": "HT+FP"
         },
         {
-          "text": "知道了但装作不知道，继续摸鱼",
+          "text": "知道咗但扮唔知，繼續扮工",
           "code": "HT+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "HT/HH+FC/FP"
         }
       ]
     },
     {
       "id": 45,
-      "question": "你对\"持仓浮盈 50% 却迟迟不卖\"的心理描述是——",
+      "question": "你對「持倉浮盈 50% 但遲遲唔賣」嘅心理描述係——",
       "options": [
         {
-          "text": "\"淡定，还没到我的目标价\"",
+          "text": "「淡定，未到目標價」",
           "code": "HH+FC"
         },
         {
-          "text": "\"天天算还能再涨多少，睡不好\"",
+          "text": "「日日計仲可以升幾多，瞓唔好」",
           "code": "HH+FP"
         },
         {
-          "text": "\"早就止盈跑了，哪能拿这么久\"",
+          "text": "「一早止賺走咗啦，邊揸得咁耐」",
           "code": "HT+FC"
         },
         {
-          "text": "\"拿一天就想卖，忍到现在已经是奇迹\"",
+          "text": "「揸一日就想賣，忍到而家已經係奇蹟」",
           "code": "HT+FP"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "HT/HH+FC/FP"
         }
       ]
     },
     {
       "id": 46,
-      "question": "深夜复盘时，你的状态通常是——",
+      "question": "深夜覆盤嗰陣，你嘅狀態通常係——",
       "options": [
         {
-          "text": "一杯茶、一份笔记，冷静客观地总结",
+          "text": "一杯茶、一本筆記，冷靜客觀咁總結",
           "code": "HH+FC"
         },
         {
-          "text": "边复盘边emo，\"我是不是不适合做长线\"",
+          "text": "邊覆盤邊 emo，「我係咪唔啱做長線」",
           "code": "HH+FP"
         },
         {
-          "text": "快速扫一眼今天的T做得怎么样，然后睡觉",
+          "text": "快速睇一眼今日啲 T 做得點，然後瞓覺",
           "code": "HT+FC"
         },
         {
-          "text": "手机屏幕的光照着焦虑的脸，翻来覆去睡不着",
+          "text": "手機螢光映住個焦慮樣，輾轉反側瞓唔着",
           "code": "HT+FP"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "HT/HH+FC/FP"
         }
       ]
     },
     {
       "id": 47,
-      "question": "你上一次\"情绪失控\"和投资有关的时刻是——",
+      "question": "你上一次「情緒失控」同投資有關嘅時刻係——",
       "options": [
         {
-          "text": "完全想不起来，我心态一直很稳",
+          "text": "完全諗唔起，我心態一直好穩",
           "code": "HH+FC"
         },
         {
-          "text": "昨天，因为隔夜仓又让我梦到跌停",
+          "text": "琴日，因為個過夜倉又令我夢到插水",
           "code": "HH+FP"
         },
         {
-          "text": "每天都有，毕竟每天都在T",
+          "text": "每日都有，畢竟每日都喺度 T",
           "code": "HT+FP"
         },
         {
-          "text": "几年前了吧，反正现在心态早就佛了",
+          "text": "幾年前啦，反正而家心態早就隨緣咗",
           "code": "HH+FC"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "HT/HH+FC/FP"
         }
       ]
     },
     {
       "id": 48,
-      "question": "假如给你的投资生涯写一句\"墓志铭\"，会是——",
+      "question": "假如幫你嘅投資生涯寫一句「墓誌銘」，會係——",
       "options": [
         {
-          "text": "\"他很少看盘，但每次看都很平静\"",
+          "text": "「佢好少睇市，但每次睇都好冷靜」",
           "code": "HH+FC"
         },
         {
-          "text": "\"他天天看盘，天天很慌，但从没卖过\"",
+          "text": "「佢日日睇市，日日好慌，但從冇賣過」",
           "code": "HH+FP"
         },
         {
-          "text": "\"他从不留隔夜仓，睡得比谁都香\"",
+          "text": "「佢從不留過夜倉，瞓得比邊個都香」",
           "code": "HT+FC"
         },
         {
-          "text": "\"他天天T，天天慌，直到最后一刻\"",
+          "text": "「佢日日 T，日日慌，直到最後一刻」",
           "code": "HT+FP"
         },
         {
-          "text": "说不清，好像都沾一点",
+          "text": "講唔清，好似樣樣都有啲",
           "code": "HT/HH+FC/FP"
         }
       ]
@@ -4524,33 +4548,33 @@ var QUESTIONS = {
 
 var RESULTS = {
   "results": [
-    { "code": "RGHC", "word": "SNIPER", "name": "猎手", "tagline": "你研究十年，出手一次。猎物从没跑掉过——直到你上次抄底抄在了半山腰。", "traits": ["你是朋友圈里的「股神」，大家亏钱都来问你。", "你的问题不是选股，是拿不住——逻辑对了，手却管不住。", "冷静是你的超能力，但冷静太久容易错过最肥的一段。"], "recommendedAsset": "你重仓的那只股票（你研究它十年了）", "shareText": "我是猎手型——研究十年，出手一次，从不梭哈。你呢？" },
-    { "code": "RSHC", "word": "TURTLE", "name": "龟仙人", "tagline": "你的持仓年限，比你谈过的恋爱还长。", "traits": ["你 2021 年买的白酒，今年终于……还差 20% 回本。", "你的字典里没有「割肉」，只有「长期主义」。", "说真的，大多数人都该学你，可惜没人学得会。"], "recommendedAsset": "任何 ETF——反正你要拿 30 年", "shareText": "我是龟仙人型——十年不动，一动惊人。时间是复利的朋友。" },
-    { "code": "RGTC", "word": "BOT", "name": "量化猎人", "tagline": "你有一个策略，一个止损，和一个不存在的感情生活。", "traits": ["你的交易记录精确到小数点后两位，你的亏损也是。", "数据是你的信仰，可惜市场偶尔不信数据。", "建议：把策略里的「回撤 20% 加仓」改成「回撤 20% 反省」。"], "recommendedAsset": "高频交易手续费套餐（你的主要支出）", "shareText": "我是量化猎人型——不看情绪，只看数据。你亏钱是因为你不做回测。" },
-    { "code": "RSTC", "word": "GRANDMA", "name": "精算师", "tagline": "你连买菜都要算收益率，却在股市里做慈善。", "traits": ["每一笔交易你都有计划，除了割肉的时候。", "你的胜率很高，但你赚的还不够手续费。", "保守不是缺点，但你错过的那几只十倍股，够你算十年的。"], "recommendedAsset": "国债——它们和你一样稳（无聊）", "shareText": "我是精算师型——每一笔都有计划，每一次都不亏大钱。稳，就是我的进攻。" },
-    { "code": "FGHC", "word": "PROPHET", "name": "传教士", "tagline": "你坚信一个故事，然后把它讲给所有人听——包括自己。", "traits": ["你买入的那一刻，不是建仓，是皈依。", "别人问你仓位，你说「信仰不需要仓位」。", "好消息：你的直觉偶尔准得可怕。坏消息：你分不清哪次准。"], "recommendedAsset": "加密货币——信徒的天堂，韭菜的坟场", "shareText": "我是传教士型——要么信，要么不信，没有中间态。我信的那个故事，还没讲完。" },
-    { "code": "FSHC", "word": "MONK", "name": "佛系玩家", "tagline": "你的投资策略：买了，忘了，随缘。", "traits": ["你去年定投的基金，你连名字都快忘了。", "市场暴跌那天，你在睡觉，这是你赢过所有人的原因。", "偶尔打开一次账户：哦，翻倍了。然后继续睡觉。"], "recommendedAsset": "余额宝——你的青春，你的主场", "shareText": "我是佛系玩家型——不追高，不割肉，不慌。市场再怎么跌，我睡得着。" },
-    { "code": "FGTC", "word": "God of Gamblers", "name": "赌神", "tagline": "你赢的时候叫股神，输的时候叫赌狗。", "traits": ["你的盘感强得离谱，但你的手比盘感更快。", "一天不交易，你就浑身难受。", "建议把持仓时间从「3 小时」改成「3 天」，你会感谢我的。"], "recommendedAsset": "一张去澳门的机票", "shareText": "我是赌神型——凭直觉进场，凭本事出场。昨天刚把手续费赚回来。" },
-    { "code": "FSTC", "word": "GEAR", "name": "打工人", "tagline": "别人炒股是投资，你炒股是兼职。", "traits": ["你的目标很朴素：赚个早餐钱就跑。", "好消息：你从不亏大钱。坏消息：你赚的还不够买早餐。", "但你的心态赢了 90% 的股民——起码你睡得着。"], "recommendedAsset": "可转债打新——本打工人的信仰", "shareText": "我是打工人型——小赚就跑，绝不恋战。市场再疯，我只赚我的早餐钱。" },
-    { "code": "RGHP", "word": "MARTYR", "name": "杠杆烈士", "tagline": "你研究得很认真，然后加了 3 倍杠杆。", "traits": ["你的研究报告写满三页纸，风险提示写在第四页——没看。", "你坚信这次不一样，市场说：每次都一样。", "你离财务自由只差一次成功，也离天台只差一次失败。"], "recommendedAsset": "跌停板——你与它相拥的次数最多", "shareText": "我是杠杆烈士型——不杠杆，不人生。别学我，我认真的。" },
-    { "code": "RSHP", "word": "BAGHOLDER", "name": "大冤种", "tagline": "你研究得越认真，套得越深。", "traits": ["你买在最高点的概率是 100%，哪怕那股票已经涨了十倍。", "你最大的资产叫「等回本」，已经等了三年。", "好消息：你终于学会止损了。坏消息：学完你就反弹了。"], "recommendedAsset": "一本《高点接盘纪念册》（已绝版，因销量太好）", "shareText": "我是大冤种型——认真研究，精准接盘。我等的回本，还在路上。" },
-    { "code": "RGTP", "word": "FOMO", "name": "追高侠", "tagline": "别人贪婪我恐惧，别人恐惧我……接盘。", "traits": ["你的买入信号：连续涨停 + 全网都在吹。", "你的卖出信号：跌回你的成本价，然后割肉。", "你为市场提供了流动性，是真正的无私奉献者。"], "recommendedAsset": "山顶的空气——新鲜、昂贵、你已购买多份", "shareText": "我是追高侠型——只买涨得最猛的，人生就是要冲。最近在山顶吹风，信号还行。" },
-    { "code": "RSTP", "word": "STALKER", "name": "焦虑盯盘侠", "tagline": "你的手机电量，全贡献给了行情页。", "traits": ["你每分钟刷一次价格，哪怕你知道它不会变。", "你的心跳曲线，比你的持仓曲线还刺激。", "建议把看盘时间换成睡觉，你的血压会感谢你。"], "recommendedAsset": "降压药板块——你迟早需要的行业", "shareText": "我是焦虑盯盘侠型——每分钟都在看，每天都在担惊受怕，但就是不改。" },
-    { "code": "FGHP", "word": "DREAMER", "name": "梦想家", "tagline": "你的持仓里，有一个价值十万的梦想和两万块的现实。", "traits": ["你 all-in 的那一刻，配乐都是史诗级的。", "你的故事讲给所有人听：太空、AI、改变世界。", "偶尔也讲讲：什么时候回本。"], "recommendedAsset": "太空概念股——梦要够大，跌才够疼", "shareText": "我是梦想家型——all-in 一个改变世界的故事。你问我风险？梦哪有什么风险。" },
-    { "code": "FSHP", "word": "GHOST", "name": "删App侠", "tagline": "你的投资策略：跌了删 App，涨了装回来。", "traits": ["你的手机里，那款炒股 App 的安装次数已破纪录。", "你坚信：不打开，就等于没亏。", "真相：它每次都在，等你回来。"], "recommendedAsset": "手机流量套餐——你反复下载 App 的最大开支", "shareText": "我是删App侠型——不看就不亏，卸载就是止损。等我准备好了再回来。" },
-    { "code": "FGTP", "word": "YOLO", "name": "梭哈战神", "tagline": "你的仓位管理：全仓。你的风险控制：祈祷。", "traits": ["你的人生格言：all-in 不一定赢，不 all-in 一定输。", "你的账户曲线像心电图，你说是正常的。", "说句公道话：你赢的时候，是真的敢。"], "recommendedAsset": "彩票——你与它唯一的区别是它合法（其实都合法）", "shareText": "我是梭哈战神型——人生就是一把梭，赢了会所嫩模，输了下海干活。" },
-    { "code": "FSTP", "word": "CHICKEN", "name": "恐慌割肉侠", "tagline": "你的操作：跌 3% 就割，割完就涨停。", "traits": ["你是市场公认的「反向指标」——你卖出的股票，次日必涨。", "你的止损线比你的底线还低。", "建议：下次想卖的时候，先问问自己是不是又慌了。"], "recommendedAsset": "割肉专用小刀（镀金限量版）", "shareText": "我是恐慌割肉侠型——我一卖就涨，一涨就悔。别跟我买，但可以跟我反着买。" }
+    { "code": "RGHC", "word": "SNIPER", "name": "狙擊手", "tagline": "你研究足十年先出手一次，隻獵物從未走甩——直到上次你喺半山腰撈底。", "traits": ["你係群組入面嘅「股神」，啲人輸錢先至嚟問你。", "你嘅問題唔係揀股，係揸唔住——邏輯啱晒，隻手唔聽話。", "冷靜係你嘅超能力，但冷靜得太耐，最肥嗰段永遠食唔到。"], "recommendedAsset": "你重倉嗰隻股票（你研究咗佢十年）", "shareText": "我係狙擊手型——研究十年，出手一次，從不 all-in。你呢？" },
+    { "code": "RSHC", "word": "TURTLE", "name": "龜仙人", "tagline": "你揸貨嘅年期，長過你任何一段戀情。", "traits": ["你 2021 年買嘅科技股，今年終於……仲差 20% 先返家鄉。", "你嘅字典冇「止蝕」呢兩個字，只有「長期主義」。", "講真，大把人應該學你，可惜冇人學得嚟。"], "recommendedAsset": "任何 ETF——反正你打算揸 30 年", "shareText": "我係龜仙人型——十年唔郁，一郁驚人。時間係複利嘅朋友。" },
+    { "code": "RGTC", "word": "BOT", "name": "量化機械人", "tagline": "你有一個策略、一個止蝕位，同一個唔存在嘅感情生活。", "traits": ["你嘅交易紀錄精確到小數點後兩位，你嘅虧損都係。", "數據係你嘅信仰，可惜市場間中唔信數據。", "建議：將策略入面嘅「回撤 20% 加倉」改成「回撤 20% 反省」。"], "recommendedAsset": "高頻交易手續費套餐（你嘅最大開支）", "shareText": "我係量化機械人型——唔睇情緒，只睇數據。你輸錢係因為你唔做 backtest。" },
+    { "code": "RSTC", "word": "GRANDMA", "name": "師奶股神", "tagline": "你連買餸都要計回報率，但係喺股市入面做善事。", "traits": ["每一筆交易你都有計劃，除咗止蝕嗰陣。", "你嘅勝率好高，但你賺嘅仲未夠畀手續費。", "保守唔係缺點，但你走漏嗰幾隻十倍股，夠你計十年。"], "recommendedAsset": "定期存款——同你一樣咁穩（咁悶）", "shareText": "我係師奶股神型——每筆都有計劃，次次都唔輸大錢。穩，就係我嘅進攻。" },
+    { "code": "FGHC", "word": "PROPHET", "name": "教主", "tagline": "你相信一個故事，然後講俾全世界聽——包括你自己。", "traits": ["你買入嗰一刻，唔係建倉，係入教。", "人哋問你倉位，你話「信仰唔需要倉位」。", "好消息：你嘅直覺間中準得可怕。壞消息：你分唔清邊次準。"], "recommendedAsset": "加密貨幣——信徒嘅天堂，水魚嘅墳場", "shareText": "我係教主型——信就信，唔信就唔信，冇中間位。我信嗰個故事，仲未講完。" },
+    { "code": "FSHC", "word": "MONK", "name": "隨緣玩家", "tagline": "你嘅投資策略：買咗，忘記，隨緣。", "traits": ["你舊年月供嘅基金，你連名都唔記得。", "市場冧市嗰日，你喺瞓覺，呢個正正就係你贏晒嘅原因。", "間中開一次戶口：哦，翻咗倍。然後繼續瞓。"], "recommendedAsset": "定期存款——你嘅青春，你嘅主場", "shareText": "我係隨緣玩家型——唔高追，唔止蝕，唔慌。市場跌成點，我一樣瞓得着。" },
+    { "code": "FGTC", "word": "God of Gamblers", "name": "賭神", "tagline": "你贏嗰陣係股神，輸嗰陣係賭仔。", "traits": ["你嘅盤感強得離譜，但你隻手快過你嘅盤感。", "一日唔交易，你周身唔聚財。", "建議將揸倉時間由「3 個鐘」改成「3 日」，你會多謝我。"], "recommendedAsset": "一張去澳門嘅船飛", "shareText": "我係賭神型——憑直覺入場，憑本事出場。琴日啱啱將手續費賺返嚟。" },
+    { "code": "FSTC", "word": "GEAR", "name": "打工仔", "tagline": "人哋炒股係投資，你炒股係兼職。", "traits": ["你嘅目標好樸素：賺返餐早餐錢就走。", "好消息：你從唔輸大錢。壞消息：你賺嘅仲未夠買早餐。", "但你嘅心態贏咗 90% 嘅股民——起碼你瞓得着。"], "recommendedAsset": "月供股票——打工仔嘅信仰", "shareText": "我係打工仔型——賺少少就走，絕不戀戰。市場幾癲，我淨係賺我嘅早餐錢。" },
+    { "code": "RGHP", "word": "MARTYR", "name": "孖展烈士", "tagline": "你研究得好認真，然後加咗 3 倍孖展。", "traits": ["你嘅研究報告寫滿三頁紙，風險提示寫喺第四頁——冇睇。", "你相信今次唔同，市場話：每次都一樣。", "你距離財務自由只差一次成功，距離跳樓都只差一次失敗。"], "recommendedAsset": "窩輪牛熊證——你同佢相擁嘅次數最多", "shareText": "我係孖展烈士型——唔孖展，唔人生。唔好學我，我講真。" },
+    { "code": "RSHP", "word": "BAGHOLDER", "name": "蟹貨之王", "tagline": "你研究得越認真，坐艇坐得越深。", "traits": ["你買喺最高位嘅概率係 100%，哪怕隻股已經升咗十倍。", "你最大嘅資產叫「等返家鄉」，已經等咗三年。", "好消息：你終於學識止蝕。壞消息：學完佢就反彈。"], "recommendedAsset": "一本《高位接盤紀念冊》（已絕版，因為銷量太好）", "shareText": "我係蟹貨之王型——認真研究，精準接貨。我等到嘅返家鄉，仲喺路上。" },
+    { "code": "RGTP", "word": "FOMO", "name": "摸頂俠", "tagline": "人哋貪婪我恐懼，人哋恐懼我……接貨。", "traits": ["你嘅買入訊號：升到爆 + 全網都喺度吹。", "你嘅賣出訊號：跌返你嘅成本價，然後止蝕。", "你為市場提供咗流動性，係真正嘅無私奉獻者。"], "recommendedAsset": "山頂嘅空氣——新鮮、昂貴、你已經買咗好多份", "shareText": "我係摸頂俠型——只買升得最癲嘅，人生就係要衝。最近喺山頂吹風，訊號仲得。" },
+    { "code": "RSTP", "word": "STALKER", "name": "恐慌盯盤俠", "tagline": "你嘅手機電量，全部貢獻咗畀報價機。", "traits": ["你每分鐘撳一次報價，哪怕你知佢唔會變。", "你嘅心跳曲線，刺激過你嘅持倉曲線。", "建議將睇市時間換成瞓覺，你嘅血壓會多謝你。"], "recommendedAsset": "降壓藥板塊——你遲早需要嘅行業", "shareText": "我係恐慌盯盤俠型——每分鐘都睇，每日都騰騰震，但就係唔改。" },
+    { "code": "FGHP", "word": "DREAMER", "name": "發夢王", "tagline": "你嘅持倉入面，有一個價值十萬嘅夢想，同兩萬蚊嘅現實。", "traits": ["你 all-in 嗰一刻，背景音樂都係史詩級。", "你嘅故事講俾所有人聽：太空、AI、改變世界。", "間中都會講：幾時返家鄉。"], "recommendedAsset": "港股新經濟股——夢要夠大，跌先夠痛", "shareText": "我係發夢王型——all-in 一個改變世界嘅故事。你問我風險？夢邊度有風險。" },
+    { "code": "FSHP", "word": "GHOST", "name": "刪App俠", "tagline": "你嘅投資策略：跌咗刪 App，升返裝返。", "traits": ["你部手機入面，嗰個炒股 App 嘅安裝次數已破紀錄。", "你深信：唔打開，就等於冇蝕。", "真相：佢每次都在，等你返嚟。"], "recommendedAsset": "手機數據套餐——你反覆下載 App 嘅最大開支", "shareText": "我係刪App俠型——唔睇就唔蝕，刪 App 就係止蝕。等我準備好再返嚟。" },
+    { "code": "FGTP", "word": "YOLO", "name": "一鋪清袋戰神", "tagline": "你嘅倉位管理：全倉。你嘅風險控制：祈禱。", "traits": ["你嘅人生格言：all-in 唔一定贏，唔 all-in 一定輸。", "你嘅帳戶曲線似心電圖，你話係正常。", "講句公道話：你贏嗰陣，係真係夠膽。"], "recommendedAsset": "六合彩——你同佢唯一嘅分別係佢合法（其實都合法）", "shareText": "我係一鋪清袋戰神型——人生就係一鋪過，贏咗揸靚車，輸咗揸的士。" },
+    { "code": "FSTP", "word": "CHICKEN", "name": "震走俠", "tagline": "你嘅操作：跌 3% 就止蝕，止完即刻爆升。", "traits": ["你係市場公認嘅「反向指標」——你賣出嘅股票，第二日必升。", "你嘅止蝕線，低過你嘅底線。", "建議：下次想賣嗰陣，先問吓自己係咪又慌咗。"], "recommendedAsset": "一把止蝕專用刀（鍍金限量版）", "shareText": "我係震走俠型——我一賣就升，一升就後悔。唔好跟我買，但可以跟我反着買。" }
   ],
   "systemNotes": [
-    "怎么样，被我拿捏了吧？",
-    "以上结果由 AI 掐指一算得出，准确率 100%——不准是因为你在第 5 题就已经开始撒谎了。",
-    "本测试仅供娱乐，别拿它算命、更别拿它去相亲。"
+    "點樣，俾我拿捏咗啦？",
+    "以上結果由 AI 掐指一算得出，準確率 100%——唔準係因為你喺第 5 條已經開始講大話。",
+    "本測試純屬娛樂，唔好用嚟算命，更加唔好用嚟相睇。"
   ],
   "easterEggs": {
-    "allSameAnswer": { "persona": "人形提款机", "note": "AI 检测到你已失去理智，建议立即卸载所有交易软件。" },
-    "rapidSubmit": { "note": "世界已经够乱了，起码把题做完整。" },
-    "abcdCycle": { "persona": "强迫症鉴赏家", "note": "你连做题都要对称，一定活得挺累吧？" },
-    "q9CNote": { "note": "放心，我们的 AI 也被打过脸，它现在学乖了。" }
+    "allSameAnswer": { "persona": "人肉提款機", "note": "AI 檢測到你已經失去理智，建議即刻刪晒所有交易 App。" },
+    "rapidSubmit": { "note": "世界已經夠亂，起碼將啲題答完先。" },
+    "abcdCycle": { "persona": "對稱美學鑑賞家", "note": "你連答題都要對稱，一定活得幾攰吓？" },
+    "q9CNote": { "note": "放心，我哋嘅 AI 都俾人打過臉，佢而家學乖咗。" }
   }
 };
 
@@ -4558,153 +4582,153 @@ var RESULTS = {
 
 /* ============ 结果页数据:社交钩子统计 + 深度解读 + App二维码 ============ */
 var PERSONA_STATS = {
-  "SNIPER": { total: 9215, discussing: 216, topic: "这只票的财报到底该不该信" },
-  "TURTLE": { total: 14762, discussing: 58, topic: "还要拿多久才能回本", note: "其他人都在睡觉" },
-  "BOT": { total: 6340, discussing: 512, topic: "今天的策略要不要改参数" },
-  "GRANDMA": { total: 13958, discussing: 189, topic: "这笔到底值不值得" },
-  "PROPHET": { total: 7809, discussing: 743, topic: "要不要抄底那个信仰币" },
-  "MONK": { total: 16331, discussing: 31, topic: "账户好像涨了，谁能告诉我" },
-  "God of Gamblers": { total: 8627, discussing: 967, topic: "今晚要不要满仓搏一把" },
-  "GEAR": { total: 17684, discussing: 224, topic: "今天的早餐钱赚到了没" },
-  "MARTYR": { total: 5912, discussing: 601, topic: "要不要再加一倍杠杆" },
-  "BAGHOLDER": { total: 19053, discussing: 1382, topic: "到底什么时候能解套" },
-  "FOMO": { total: 16246, discussing: 1098, topic: "现在追还来不来得及" },
-  "STALKER": { total: 20398, discussing: 2847, topic: "为什么它又跌了0.3%" },
-  "DREAMER": { total: 10477, discussing: 634, topic: "这个故事到底能不能兑现" },
-  "GHOST": { total: 12905, discussing: 12, topic: "要不要把App装回来", note: "他们也在纠结" },
-  "YOLO": { total: 9631, discussing: 823, topic: "今天该不该抄底" },
-  "CHICKEN": { total: 15724, discussing: 445, topic: "刚割肉那只是不是又涨停了" }
+  "SNIPER": { total: 9215, discussing: 216, topic: "呢隻票嘅年報到底應唔應該信" },
+  "TURTLE": { total: 14762, discussing: 58, topic: "仲要揸幾耐先返家鄉", note: "其他人都在睡觉" },
+  "BOT": { total: 6340, discussing: 512, topic: "今日個策略要唔要改參數" },
+  "GRANDMA": { total: 13958, discussing: 189, topic: "呢筆到底值唔值得" },
+  "PROPHET": { total: 7809, discussing: 743, topic: "要唔要撈底嗰隻信仰幣" },
+  "MONK": { total: 16331, discussing: 31, topic: "戶口好似升咗，邊個話我知" },
+  "God of Gamblers": { total: 8627, discussing: 967, topic: "今晚要唔要全倉搏一鋪" },
+  "GEAR": { total: 17684, discussing: 224, topic: "今日嘅早餐錢搵到未" },
+  "MARTYR": { total: 5912, discussing: 601, topic: "要唔要再加一倍孖展" },
+  "BAGHOLDER": { total: 19053, discussing: 1382, topic: "到底幾時先可以返家鄉" },
+  "FOMO": { total: 16246, discussing: 1098, topic: "而家追返嚟唔嚟得切" },
+  "STALKER": { total: 20398, discussing: 2847, topic: "點解佢又跌咗 0.3%" },
+  "DREAMER": { total: 10477, discussing: 634, topic: "呢個故事到底兌唔兌現到" },
+  "GHOST": { total: 12905, discussing: 12, topic: "要唔要將個 App 裝返", note: "佢哋都喺度糾結" },
+  "YOLO": { total: 9631, discussing: 823, topic: "今日應唔應該撈底" },
+  "CHICKEN": { total: 15724, discussing: 445, topic: "啱啱止蝕嗰隻係咪又爆升" }
 };
 
 var DEEP_DIVES = {
   "SNIPER": {
-    preview: "你不是不敢下手，你是不甘心随便下手。你研究一只票的时间，比谈一场恋爱还认真——翻遍财报、算清估值、等一个\"确定性够高\"的瞬间。但奇怪的是，你等得越久，反而越容易在扣扳机的那一刻手抖。因为你心里清楚：这次如果错了，可不是\"运气不好\"能解释的，是你研究了三个月还是错了。",
+    preview: "你唔係唔敢郁手，你係唔甘心求其郁手。你研究一隻嘢，認真過人哋揀樓——翻晒年報、計足估值，等一個「確定性夠高」嘅時刻。但奇就奇在，你等得越耐，越容易喺撳掣嗰一刻手震。因為你心知肚明：今次如果錯，唔係「唔好彩」三個字解釋得到——係你研究咗三個月，都係錯。",
     sections: [
-      { title: "行为根源", content: "你的完美主义不是天生的，是曾经\"随便买\"亏过一次大的，之后你把\"研究\"当成唯一能控制的变量……" },
-      { title: "关系盲点", content: "你最容易看不起\"追热点\"的人，但你没意识到，你的\"深度研究\"有时候只是给\"不敢行动\"找的一个体面借口……" },
-      { title: "成长处方", content: "你需要的不是更多研究，是一个\"止损即止损、不用完整逻辑闭环\"的强制纪律……" }
+      { title: "行為根源", content: "你份完美主義有段故——以前試過「求其買」，蝕過一鑊大，自此你將「研究」當成唯一揸得住嘅嘢。研究越深，你越覺得自己冇錯；但講到尾，你只係用「再研究多陣」嚟拖住「唔敢郁手」嗰種驚。" },
+      { title: "關係盲點", content: "你睇唔起「追熱點」嗰班人，但你嘅「深度研究」，好多時只係俾「唔敢郁手」搵一個體面啲嘅藉口。「我仲未研究夠」——呢句先係你講得最多嘅謊言。" },
+      { title: "成長處方", content: "你嘅功課唔係研究，係承認自己會錯。研究可以慢慢嚟，但「認錯」要快過你個腦——再拖落去，你只會由「唔甘心」變成「唔捨得」。" },
     ]
   },
   "TURTLE": {
-    preview: "你的持仓年限，比你手机里所有App的使用年限都长。别人问你怎么熬过那些暴跌的，你说\"没熬，我根本没打开过软件\"。这句话听起来云淡风轻，但只有你自己知道，有那么几个深夜，你也曾经手贱点开过App，然后又假装什么都没看见地关掉。",
+    preview: "你揸住啲嘢嘅年期，耐過你種過嘅任何一盆植物。人哋問你點捱過嗰啲暴跌，你話「冇捱過，我根本冇開過個 App」。講得好輕描淡寫，但得你自己知：有幾個深夜，你都係忍唔住撳開咗，睇完又扮冇嘢閂返。",
     sections: [
-      { title: "行为根源", content: "你不是天生佛系，你只是发现\"不做决定\"比\"做错决定\"更让你心安……" },
-      { title: "关系盲点", content: "你最看不惯短线操作的朋友，但你也悄悄羡慕他们的灵活……" },
-      { title: "成长处方", content: "长期主义不等于\"永远不检查\"，你缺的是一套\"多久复盘一次\"的机制……" }
+      { title: "行為根源", content: "你份淡定唔係天生，係你發現「唔做決定」比「做錯決定」令你心安。時間越耐，你越分唔清：你係真係唔怕，定係已經慣咗唔望。" },
+      { title: "關係盲點", content: "你成日睇唔順眼啲短線朋友，但佢哋買賣嗰陣嗰種靈活，你有時會暗暗羨慕。你話人哋「坐唔定」，其實你心知：人哋起碼有反應，你係連反應都慳返。" },
+      { title: "成長處方", content: "真正難嘅，係忍受「乜都唔做」嗰種唔安樂。你以為唔郁就係贏，但真正難嘅，係學識分開「等」同「避」——呢兩樣嘢，你而家撈埋一齊好耐喇。" },
     ]
   },
   "BOT": {
-    preview: "你相信数据，胜过相信任何人说的话——包括你自己昨天说的话。你的交易记录精确到小数点后两位，回测报告写得比论文还严谨。但市场有个坏习惯：它偶尔就是不按你的模型出牌，而那一刻，你比任何感性交易者都更崩溃，因为你连\"崩溃\"这件事，都觉得不该发生在一个理性的人身上。",
+    preview: "你信數據，信過信你自己尋日講嘅嘢。你嘅交易紀錄精確到小數點後兩位，回測報告寫得比論文仲嚴謹。但市場有個壞習慣：佢間中就係唔跟你個模型出牌——而嗰一刻，你比任何憑感覺嘅人仲崩潰，因為你連「崩潰」呢件事，都覺得唔應該發生喺一個理性嘅人身上。",
     sections: [
-      { title: "行为根源", content: "你把\"控制感\"寄托在数字上，是因为现实生活里有些事，你控制不了……" },
-      { title: "关系盲点", content: "你身边的人觉得你很难沟通感情，其实你只是不知道怎么处理\"没有标准答案\"的事……" },
-      { title: "成长处方", content: "你需要给模型加一个\"人类情绪\"变量，而不是假装它不存在……" }
+      { title: "行為根源", content: "數字係你嘅避風塘——因為，係因為現實生活入面有啲嘢，你根本控制唔到。數字至少會俾你答案——就算個答案係錯，你都覺得「起碼有個答案」。" },
+      { title: "關係盲點", content: "人哋同你講感受，你第一時間想開個試算表，其實你只係唔識處理「冇標準答案」嘅事。人哋同你講感受，你第一時間想開個試算表——呢個先係你真正嘅盲點。" },
+      { title: "成長處方", content: "你遲早會撞到「數據都幫唔到你」嗰一刻。你以為理性係盔甲，但盔甲都有透氣嘅一日——嗰日嚟嗰陣，你唔好當自己係部壞咗嘅機器，要當自己係個人。" },
     ]
   },
   "GRANDMA": {
-    preview: "你连买菜都要算收益率，但你在股市里做的，其实是慈善。每一笔交易你都有精密的计划，胜率高得惊人——可惜赚的钱，刚好够付手续费。你不是不懂进攻，你只是把\"不亏\"看得比\"多赚\"重要一万倍，这份谨慎，让你避开了所有大坑，也避开了所有大机会。",
+    preview: "你每一筆交易都有計劃，勝率高得嚇人——可惜賺到嘅錢，啱啱夠畀手續費。你成日話「穩陣啲好」，但冇人問過你：你避開晒所有大坑嘅同時，係咪都避開晒所有機會？你以為你係贏喺謹慎，其實你可能係輸喺唔敢。",
     sections: [
-      { title: "行为根源", content: "你对\"确定性\"的执念，往往来自一次让你记忆深刻的意外损失……" },
-      { title: "关系盲点", content: "你身边爱冒险的朋友觉得你无聊，但其实他们私下都很羡慕你从不失眠……" },
-      { title: "成长处方", content: "适度放宽你的安全边际，你会发现\"小赌怡情\"和\"稳\"并不矛盾……" }
+      { title: "行為根源", content: "一次令你記到而家嘅意外損失，種落咗你對「確定性」嘅執着。自此你將「唔蝕」擺喺「賺」前面——呢個選擇冇錯，但你要知：你揀嘅唔係穩陣，係唔使自己再面對嗰種驚。" },
+      { title: "關係盲點", content: "鍾意冒險嘅朋友嫌你悶，但佢哋私下其實好羨慕你從來唔失眠。你冇發現嘅係：你份「穩陣」，有時係攞嚟擋住人哋關心你嘅藉口——「我冇事，我乜都計過」。" },
+      { title: "成長處方", content: "「穩」背後嗰份驚，先係你真正要面對嘅。你以為你係謹慎，其實你可能係將「唔敢」包裝成「唔需要」——兩者個樣好似，但一個係選擇，一個係逃避。" },
     ]
   },
   "PROPHET": {
-    preview: "你买入的那一刻，不是建仓，是皈依。你坚信一个故事，然后把它讲给所有人听——包括那个其实还没完全说服自己的你。别人问你仓位多重，你说\"信仰不需要用仓位衡量\"，但深夜里，你也悄悄查过好几次这个\"信仰\"的实时价格。",
+    preview: "你買入嗰一刻，唔係建倉，係入教。你信一個故事，然後講俾全世界聽——包括嗰個其實仲未完全說服到自己嘅你。人哋問你倉位幾重，你話「信仰唔需要倉位衡量」，但深夜嗰陣，你都係忍唔住查咗好幾次呢個「信仰」嘅即時報價。",
     sections: [
-      { title: "行为根源", content: "你对\"确定性叙事\"的渴望，本质是对不确定世界的一种反抗……" },
-      { title: "关系盲点", content: "你身边的人一开始被你的热情感染，后来开始有意躲着你聊这个话题……" },
-      { title: "成长处方", content: "信仰和仓位管理可以共存，你需要学的不是怀疑，是\"分批验证\"……" }
+      { title: "行為根源", content: "世界太亂，你先咁想要一個「講得通」嘅故事。你唔係信嗰個故事，你係需要一個故事——兩者差別好大，但你唔想知。" },
+      { title: "關係盲點", content: "初初俾你嘅熱情感染嗰班人，後來開始避你。你以為係佢哋唔明，其實係佢哋發現：你講嘅唔係分析，係佈道——而佈道，係冇得傾嘅。" },
+      { title: "成長處方", content: "你肯唔肯承認：你都識懷疑。你唔使放棄信仰，但你要容許自己問一句「如果錯咗呢」——肯問呢句，你先係真信，唔係盲信。" },
     ]
   },
   "MONK": {
-    preview: "你的投资策略：买了，忘了，随缘。市场暴跌那天你在睡觉，这是你赢过所有人的原因。偶尔打开一次账户——哦，翻倍了，然后你继续睡觉。这种松弛感让所有人羡慕，但只有你知道，这份\"不在乎\"，一开始其实是装出来的。",
+    preview: "你嘅投資策略：買咗，忘記，隨緣。市場冧市嗰日你喺瞓覺，呢個正正係你贏過所有人嘅原因。間中開一次戶口——哦，翻咗倍，然後繼續瞓。呢種鬆弛感令人羨慕，但得你自己知：呢份「唔在乎」，一開始係裝出嚟嘅。",
     sections: [
-      { title: "行为根源", content: "你的\"随缘\"，可能源自一次让你太痛的经历，让你学会了自我保护性的疏离……" },
-      { title: "关系盲点", content: "朋友觉得你心态好，但也偶尔觉得你对钱的事太\"不上心\"，这让合伙做事变得有点难……" },
-      { title: "成长处方", content: "你需要的不是更\"上心\"，而是一个\"定期不经意查看\"的轻量机制……" }
+      { title: "行為根源", content: "有次痛到你而家都唔想提，你自此學識咗「隨緣」。你學會咗用疏離保護自己——唔上心，就唔會痛。呢個方法好有效，可惜佢同時閂咗你感受快樂嗰度門。" },
+      { title: "關係盲點", content: "朋友眼中嘅你係「好隨緣」，但隨緣同冇你乎，佢哋分得清，搞到一齊夾嘢有啲難。你冇諗過：你嘅「隨緣」，喺人哋眼中有時係「冇你乎」——兩種感覺，差好遠。" },
+      { title: "成長處方", content: "逼自己變緊張，唔係出路——你要分得清嘅係：你係真係放得低，定係根本未敢攞起過；呢兩樣，瞓覺係分唔出嚟嘅。" },
     ]
   },
   "God of Gamblers": {
-    preview: "你赢的时候大家叫你股神，输的时候叫你赌狗，你自己觉得这俩其实是同一个人。你的盘感强得离谱，但你的手比盘感更快——一天不交易，你就浑身难受。这种\"必须在场\"的冲动，是你最大的天赋，也是你最大的破绽。",
+    preview: "你贏嗰陣人哋叫你股神，輸嗰陣叫你賭仔，你自己覺得其實係同一個人。你嘅盤感強得離譜，但你隻手快過你嘅盤感——一日唔交易，你周身唔聚財。呢種「一定要在場」嘅衝動，係你最大嘅天賦，都係你最大嘅破綻。",
     sections: [
-      { title: "行为根源", content: "这种\"必须交易\"的冲动，心理学上更接近一种情绪调节方式，而不是策略选择……" },
-      { title: "关系盲点", content: "你身边的人喜欢跟你一起冒险，但没人敢真正把钱托付给你……" },
-      { title: "成长处方", content: "把\"持仓时间\"从3小时改成3天，不是为了赚更多，是为了先活下来……" }
+      { title: "行為根源", content: "心理學家會話你嘅「一定要交易」係情緒調節，多過係策略。你追逐嘅與其話係贏，不如話係嗰種刺激入面嘅短暫避開——避開乜嘢，你自己都未肯諗。" },
+      { title: "關係盲點", content: "陪你癲嘅人好多，敢將錢交託俾你嘅，一個都冇。你以為係佢哋唔夠膽，其實係佢哋睇到：你連自己都未搞得掂嗰種「手痕」，點可能搞得掂人哋嘅錢。" },
+      { title: "成長處方", content: "問自己一句：你追嘅係回報，定係心跳？如果你嘅答案係「心跳」，咁你要面對嘅唔係輸贏——係點解你唔交易嗰陣，會覺得自己唔存在。" },
     ]
   },
   "GEAR": {
-    preview: "别人炒股是投资，你炒股是兼职。你的目标很朴素：赚个早餐钱就跑。好消息是你从不亏大钱，坏消息是你赚的还不够买杯像样的咖啡。但你的心态赢了90%的散户——起码你睡得着觉，账户曲线平得像你的KPI。",
+    preview: "人哋炒股係投資，你炒股係兼職。你嘅目標好樸素：賺返餐早餐錢就走。好消息係你從唔輸大錢，壞消息係你賺嘅仲未夠買杯似樣嘅咖啡。但你嘅心態贏咗九成散戶——起碼你瞓得着，戶口曲線平過你份糧單。",
     sections: [
-      { title: "行为根源", content: "你对\"小赚就跑\"的执念，其实是把股市当成了另一份需要\"下班\"的工作……" },
-      { title: "关系盲点", content: "身边人觉得你太保守，但他们不知道你早就算过风险和收益比……" },
-      { title: "成长处方", content: "适度延长持有周期，你的\"打工思维\"其实更适合定投而不是短炒……" }
+      { title: "行為根源", content: "你當股市係另一份要「收工」嘅工。你慣咗計時薪，慣咗落班就走——但市場冇收工時間，你嘅「兼職心態」，先係你賺唔到大錢嘅原因。" },
+      { title: "關係盲點", content: "人哋覺得你太保守，但佢哋唔知你早就計過晒風險回報。你唔知嘅係：你連「同人講你點諗」都慳返——你將股市當兼職，將溝通都當成兼職，乜都做一半。" },
+      { title: "成長處方", content: "「小賺就走」背後嗰份慌，你一直冇正視。你覺得自己好知足，其實你可能係怕「揸得耐會嘔返出嚟」——想要同敢要，係兩件事。" },
     ]
   },
   "MARTYR": {
-    preview: "你的研究报告写满三页纸，风险提示写在第四页——你没看。你坚信这次不一样，市场却总是说\"每次都一样\"。你离财务自由只差一次成功，也离天台只差一次失败，而你偏偏就爱这种走钢丝的感觉。",
+    preview: "你嗰份研究報告寫滿三頁紙，風險提示寫喺第四頁——你冇睇。你成日堅信今次唔同，但市場永遠都話「每次都一樣」。你距離財務自由，只差一次成功；距離跳樓，都只差一次失敗——而你偏偏就鍾意呢種行鋼線嘅感覺。",
     sections: [
-      { title: "行为根源", content: "你对杠杆的迷恋，本质是对\"慢慢变富\"这件事缺乏耐心……" },
-      { title: "关系盲点", content: "家人朋友劝你收手时，你听到的不是关心，是\"他们不相信我能成功\"……" },
-      { title: "成长处方", content: "不是不能用杠杆，是你需要一个\"输了就必须停\"的硬性规则，而不是靠自控力……" }
+      { title: "行為根源", content: "風險呢家嘢，你識，但你對「慢慢變有錢」冇乜耐性；你甚至覺得風險係「其他人嘅事」——直到個市話你知，風險係認人唔認你。" },
+      { title: "關係盲點", content: "勸你收手嘅人，你聽落全部都似「唔信我會成功」。你冇意識到：你將全世界嘅提醒，都當成對你嘅打擊——呢個先係你真正嘅孖展。" },
+      { title: "成長處方", content: "你嘅真正功課，係對「慢慢嚟」嘅不耐煩。你以為贏家係敢搏嗰個，但真正贏家係肯等嗰個——你要諗清楚：你追嘅係財務自由，定係「即刻見輸贏」嗰種痛快。" },
     ]
   },
   "BAGHOLDER": {
-    preview: "你买在最高点的概率是100%，哪怕那股票已经涨了十倍。你最大的资产叫\"等回本\"，已经等了三年。好消息是你终于学会止损了，坏消息是你刚学会，它就开始反弹了——这种精准的倒霉，简直是一种被上天特别关照的才华。",
+    preview: "你買喺最高位嘅概率係百分百，哪怕隻股已經升咗十倍。你最大嘅資產叫「等返家鄉」，已經等咗三年。好消息係你終於學識止蝕，壞消息係你一學識，佢就反彈——呢種精準嘅倒霉，似係一種被上天特別眷顧嘅才華。",
     sections: [
-      { title: "行为根源", content: "你的\"高点接盘\"体质，其实和一种心理偏差有关——你总在\"错过恐惧\"最强烈的时候出手……" },
-      { title: "关系盲点", content: "朋友们私下叫你\"反指\"，但没人真的觉得你蠢，大家只是心疼你太诚实……" },
-      { title: "成长处方", content: "你需要的不是更准的择时，是一套\"分批建仓\"的强制纪律……" }
+      { title: "行為根源", content: "你永遠喺「怕錯過」最強烈嗰刻出手——呢個先係「高位接貨」嘅根源。個市越嘈，你隻手越快：你忍唔住。" },
+      { title: "關係盲點", content: "「反指」呢個朵係朋友幫你改嘅，大家只係心痛你太誠實。你一直冇留意：你成日將「堅持」同「死牛一面頸」撈埋一齊——前者係品格，後者係倔。" },
+      { title: "成長處方", content: "你對「等返家鄉」嗰份執着，先係你最大嘅持倉。你諗住你等嘅係回本，其實你可能係等緊「證明自己冇錯」——呢兩樣嘢，等你嘅時間一樣咁長。" },
     ]
   },
   "FOMO": {
-    preview: "别人贪婪你恐惧，别人恐惧你……接盘。你的买入信号是连续涨停加全网都在吹，你的卖出信号是跌回成本价然后割肉。你为市场提供了大量流动性，堪称一位无私的奉献者——只不过每次奉献的都是自己的本金。",
+    preview: "人哋貪婪你恐懼，人哋恐懼你……接貨。你嘅買入訊號係升到爆加全網都喺度吹，你嘅賣出訊號係跌返成本價然後止蝕。你為市場提供咗大量流動性，堪稱一位無私嘅奉獻者——只不過每次奉獻嘅，都係自己嘅本金。",
     sections: [
-      { title: "行为根源", content: "追高的冲动，本质是害怕\"错过\"比害怕\"亏损\"更强烈的一种心理机制……" },
-      { title: "关系盲点", content: "你身边的人开始对你的荐股半信半疑，因为你推荐的时间点，往往刚好是山顶……" },
-      { title: "成长处方", content: "设一条\"涨幅超过X%不追\"的硬规则，比培养耐心更有效……" }
+      { title: "行為根源", content: "「怕錯過」三個字，在你心目中嘅分量重過「怕蝕」。你唔係貪心，你係驚——驚人哋發達嗰陣，得你一個冇份。" },
+      { title: "關係盲點", content: "你啲朋友開始對你嘅薦股半信半疑，因為你推薦嘅時間點，往往啱啱好係山頂。你冇發現嘅係：你嘅眼光冇問題，問題係你永遠俾「人哋賺緊」呢四個字牽住走。" },
+      { title: "成長處方", content: "「錯過」呢兩個字，先係你真正要處理嘅。你諗住你追嘅係升幅，其實你追嘅係「人哋有而我冇」嗰種唔安樂——你要諗清楚：你係咪真係想要嗰隻嘢，定係只係唔想冇份。" },
     ]
   },
   "STALKER": {
-    preview: "你的手机电量，全贡献给了行情页。你每分钟刷新一次价格，哪怕你知道它不会有太大变化。你的心跳曲线，比你的持仓曲线还要刺激——这种警觉性，放在原始社会大概能让你活下来，可惜放在股市里只会让你先垮掉。",
+    preview: "你嘅手機電量，全部貢獻咗畀報價機。你每分鐘撳一次價，哪怕你知佢唔會有大變化。你嘅心跳曲線，刺激過你嘅持倉曲線——呢種警覺性，擺喺原始社會大概可以令你生存到，可惜擺喺股市，只會令你先冧低。",
     sections: [
-      { title: "行为根源", content: "这种高频检查行为，和手机上瘾的神经机制其实是同一套系统……" },
-      { title: "关系盲点", content: "你身边人已经习惯你随时看盘的样子，但没人告诉过你，这种紧绷正在悄悄影响你的睡眠和情绪……" },
-      { title: "成长处方", content: "不是要你完全不看，是需要一个\"定时查看\"代替\"随时查看\"的替代机制……" }
+      { title: "行為根源", content: "你嘅高頻檢查，同手機上癮行緊同一條神經迴路。你唔係喺度睇市，你係喺度搵一個「確認」——確認自己仲存在，確認個世界仲喺度郁。" },
+      { title: "關係盲點", content: "你隨時睇市嘅樣，身邊人已經慣晒，但冇人話你知：呢種繃緊，正喺度靜靜雞侵蝕你嘅睡眠同情緒。你以為你係「緊張個市」，其實你係緊張自己。" },
+      { title: "成長處方", content: "你唔使逼自己唔好睇，但你要問自己：如果一個鐘唔撳，你最驚嘅係乜嘢？嗰樣嘢，先係你真正要處理嘅持倉。" },
     ]
   },
   "DREAMER": {
-    preview: "你的持仓里，有一个价值十万的梦想和两万块的现实。你重仓的那一刻，配乐都是史诗级的——太空、AI、改变世界，你的故事讲给所有人听。偶尔，你也会小声问自己一句：这个故事，到底什么时候能兑现。",
+    preview: "你嘅持倉入面，有一個價值十萬嘅夢想，同兩萬蚊嘅現實。你 all-in 嗰一刻，背景音樂都係史詩級——太空、AI、改變世界，你嘅故事講俾所有人聽。間中，你都會細細聲問自己一句：呢個故事，到底幾時先兌現到。",
     sections: [
-      { title: "行为根源", content: "你对\"改变世界\"叙事的迷恋，往往来自你自己人生中某个渴望被认可的部分……" },
-      { title: "关系盲点", content: "朋友们喜欢听你讲故事，但很少有人真的把钱押在你讲的故事上……" },
-      { title: "成长处方", content: "梦想需要一个\"止损日期\"，而不是无限期的等待验证……" }
+      { title: "行為根源", content: "你咁鍾意「改變世界」呢個劇本，其實係想有人認可你。你買嘅唔係股票——係一個「自己好重要」嘅證明，可惜市場唔會為你嘅劇本配音。" },
+      { title: "關係盲點", content: "你講故事有人聽，但將錢押落你個故事嘅人，一個都冇。你冇發現嘅係：你以為你係「有遠見」，但喺人哋眼中，你係「永遠喺下一個故事」——兩者差一個字，差好遠。" },
+      { title: "成長處方", content: "「故事會完」嗰一日，你諗過未？夢想可以繼續有，但你要容許自己諗：如果呢個故事最後冇兌現，你仲係唔係你？——呢條問題，比任何估值模型都重要。" },
     ]
   },
   "GHOST": {
-    preview: "你的投资策略：跌了删App，涨了装回来。你坚信\"不打开，就等于没亏\"，可惜真相是：不管你打不打开，它都在那里，安静地等你回来面对。你的App安装次数，可能已经打破了应用商店的某项隐藏记录。",
+    preview: "你嘅投資策略：跌咗刪 App，升返裝返。你堅信「唔打開，就等於冇蝕」，可惜真相係：你打唔打開都好，佢都喺度，靜靜雞等你返嚟面對。你部手機入面嗰個 App 嘅安裝次數，可能已經打破咗應用商店某項隱藏紀錄。",
     sections: [
-      { title: "行为根源", content: "这种回避行为，心理学上叫\"鸵鸟效应\"——短期缓解焦虑，长期加重损失……" },
-      { title: "关系盲点", content: "你身边人以为你\"看开了\"，其实你只是在用删除代替处理……" },
-      { title: "成长处方", content: "与其删App，不如设置一个\"每周固定查看一次\"的仪式，把回避变成可控……" }
+      { title: "行為根源", content: "心理學有個名，叫「鴕鳥效應」——短期緩解焦慮，長期加重損失。你唔係睇開咗，你係練成咗一套好高明嘅「唔好意思，我睇唔到」大法。" },
+      { title: "關係盲點", content: "你身邊嘅人以為你「睇開咗」，其實你只係用刪除嚟代替處理。你冇留意嘅係：你連面對自己嘅持倉都唔敢，點樣面對人哋問你「近排點呀」——呢兩件事，其實係同一件事。" },
+      { title: "成長處方", content: "你唔使日日睇，但你至少要肯承認：佢喺度，你知，你只係唔想知——呢句說話，你對自己講得出口嗰日，先係你真正刪走嗰樣嘢。" },
     ]
   },
   "YOLO": {
-    preview: "你的仓位管理是全仓，你的风险控制是祈祷。你的人生格言是\"all-in不一定赢，不all-in一定输\"，你的账户曲线像心电图，你说这很正常。说句公道话——你赢的时候，是真的敢，这份勇气，大多数人这辈子都没体验过。",
+    preview: "你嘅倉位管理係全倉，你嘅風險控制係祈禱。你嘅人生格言係「all-in 唔一定贏，唔 all-in 一定輸」，你嘅戶口曲線似過山車，你話呢個好正常。講句公道話——你贏嗰陣，係真係夠膽，呢份勇氣，大把人呢世都未體驗過。",
     sections: [
-      { title: "行为根源", content: "这种\"全押\"的冲动，往往和一种对\"确定性无聊\"的厌倦感有关……" },
-      { title: "关系盲点", content: "你身边人既羡慕又害怕你的果断，没人敢真的模仿你……" },
-      { title: "成长处方", content: "把\"全仓一次\"改成\"分仓多次梭哈\"，刺激感不减，但活下来的概率大幅提升……" }
+      { title: "行為根源", content: "你對「確定性太悶」嘅厭倦，先係「全押」嘅真正燃料。風險你識，但「慢慢嚟」三個字，聽落似認輸——你寧願輸，都唔想悶。" },
+      { title: "關係盲點", content: "又羨慕又怕你嘅人，排滿你身邊，冇人敢真係模仿你。你可能唔知：你成日將「敢」同「勇」撈埋一齊——敢係唔怕輸，勇係明知會輸都肯面對，你而家多數時間係前者。" },
+      { title: "成長處方", content: "你以為全倉先有快感，但你要問自己。你以為全倉先有快感，但你要問自己：如果贏咗都只係一時嘅心跳，咁你追嘅到底係財富，定係嗰下心跳——呢條問題，六合彩都答你唔到。" },
     ]
   },
   "CHICKEN": {
-    preview: "你的操作是跌3%就割，割完就涨停。你是市场公认的\"反向指标\"——你卖出的股票，次日几乎必涨。你的止损线，比你的心理底线还要低，这种精准的\"反向天赋\"，简直让人怀疑你是不是故意的。",
+    preview: "你嘅操作，係一跌三個巴仙就止蝕，止完即刻爆升。你係市場公認嘅「反向指標」——你賣出嘅股票，第二日幾乎必爆升。你嘅止蝕線，低過你嘅心理底線，呢種咁精準嘅「反向天賦」，真係會令人懷疑你係咪特登嘅。",
     sections: [
-      { title: "行为根源", content: "你对亏损的恐惧，远大于对错过收益的恐惧，这是一种典型的损失厌恶心理……" },
-      { title: "关系盲点", content: "朋友们开始\"反着\"参考你的操作，这让你哭笑不得，但你说不出哪里错了……" },
-      { title: "成长处方", content: "设置一个\"冷静24小时\"的强制延迟卖出机制，专治手抖……" }
+      { title: "行為根源", content: "蝕一蚊驚過賺十蚊——你呢種係典型嘅損失厭惡。個市一郁，你隻手快過你個腦：你怕嗰啲數字繼續跌，跌到你唔敢面對自己。" },
+      { title: "關係盲點", content: "朋友開始「反着」睇你嘅操作，搞到你哭笑不得，但你講唔出邊度錯。你冇發現嘅係：你成日將「保命」同「投降」撈埋一齊——前者係紀律，後者係條件反射。" },
+      { title: "成長處方", content: "你嘅「反應快」，好多時只係恐懼撳住個掣——你要練嘅唔係忍住唔賣，係分清邊一刻係「驚」、邊一刻係「判斷」。" },
     ]
-  }
+  },
 };
 
 var QR_APP_IMG = 'data:image/png;base64,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';
@@ -4728,7 +4752,7 @@ function initHome() {
   var box = document.getElementById('dim-cards');
   if (!box) return;
   /* 四个板块:Decision 决策 / Risk 风险 / Holding 持仓 / Mindset 心态 */
-  var names = { D: 'Decision 决策', R: 'Risk 风险', H: 'Holding 持仓', F: 'Mindset 心态' };
+  var names = { D: 'Decision 決策', R: 'Risk 風險', H: 'Holding 持倉', F: 'Mindset 心態' };
   box.innerHTML = Object.keys(dims).map(function(d) {
     return '<div class="dim-card dim-simple">' + names[d] + '</div>';
   }).join('');
@@ -4755,13 +4779,13 @@ function initHome() {
 function initTicker() {
   /* 品牌广告跑马灯:静态文案,内容A+内容A 首尾相连实现无缝循环 */
   var marqueeItems = [
-    '刚测完你的金融人格？无论你是稳健派还是冒险派，真正的投资进阶，从看懂市场开始',
-    'NeuralFin——AI 原生社交交易平台，为刷屏一代而生',
-    '刷屏、学习、讨论、行动、复利——把每天滑手机的碎片时间，变成你的专属金融学习闭环',
-    '关注专业人士、机构与博主，社区驱动学习，AI 把海量内容压缩成可行动的洞察',
-    '从发现到执行，同一个界面完成，学到的当下就能行动',
-    '已接入香港证监会持牌机构德林证券，受监管交易，安心起步',
-    '你的测试结果只是起点，点击下方，开启你的投资复利之旅 🚀'
+    '啱啱測完你嘅金融人格？無論你係穩健派定冒險派，真正嘅投資進階，由睇明市場開始',
+    'NeuralFin——AI 原生社交交易平台，為刷屏一代而生',
+    '刷屏、學習、討論、行動、複利——將每日碌手機嘅碎片時間，變成你嘅專屬金融學習閉環',
+    '關注專業人士、機構與博主，社區驅動學習，AI 將海量內容壓縮成可行動嘅洞察',
+    '由發現到執行，同一個介面完成，學到嘅當下就能行動',
+    '已接入香港證監會持牌機構德林證券，受監管交易，安心起步',
+    '你嘅測試結果只係起點，撳下面，開啟你嘅投資複利之旅 🚀'
   ];
   var marqueeText = '✦ ' + marqueeItems.join(' ✦ ') + ' ✦';
   marqueeText = marqueeText.replace(/✦/g, '<span class="marquee-sep">✦</span>'); /* 分隔符品牌色 */
@@ -4774,25 +4798,25 @@ function renderNavButton() {
   var box = document.getElementById('nav-button-area');
   if (!box) return;
   if (current === 0) {
-    box.innerHTML = '<button class="back-to-home-inline-btn" onclick="goToHomePage()">← 返回首页</button>';
+    box.innerHTML = '<button class="back-to-home-inline-btn" onclick="goToHomePage()">← 返回首頁</button>';
   } else {
-    box.innerHTML = '<button class="prev-question-btn" onclick="goToPreviousQuestion()">← 上一题</button>';
+    box.innerHTML = '<button class="prev-question-btn" onclick="goToPreviousQuestion()">← 上一題</button>';
   }
 }
 function goToHomePage() {
   if (userAnswers.length > 0) {
     /* 答题中途退出:确认弹层,进度已自动保存 */
     showConfirm({
-      title: '确定退出？',
-      desc: '进度已自动保存，下次可随时继续。',
-      primary: '继续答题',
+      title: '確定退出？',
+      desc: '進度已自動保存，隨時可繼續。',
+      primary: '繼續答題',
       secondary: '退出',
       onPrimary: function() {}, /* 继续答题 */
       onSecondary: function() { goHome(); }
     });
     return;
   }
-  goHome(); /* 无进度直接返回(与结果页"返回首页"同逻辑) */
+  goHome(); /* 无进度直接返回(与结果页"返回首頁"同逻辑) */
 }
 function goToPreviousQuestion() {
   if (current <= 0) return;
@@ -4802,15 +4826,15 @@ function goToPreviousQuestion() {
   renderQuestion(); /* 回填高亮由 renderQuestion 依据 userAnswers 完成 */
 }
 function startQuiz() {
-  if (window._hmt) { window._hmt.push(['_trackEvent', 'test_flow', 'start']); } /* 百度统计:开始测试 */
-  if (window.gtag) { gtag('event', 'test_start', { 'test_version': '48题版' }); } /* GA4:开始测试 */
+  if (window._hmt) { window._hmt.push(['_trackEvent', 'test_flow', 'start']); } /* 百度统计:開始測試 */
+  if (window.gtag) { gtag('event', 'test_start', { 'test_version': '48-hk' }); } /* GA4:開始測試 */
   var saved = loadProgress();
   if (saved) {
     showConfirm({
-      title: '继续上次的测试？',
-      desc: '检测到未完成的测试（已完成 ' + saved.answers.length + '/' + QUESTIONS.questions.length + ' 题）。',
-      primary: '继续答题',
-      secondary: '重新开始',
+      title: '繼續上次的測試？',
+      desc: '檢測到未完成的測試（已完成 ' + saved.answers.length + '/' + QUESTIONS.questions.length + ' 條）。',
+      primary: '繼續答題',
+      secondary: '重新開始',
       onPrimary: function() { restoreProgress(saved); },
       onSecondary: function() { clearProgress(); freshStart(); }
     });
@@ -4826,7 +4850,7 @@ function freshStart() {
 function renderQuestion() {
   var q = QUESTIONS.questions[current];
   var n = String(current + 1).padStart(2, '0'), total = String(QUESTIONS.questions.length).padStart(2, '0');
-  document.getElementById('q-count').textContent = '第 ' + n + ' 题 / 共 ' + total + ' 题';
+  document.getElementById('q-count').textContent = '第 ' + n + ' 題 / 共 ' + total + ' 題';
   document.getElementById('q-pct').textContent = '已完成 ' + Math.round(current / QUESTIONS.questions.length * 100) + '%';
   document.getElementById('q-title').textContent = q.question;
   document.getElementById('progress-fill').style.width = ((current) / QUESTIONS.questions.length * 100) + '%';
@@ -4838,7 +4862,7 @@ function renderQuestion() {
     if (i === 4) { /* 第 5 项为中性选项:先插分隔线 */
       var dv = document.createElement('div');
       dv.className = 'opt-divider';
-      dv.innerHTML = '<span>拿不准？</span>';
+      dv.innerHTML = '<span>揀唔落手？</span>';
       box.appendChild(dv);
     }
     var b = document.createElement('button');
@@ -4876,11 +4900,11 @@ function advance() {
 function showSubmit() {
   show('page-result');
   document.getElementById('result-body').innerHTML =
-    '<div class="card"><p style="text-align:center;font-size:16px;line-height:2.2;">答完了？行吧，看你答得这么诚（心）实（虚），<br>把手机端稳了，见证奇迹的时刻到了——</p></div>' +
-    '<button class="btn" id="submit-btn" onclick="submit()">提交并让 AI 算命</button>';
+    '<div class="card"><p style="text-align:center;font-size:16px;line-height:2.2;">答完喇？行啦，睇你答得咁誠（心）實（虛），<br>揸穩部手機，見證奇蹟嘅時刻到喇——</p></div>' +
+    '<button class="btn" id="submit-btn" onclick="submit()">提交並讓 AI 算命</button>';
 }
 /* ============ AI 结算动画（3 秒）+ 连点彩蛋 ============ */
-var LOAD_MSGS = ['扫描交易 DNA……', '回撤计算中……', '韭菜指数校准中……', '匹配 16 型人格……', '天台排队中……'];
+var LOAD_MSGS = ['掃描交易 DNA……', '回撤計算中……', '水魚指數校準中……', '匹配 16 型人格……', '上天台排隊中……'];
 function submit() {
   show('page-loading');
   var i = 0;
@@ -4965,7 +4989,7 @@ function finish() {
   }
   var s = score();
   if (window._hmt) { window._hmt.push(['_trackEvent', 'test_completed', 'finish', s.code]); } /* 百度统计:完成测试(含人格代码) */
-  if (window.gtag) { gtag('event', 'test_completed', { 'test_version': '48题版', 'persona_result': s.code }); } /* GA4:完成测试 */
+  if (window.gtag) { gtag('event', 'test_completed', { 'test_version': '48-hk', 'persona_result': s.code }); } /* GA4:完成测试 */
   var persona = RESULTS.results.filter(function(r) { return r.code === s.code; })[0];
   renderResult(persona, s);
 }
@@ -4975,16 +4999,16 @@ function renderEgg(name, note, word) {
   document.getElementById('result-body').innerHTML =
     '<div class="egg-wrap">' +
       '<img class="egg-img" loading="eager" alt="' + name + '" src="/' + (word === 'ATM' ? 'atm' : 'abcd') + '.webp" onerror="this.onerror=null;this.src=\'/' + (word === 'ATM' ? 'atm' : 'abcd') + '.png\';">' +
-      '<div class="egg-title">隐藏人格「' + name + '」</div>' +
+      '<div class="egg-title">隱藏人格「' + name + '」</div>' +
       '<div class="card"><p style="text-align:center;line-height:2;">' + note + '</p></div>' +
       '<div class="share-card-wrap">' +
         '<button class="btn" id="btn-gen-share" onclick="generateShareFlow()">生成分享卡片</button>' +
-        '<p class="hint">生成后可长按保存或发送给好友</p>' +
+        '<p class="hint">生成後可長按儲存或傳畀朋友</p>' +
       '</div>' +
       '<div class="row-2">' +
-        '<button class="btn ghost" onclick="restart()">重新测试</button>' +
+        '<button class="btn ghost" onclick="restart()">重新測試</button>' +
       '</div>' +
-      '<button class="home-link" onclick="goHome()">返回首页</button>' +
+      '<button class="home-link" onclick="goHome()">返回首頁</button>' +
     '</div>';
   lastShareReq = { persona: { word: word, name: name, tagline: note }, match: 100 };
   setResultHash('#result=' + eggHashByWord(word));
@@ -4998,7 +5022,7 @@ function renderResult(persona, s) {
   var proof = PERSONA_STATS[persona.word] || null;
   var proofHtml = '';
   if (proof) proofHtml = '<div class="card proof-bar">' + proofSentence(persona, proof) + '</div>';
-  var dimLabels = { 'D': ['研究派', '直觉派'], 'R': ['激进', '保守'], 'H': ['长持', '短线'], 'F': ['冷静', '上头'] };
+  var dimLabels = { 'D': ['研究派', '直覺派'], 'R': ['激進', '保守'], 'H': ['長持', '短線'], 'F': ['冷靜', '上頭'] };
   var dimsHtml = (s.edges || []).map(function(e) {
     var tot = e.left + e.right;
     var lp = tot === 0 ? 50 : Math.round(e.left / tot * 100), rp = 100 - lp;
@@ -5023,24 +5047,24 @@ function renderResult(persona, s) {
       '<div class="result-main">' +
         '<div class="result-head">' +
           charHtml +
-          '<div class="type-badge">经AI认证，你就是—— ' + persona.word + '</div>' +
+          '<div class="type-badge">經AI認證，你就是—— ' + persona.word + '</div>' +
           '<div class="persona">' + persona.name + '</div>' +
           matchHtml +
         '</div>' +
         '<div class="card"><p>' + persona.tagline + '</p></div>' +
         proofHtml +
-        '<div class="card"><h3>人格解读</h3><ul>' + persona.traits.map(function(t) { return '<li>' + t + '</li>'; }).join('') + '</ul></div>' +
-        '<div class="card"><h3>四维画像</h3>' + dimsHtml + '</div>' +
-        '<div class="card"><h3>你的天选投资品</h3><p>' + persona.recommendedAsset + '</p></div>' +
+        '<div class="card"><h3>人格解讀</h3><ul>' + persona.traits.map(function(t) { return '<li>' + t + '</li>'; }).join('') + '</ul></div>' +
+        '<div class="card"><h3>四維畫像</h3>' + dimsHtml + '</div>' +
+        '<div class="card"><h3>你嘅天選投資品</h3><p>' + persona.recommendedAsset + '</p></div>' +
         deepDiveHtml(persona) +
       '</div>' +
       '<div class="result-side">' +
         (hasMatch ? '<div class="share-card-wrap">' +
           '<button class="btn" id="btn-gen-share" onclick="generateShareFlow()">生成分享卡片</button>' +
-          '<p class="hint">生成后可长按保存或发送给好友</p>' +
+          '<p class="hint">生成後可長按儲存或傳畀朋友</p>' +
         '</div>' : '') +
-        '<button class="btn ghost" onclick="restart()">重新测试</button>' +
-        '<button class="home-link" onclick="goHome()">返回首页</button>' +
+        '<button class="btn ghost" onclick="restart()">重新測試</button>' +
+        '<button class="home-link" onclick="goHome()">返回首頁</button>' +
       '</div>' +
     '</div>';
   if (hasMatch) { lastShareReq = { persona: persona, match: s.match }; } /* 降级时不设 lastShareReq,防止以 0% 生成分享卡 */
@@ -5053,8 +5077,8 @@ function renderResult(persona, s) {
 var lastPersonaCode = null;
 function fmtNum(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 function proofSentence(persona, proof) {
-  var s = '全网有 <b>' + fmtNum(proof.total) + '</b> 人和你一样是「' + persona.name + '」，' +
-    '其中 <b>' + fmtNum(proof.discussing) + '</b> 人正在 NeuralFin 讨论「' + proof.topic + '」';
+  var s = '全網有 <b>' + fmtNum(proof.total) + '</b> 人和你一樣係「' + persona.name + '」，' +
+    '其中 <b>' + fmtNum(proof.discussing) + '</b> 人正在 NeuralFin 討論「' + proof.topic + '」';
   if (proof.note) s += '（' + proof.note + '）';
   return s + '。';
 }
@@ -5064,24 +5088,24 @@ function deepDiveHtml(persona) {
   var locked = dd.sections.map(function(sec) {
     return '<h4>' + sec.title + '</h4><p>' + sec.content + '</p>';
   }).join('');
-  return '<div class="card deepdive"><h3>深度解读</h3>' +
+  return '<div class="card deepdive"><h3>深度解讀</h3>' +
     '<div class="dd-free">' + dd.preview + '</div>' +
     '<div class="dd-locked">' +
       '<div class="locked-content">' + locked + '</div>' +
       '<div class="unlock-overlay" id="dd-overlay">' +
-        '<button class="unlock-btn" onclick="unlockDeepDive()">🔒 在 NeuralFin 查看完整解读</button>' +
+        '<button class="unlock-btn" onclick="unlockDeepDive()">🔒 喺 NeuralFin 睇完整解讀</button>' +
       '</div>' +
     '</div></div>';
 }
 function unlockDeepDive() {
   track('deep_dive_unlock_click', { personaCode: lastPersonaCode });
-  if (window.gtag) { gtag('event', 'deep_dive_expand_click', { 'test_version': '48题版', 'persona_result': lastPersonaCode }); } /* GA4:点击查看完整解读 */
+  if (window.gtag) { gtag('event', 'deep_dive_expand_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } /* GA4:点击查看完整解读 */
   var ov = document.getElementById('dd-overlay');
   var locked = document.querySelector('.dd-locked');
   if (locked) locked.classList.add('unlocked'); /* 修复:展开后容器自适应高度,防二维码被 overflow 裁切 */
   ov.innerHTML = '<div class="qr-panel">' +
-    '<img class="deep-dive-qrcode" src="' + QR_APP_IMG + '" alt="NeuralFin 二维码">' +
-    '<p>截图保存后长按识别二维码<br>下载 NeuralFin App，解锁完整深度解读</p>' +
+    '<img class="deep-dive-qrcode" src="' + QR_APP_IMG + '" alt="NeuralFin 二維碼">' +
+    '<p>截圖儲起之後長按識別 QR Code<br>下載 NeuralFin App，解鎖完整深度解讀</p>' +
     '<span class="collapse" onclick="collapseDeepDive()">收起</span></div>';
   var qimg = ov.querySelector('.deep-dive-qrcode');
   if (qimg) {
@@ -5090,7 +5114,7 @@ function unlockDeepDive() {
     qimg.onload = function() { this.style.opacity = '1'; console.log('[qr] loaded', this.naturalWidth, this.naturalHeight); };
     qimg.onerror = function() { console.log('[qr] load failed'); };
     qimg.addEventListener('click', function() {
-      if (window.gtag) { gtag('event', 'deep_dive_qrcode_click', { 'test_version': '48题版', 'persona_result': lastPersonaCode }); } /* GA4:点击二维码 */
+      if (window.gtag) { gtag('event', 'deep_dive_qrcode_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } /* GA4:点击二维码 */
     });
   }
   track('deep_dive_app_open_success', { personaCode: lastPersonaCode });
@@ -5130,8 +5154,8 @@ function isWeChatBrowser() { return /MicroMessenger/i.test(navigator.userAgent |
 function isMobileDevice() { return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || ''); }
 var isWechat = isWeChatBrowser();
 function proofTextPlain(persona, proof) {
-  var s = '全网有 ' + fmtNum(proof.total) + ' 人和你一样是「' + persona.name + '」，其中 ' +
-    fmtNum(proof.discussing) + ' 人正在 NeuralFin 讨论「' + proof.topic + '」';
+  var s = '全網有 ' + fmtNum(proof.total) + ' 人和你一樣係「' + persona.name + '」，其中 ' +
+    fmtNum(proof.discussing) + ' 人正在 NeuralFin 討論「' + proof.topic + '」';
   if (proof.note) s += '（' + proof.note + '）';
   return s + '。';
 }
@@ -5201,13 +5225,13 @@ function generateShareCard(persona, match) {
     return html2canvas(tpl, { scale: 3, backgroundColor: '#0A0A0A', width: 750, useCORS: true });
   }).then(function(canvas) {
     shareCardUrl = canvas.toDataURL('image/png');
-    if (window.gtag) { gtag('event', 'share_card_generate_success', { 'test_version': '48题版', 'persona_result': persona.code || persona.word || '' }); } /* GA4:生成成功 */
+    if (window.gtag) { gtag('event', 'share_card_generate_success', { 'test_version': '48-hk', 'persona_result': persona.code || persona.word || '' }); } /* GA4:生成成功 */
     return true;
   }).catch(function(e) {
     shareCardUrl = null;
     /* 详细错误日志(开发排障用) */
     console.error('[shareCard] generation failed:', e);
-    if (window.gtag) { gtag('event', 'share_card_generate_failed', { 'test_version': '48题版' }); } /* GA4:生成失败 */
+    if (window.gtag) { gtag('event', 'share_card_generate_failed', { 'test_version': '48-hk' }); } /* GA4:生成失败 */
     return false;
   });
 }
@@ -5215,10 +5239,10 @@ var lastShareReq = null; /* 最近一次要生成分享卡的人格 */
 var shareGenerating = false;
 function generateShareFlow() {
   if (!lastShareReq || shareGenerating) return;
-  if (window.gtag) { gtag('event', 'share_card_generate_start', { 'test_version': '48题版', 'persona_result': lastShareReq.persona.code || '' }); } /* GA4:生成开始 */
+  if (window.gtag) { gtag('event', 'share_card_generate_start', { 'test_version': '48-hk', 'persona_result': lastShareReq.persona.code || '' }); } /* GA4:生成开始 */
   shareGenerating = true;
   var btn = document.getElementById('btn-gen-share');
-  if (btn) { btn.disabled = true; btn.textContent = '正在生成专属分享卡...'; }
+  if (btn) { btn.disabled = true; btn.textContent = '正在生成專屬分享卡...'; }
   generateShareCard(lastShareReq.persona, lastShareReq.match).then(function(ok) {
     shareGenerating = false;
     if (btn) { btn.disabled = false; btn.textContent = '生成分享卡片'; }
@@ -5236,15 +5260,15 @@ function openSharePreview() {
   img.src = shareCardUrl;
   var hint = document.getElementById('sharePreviewHint');
   var dl = document.getElementById('sharePreviewDl');
-  dl.textContent = '下载分享图';
+  dl.textContent = '下載分享圖';
   if (isWechat) {
-    hint.textContent = '👆 长按上方图片，选择「发送给朋友」或「保存图片」';
+    hint.textContent = '👆 長按上方圖片，揀「傳畀朋友」或「儲存圖片」';
     dl.style.display = 'none';
   } else if (isMobileDevice()) {
-    hint.textContent = '长按图片保存，或点击下方按钮下载';
+    hint.textContent = '長按圖片儲存，或撳下面嘅掣下載';
     dl.style.display = '';
   } else {
-    hint.textContent = '点击下方按钮下载图片，用手机扫码分享体验更佳';
+    hint.textContent = '撳下面嘅掣下載圖片，用手機掃描 QR Code 分享體驗更佳';
     dl.style.display = '';
   }
   var m = document.getElementById('sharePreviewModal');
@@ -5252,7 +5276,7 @@ function openSharePreview() {
 }
 function openSharePreviewError() {
   document.getElementById('sharePreviewImg').style.display = 'none';
-  document.getElementById('sharePreviewHint').textContent = '生成失败，请重试';
+  document.getElementById('sharePreviewHint').textContent = '生成失敗，請重試';
   var dl = document.getElementById('sharePreviewDl');
   dl.textContent = '重新生成';
   dl.style.display = '';
@@ -5275,7 +5299,7 @@ function downloadCard() {
   a.download = 'neuralfin-nbti.png';
   a.href = shareCardUrl;
   a.click();
-  toast('图片已保存，可在相册中找到，打开微信发送给好友吧');
+  toast('圖片已儲存，可以去相簿搵返，打開微信傳畀朋友啦');
 }
 
 /* ============ 进度保存与续答(确认弹层) ============ */
@@ -5322,7 +5346,7 @@ function restart() { startQuiz(); }
 function goHome() {
   if (pendingTimer) { clearTimeout(pendingTimer); pendingTimer = null; }
   answerMoving = false;
-  /* 重置全部答题状态,保证下次"开始测试"是全新流程 */
+  /* 重置全部答题状态,保证下次"開始測試"是全新流程 */
   userAnswers = [];
   current = 0;
   show('page-home');
@@ -5341,7 +5365,7 @@ window.onerror = function(msg, src, line, col, err) {
   if (window.console && window.console.error) window.console.error('[error]', msg, '@' + (line || '?') + ':' + (col || '?'));
   var nb = document.getElementById('result-body');
   if (nb && !nb.innerHTML) {
-    nb.innerHTML = '<div class="card"><p style="text-align:center;line-height:2;">出错了，请刷新页面重试。</p></div>';
+    nb.innerHTML = '<div class="card"><p style="text-align:center;line-height:2;">出錯咗，請重新整理頁面再試。</p></div>';
   }
 };
 

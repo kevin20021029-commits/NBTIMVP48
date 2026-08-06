@@ -431,6 +431,12 @@
   .confirm-secondary { background: transparent; border: 1px solid var(--border-subtle);
     color: var(--text-secondary); font-weight: 600; margin-top: 10px; box-shadow: none; }
 
+
+  /* ---- 320px 系列 header 溢出修復(三態切換器;全局,非語言特例) ---- */
+  @media (max-width: 480px) {
+    .version { display: none; }
+    .lang-option { padding: 10px 8px; min-height: 44px; box-sizing: border-box; }
+  }
   /* ============ 桌面版(>=768px) ============ */
   @media (min-width: 768px) {
     #app { max-width: 1120px; padding: 24px 48px 80px; }
