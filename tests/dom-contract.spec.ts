@@ -23,6 +23,11 @@ const REQUIRED_IDS = [
   'sharePreviewHint', // 提示文案
   'shareCardTemplate916', // 9:16 分享卡模板
   'shareCardTemplate45', // 4:5 分享卡模板
+  'confirmModal', // 确认弹层容器(E2-P0: 07d7f99 误删后恢复)
+  'confirmTitle', // 确认弹层标题
+  'confirmDesc', // 确认弹层描述
+  'confirmPrimary', // 确认主按钮
+  'confirmSecondary', // 确认次按钮
 ];
 
 /* 生产 HTML 文件:index.html / index-en.html / index-hk.html */

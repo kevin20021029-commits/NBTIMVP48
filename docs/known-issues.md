@@ -46,3 +46,18 @@ warm 失败 → 生成时阻塞重试 1 次 → 仍失败则输出「纯色占�
 ## 6. TODO: warm 失败回退依赖 html2canvas 特性（确认仍在）
 
 已记录（第 2 条），2026-08-07 复核仍在：`warmCardAssets()` 失败时回退相对路径 `<img src>`，依赖 html2canvas 一级克隆 iframe 继承 baseURI 才能加载。换渲染引擎必须重新设计（warm 失败 → 阻塞重试 1 次 → 仍失败则纯色占位块）。另确认：生产主窗口场景下该回退可用（6/6 断言通过）；diag 的二级 iframe 场景不可用（baseURI 不继承——已用预热内联修复）。
+
+
+## 7. TODO(1C): 13 测试页残留第一版 bindShareCard 双份定义
+
+**现象**: 13 个测试页(flowtest/hashtest × zh/en/hk × 两仓库 + p02check)存在两个 bindShareCard 定义:
+第一版残留(约 4997 行)与生产版(约 5118 行)。JS 函数声明提升使后者生效,行为与生产一致,
+但双份代码会漂移(C1 B7 曾发现 en 测试页 name-sub 绑定缺失,生产 index-en 同样中招)。
+**转入 1C 待办**: 测试页全量同步(handoff §7.1)时删除第一版残留,保留生产版。
+
+
+## 8. TODO(1C): 13 测试页 374 处裸 DOM 访问不改
+
+E2-P1 已把生产 6 页 96 处裸访问改 safeEl/safeFail(no-bare-dom-access 红线 3/3 绿)。
+13 测试页(flowtest/hashtest × zh/en/hk × 两仓库 + p02check)的 374 处(H=263 M=111)
+**按 E2 指令不动**, 1C 测试页整体处理时一并修复(与第 7 条双 bindShareCard 同步)。
