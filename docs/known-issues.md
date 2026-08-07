@@ -61,3 +61,39 @@ warm 失败 → 生成时阻塞重试 1 次 → 仍失败则输出「纯色占�
 E2-P1 已把生产 6 页 96 处裸访问改 safeEl/safeFail(no-bare-dom-access 红线 3/3 绿)。
 13 测试页(flowtest/hashtest × zh/en/hk × 两仓库 + p02check)的 374 处(H=263 M=111)
 **按 E2 指令不动**, 1C 测试页整体处理时一并修复(与第 7 条双 bindShareCard 同步)。
+
+
+## 9. P0(2026-08-07 C3): 预览 ≠ 导出 —— 视觉验收必须基于导出图,不能基于 live DOM 预览
+
+**现象**: 分享卡角色插画区(stage)在导出 PNG 中为整块墨绿,而 live DOM 预览中该区域正常(近黑底+人物)。
+
+**实测(C3, 同状态同尺寸 2160x3840, SNIPER 9:16)**:
+- stage 区域绿色占比: live DOM 截图 **0.5%** vs 导出 PNG **25.4%**(上半 41.3%);y=640-740 条带 live 0.0% vs 导出 89.4%。
+- 同坐标像素对(均为 BGR):
+  - (600,700) 墨绿块内: live=(14,15,13) vs 导出=(44,61,11)
+  - (104,1387) stage 左缘: live=(45,61,10)(墨绿 1px 描边) vs 导出=(14,16,11)
+  - (1080,1280) stage 中心(人物): live=(50,78,135) vs 导出=(50,76,136) —— 人物本身一致
+- 因果链: 角色图 webp 背景透明(绿块区 live 近黑像素 99.3% = 透出黑底)→ html2canvas 将 `.sc-char-stage` 的 `box-shadow: inset 0 0 0 1px rgba(0,229,160,.22)` 渲染成**整区填充色**(visual-spec §4 已证)→ 透明区透出墨绿。
+
+**结论**: 预览≠导出成立(P0 类)。现有全部基于预览的视觉验收方法无效;验收必须用导出图(html2canvas 产物)。
+**同类潜在分歧属性**: 半透明 alpha 合成(shadow/border/背景)、opacity、PNG/webp 透明通道、border-radius 抗锯齿。完整清单见 docs/visual-spec.md §6。
+**本轮不修**(2/3 整体重做 stage)。
+
+
+## 10. F4 证据: 仓库漂移事件两次(2026-08-07 H-POC 轮)
+
+**事件一(NBTI48 H-P0 误落 main)**: H-P0 commit c6f1a5d 在 NBTI48 的 main 上创建(未建分支即 commit)。
+纠正(reflog 完整还原): `git branch feat/card-prerender-poc c6f1a5d` → `git checkout feat/card-prerender-poc`
+→ `git checkout main` → `git reset --hard 7bf09a1` → `git checkout feat/card-prerender-poc`。
+**未 force push,远端 main 从未被污染**(纠正前 main 领先 origin/main 1 commit 但未推送)。
+根因: 双仓库操作时 NBTI16 建了分支、NBTI48 忘记建。
+
+**事件二(文档/测试历史漂移 + H-P4 未同步)**: 本轮 B0b 全量校验发现 4 文件漂移——
+① known-issues.md 缺第 9 条、visual-spec.md 缺第 6 节(C3 内容只进了 16)
+② tests/dom-contract.spec.ts 与 tests/text-check.spec.ts 是 E2 时代旧版(48 缺 C3 后 39 节点重构)
+③ H-P4 文档(8052fb1)只在 16。
+已按 16 为权威版同步 48,8 文件 byte-identical 验证通过,48 test:dom 15/15 全绿。
+根因: C3 轮起对 48 的 docs/tests 同步靠人工记忆,无强制校验。
+
+**对策(写入 B5 层次一)**: tests/ docs/ shared/ 必须收进强 byte-identical 校验,
+不一致即 test:dom 报红(具体方案见 docs/architecture-card-prerender.md 与 B5 结论)。

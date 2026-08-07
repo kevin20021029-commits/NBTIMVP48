@@ -16,18 +16,52 @@ import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
 const REQUIRED_IDS = [
-  'sharePreviewModal', // 预览弹窗容器
-  'sharePreviewImg', // 预览图
-  'sharePreviewSpin', // 生成中指示
-  'sharePreviewDl', // 下载按钮
-  'sharePreviewHint', // 提示文案
+  // 页面容器/结构
+  'app',
+  'brand-sign',
+  'page-home',
+  'page-quiz',
+  'page-loading',
+  'page-result',
+  'ticker',
+  'ticker-track',
+  'logo-blue-foot',
+  // 答题交互
+  'q-count',
+  'q-pct',
+  'progress',
+  'progress-fill',
+  'q-title',
+  'q-options',
+  'nav-button-area',
+  // 首页板块
+  'sec-dims',
+  'dim-cards',
+  'sec-clans',
+  'sec-personas',
+  'p-cards',
+  // 结果区
+  'result-body',
+  // 加载
+  'load-text',
+  'sign-load',
+  // 分享卡模板/预览弹窗
   'shareCardTemplate916',
-  'shareCardTemplate45', // 9:16 分享卡模板
-  'confirmModal', // 确认弹层容器(E2-P0: 07d7f99 误删后恢复)
-  'confirmTitle', // 确认弹层标题
-  'confirmDesc', // 确认弹层描述
-  'confirmPrimary', // 确认主按钮
-  'confirmSecondary', // 确认次按钮
+  'shareCardTemplate45',
+  'sharePreviewModal',
+  'sharePreviewImg',
+  'sharePreviewSpin',
+  'sharePreviewDl',
+  'sharePreviewHint',
+  'shareRetryBtn',
+  'shareFallbackBtn',
+  // 确认弹层/toast
+  'confirmModal',
+  'confirmTitle',
+  'confirmDesc',
+  'confirmPrimary',
+  'confirmSecondary',
+  'toast',
 ];
 
 /* 生产 HTML 文件:index.html / index-en.html / index-hk.html */
@@ -35,13 +69,13 @@ const files = readdirSync(join(__dirname, '..'))
   .filter((f) => /^index(?:-en|-hk)?\.html$/.test(f))
   .sort();
 
-test.describe('分享卡 DOM 契约(7 个关键节点)', () => {
+test.describe('全量静态 DOM 契约(39 个关键节点, 缺失/重复必炸)', () => {
   test('存在生产 HTML 文件', () => {
     expect(files.length, '仓库根目录应有 index*.html 生产文件').toBeGreaterThan(0);
   });
 
   for (const file of files) {
-    test(`${file}: 7 个关键节点各存在且仅存在 1 次`, () => {
+    test(`${file}: 39 个关键节点各存在且仅存在 1 次`, () => {
       const html = readFileSync(join(__dirname, '..', file), 'utf-8');
       for (const id of REQUIRED_IDS) {
         const count = (html.match(new RegExp(`id="${id}"`, 'g')) || []).length;

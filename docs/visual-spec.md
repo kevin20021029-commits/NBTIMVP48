@@ -40,3 +40,29 @@ EN 特有成本：指标标签固定高（916:64px / 45:58px）+ EN tagline 3 �
 - 预览弹窗：遮罩 rgba(4,6,12,.92) + body 滚动锁定（B3）；卡片高度上限 calc(90vh-200px)（B4）。
 - 13 测试页双 bindShareCard 残留 + 374 处裸 DOM 访问：1C 处理（known-issues 第 7/8 条），2/3 排版改动需同步 19 文件。
 - 素材 18 张 bbox 表：见 asset-bbox.md。
+
+## 6. html2canvas 已知渲染分歧清单(C3 F1b 实测,2026-08-07)
+
+> 方法:同状态(同一已 bind 模板)live DOM 截图 vs 导出 PNG,2160x3840,逐元素 A/B 采样。
+> **1B 引擎选型 PoC 必测项:新引擎必须在以下属性上渲染正确才算通过。**
+
+| # | 属性 | 元素 | 实测 A(live DOM) | 实测 B(html2canvas 导出) | 判定 |
+|---|---|---|---|---|---|
+| 1 | box-shadow: inset 0 0 0 1px rgba(0,229,160,.22) | .sc-char-stage | 1px 墨绿描边(stage 绿占比 0.5%) | **整区墨绿填充**(绿 25.4%,上半 41.3%) | ✗ P0 |
+| 2 | box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) | .sc-tagbox | 边缘带 | 全区平均色差 13.9,边缘带消失 | ✗ |
+| 3 | border: 1px solid rgba(255,255,255,.28) | .sc-clan-pill | 内部 (28,29,27) | 内部 (48,60,24) 偏绿(alpha 合成差异) | ✗ |
+| 4 | opacity: .9 + PNG 透明通道 | .sc-logo (img) | 亮度 38.8,高亮像素 5.6% | 亮度 11.6,高亮 0%(logo 白字消失) | ✗ |
+| 5 | border-radius: 5px | .sc-badge | 边缘精确 | 边缘 ±1-3 值偏移(抗锯齿) | ✗ 轻 |
+| 6 | border-radius: 28px/24px | .sc-char-stage | 圆角精确 | 圆角边缘抗锯齿差异 | ✗ 轻 |
+| 7 | border-radius: 999px | .sc-clan-pill | 圆角精确 | 圆角+内部合成差异(见 #3) | ✗ |
+| 8 | border-radius: 22px/20px | .sc-tagbox | 圆角精确 | 圆角+inset 阴影差异(见 #2) | ✗ |
+| 9 | border-radius: 14px/12px | .sc-qrcode | 边框 4 点精确 | 同值 | ✓ |
+| 10 | border-radius: 40px(模板) | .share-card-template | 圆角外透明 | 圆角外 #0A0A0A(保留) | ✓ |
+| 11 | 背景渐变(模板底层) | .share-card-template | — | 区域色差 RMSE 1.3 | ✓ |
+| 12 | filter | 卡片内 0 命中 | — | — | 无样本 |
+| 13 | outline | 卡片内 0 命中(:focus-visible 交互态) | — | 无样本 |
+
+**要点**:
+- #1 是 P0(known-issues 第 9 条):inset box-shadow 渲染成整区填充,叠加角色图透明背景后观感为「整块墨绿」。
+- #3/#4 属半透明 alpha 合成分歧:rgba 边框/文字 + PNG 透明通道在克隆体合成中结果不同。
+- 判定均为同坐标逐像素实测,非推断。
