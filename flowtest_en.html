@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NeuralFin Finance NBTI — Investor Personality Test</title>
-<meta name="description" content="48 questions. 10 minutes. Find your investor personality — Finance NBTI, built for the scroll generation.">
+<meta name="description" content="48 questions. 5 minutes. Find your investor personality — Finance NBTI, built for the scroll generation.">
 <meta property="og:site_name" content="NeuralFin">
 <meta property="og:title" content="Finance NBTI — What kind of investor are you?">
-<meta property="og:description" content="48 questions. 10 minutes. 16 investor personalities.">
+<meta property="og:description" content="48 questions. 5 minutes. 16 investor personalities.">
 <meta property="og:image" content="https://nbtimvp-48.vercel.app/NeuralFin.png">
 <meta property="og:url" content="https://nbtimvp-48.vercel.app/index-en.html">
 <meta property="og:type" content="website">
@@ -617,12 +617,17 @@ var _hmt = _hmt || [];
 </script>
 
 <script>
+/* FLOW-TEST error catcher */
+window.__errs = [];
+window.onerror = function(msg, src, line, col) { window.__errs.push(String(msg) + ' @' + (line || '?') + ':' + (col || '?')); };
+</script>
+<script>
 /* ============================================================
  * NeuralFin NBTI 三語路由與狀態(v1)
  * 三版共用同一段,靠 document.documentElement.lang 判別當前語言
  * 16/48 題版零差異:題數一律運行時取自 QUESTIONS.questions.length
  * ============================================================ */
-var ENABLE_AUTO_REDIRECT = true; /* 回滾開關:false = 停用瀏覽器語言自動分流,手動切換/偏好/參數/進度照常 */
+var ENABLE_AUTO_REDIRECT = false; /* 回滾開關:false = 停用瀏覽器語言自動分流,手動切換/偏好/參數/進度照常 */
 
 var LANG_MAP = { zh: 'index.html', hk: 'index-hk.html', en: 'index-en.html' }; /* cleanUrls 開啟時需改為無擴展名形式(index-hk) */
 var LANG_HREF = { zh: 'zh-Hans', hk: 'zh-Hant-HK', en: 'en' };
@@ -1085,7 +1090,7 @@ window.addEventListener('hashchange', syncLangLinks);
       </div>
       <div class="sc-foot-right">
         <div class="sc-claim"><span class="sc-claim-1"></span><span class="sc-claim-2"></span></div>
-        <div class="sc-qrcode"><img alt="NeuralFin QR code" crossorigin="anonymous"></div>
+        <div class="sc-qrcode"><img alt="NeuralFin 二维码" crossorigin="anonymous"></div>
       </div>
     </div>
   </div>
@@ -1132,7 +1137,7 @@ window.addEventListener('hashchange', syncLangLinks);
       </div>
       <div class="sc-foot-right">
         <div class="sc-claim"><span class="sc-claim-1"></span><span class="sc-claim-2"></span></div>
-        <div class="sc-qrcode"><img alt="NeuralFin QR code" crossorigin="anonymous"></div>
+        <div class="sc-qrcode"><img alt="NeuralFin 二维码" crossorigin="anonymous"></div>
       </div>
     </div>
   </div>
@@ -3981,7 +3986,7 @@ var QUESTIONS = {
         },
         {
           "text": "Shaky hand on the confirm button, muttering “don’t panic, don’t panic.”",
-          "code": "FC"
+          "code": "FP"
         },
         {
           "text": "Regretting it while you add, still debating whether to undo it afterwards.",
@@ -4233,7 +4238,7 @@ var QUESTIONS = {
       "options": [
         {
           "text": "“That’s unhinged. Diversify or perish.”",
-          "code": "RS+HT"
+          "code": "RS"
         },
         {
           "text": "“Now THAT’S conviction. He’s so back.”",
@@ -4241,7 +4246,7 @@ var QUESTIONS = {
         },
         {
           "text": "“Three years?? Three days already feels long.”",
-          "code": "RG+HT"
+          "code": "HT"
         },
         {
           "text": "“Honestly, might try it. It’s play money anyway.”",
@@ -4259,7 +4264,7 @@ var QUESTIONS = {
       "options": [
         {
           "text": "Longest: a blue chip you’ve literally never sold. Shortest: a theme stock you never held overnight.",
-          "code": "RS+HH"
+          "code": "HH+HT"
         },
         {
           "text": "Longest: the dream stock you went all in on. Shortest: barely trade short-term, it’s too hard on the liver.",
@@ -4267,7 +4272,7 @@ var QUESTIONS = {
         },
         {
           "text": "Longest: basically none, I believe in day trading. Shortest: everything I own.",
-          "code": "RG+HT"
+          "code": "HT+RG/RS"
         },
         {
           "text": "Longest: government bonds, stable to the point of mould. Shortest: the occasional itchy-finger scalp.",
@@ -4315,11 +4320,11 @@ var QUESTIONS = {
         },
         {
           "text": "“Insane. You don’t put every egg in one basket for three years.”",
-          "code": "RS+HT"
+          "code": "RS"
         },
         {
           "text": "“Hold it that long? You should’ve been trading it.”",
-          "code": "RG+HT"
+          "code": "HT"
         },
         {
           "text": "“Small position, sure. Just don’t bet the whole thing.”",
@@ -4449,11 +4454,11 @@ var QUESTIONS = {
         },
         {
           "text": "“Went all in once, regretted it, and would happily do it again.”",
-          "code": "RG+FC"
+          "code": "RG+FP"
         },
         {
           "text": "“Small size is fine. All in? Wouldn’t dare even think about it.”",
-          "code": "RS+FP"
+          "code": "RS+FC"
         },
         {
           "text": "No clue, feels like a bit of all of them",
@@ -4739,7 +4744,7 @@ var QUESTIONS = {
         },
         {
           "text": "Years ago. I’m fully zen these days.",
-          "code": "HT+FC"
+          "code": "HH+FC"
         },
         {
           "text": "No clue, feels like a bit of all of them",
@@ -5020,6 +5025,7 @@ function initTicker() {
     "Scroll, learn, discuss, act, compound — turn your daily scrolling into your own finance learning loop",
     "Follow pros, institutions and creators. Community-driven learning, with AI compressing the noise into actionable insight",
     "From discovery to execution in one interface — act on what you learn, right away",
+    "Trading via DL Securities, an SFC-licensed institution — regulated, so you can start with peace of mind",
     "Your result is just the start — tap below and begin your compounding journey 🚀",
   ];
   var marqueeText = '✦ ' + marqueeItems.join(' ✦ ') + ' ✦';
@@ -5187,7 +5193,7 @@ function score() {
   }
   QUESTIONS.questions.forEach(function(q, qi) {
     var ans = userAnswers[qi];
-    if (!ans || typeof ans.code !== 'string' || !q.options[ans.selectedOptionIndex]) return; // 防御:缺答/结构损坏跳过
+    if (!ans || !q.options[ans.selectedOptionIndex]) return; // 防御:缺答跳过
     parseCode(ans.code).forEach(function(v) {
       dims[v.d][v.p] += (v.w || 1);
     });
@@ -5221,11 +5227,6 @@ function finish() {
   if (egg) {
     var e = RESULTS.easterEggs[egg];
     renderEgg(e.persona, e.note, eggWordByKey(egg)); /* 与降级路径共用 EGG_MAP,日后加彩蛋只改一处 */
-        /* 彩蛋完成同样上报,保证漏斗不断 */
-    var eggWord = eggWordByKey(egg) || 'egg';
-    if (window._hmt) { window._hmt.push(['_trackEvent', 'test_completed', 'finish', eggWord]); }
-    if (window.gtag) { gtag('event', 'test_completed', { 'test_version': '48-question', 'persona_result': eggWord }); }
-    track('test_completed', { 'test_version': '48-question', 'persona_result': eggWord });
     return;
   }
   var s = score();
@@ -5240,7 +5241,7 @@ function renderEgg(name, note, word) {
   show('page-result');
   document.getElementById('result-body').innerHTML =
     '<div class="egg-wrap">' +
-      '<img class="egg-img" loading="eager" alt="' + name + '" src="' + (word === 'ATM' ? 'atm' : 'abcd') + '.webp" onerror="this.onerror=null;this.src=\'' + (word === 'ATM' ? 'atm' : 'abcd') + '.png\';">' +
+      '<img class="egg-img" loading="eager" alt="' + name + '" src="/' + (word === 'ATM' ? 'atm' : 'abcd') + '.webp" onerror="this.onerror=null;this.src=\'/' + (word === 'ATM' ? 'atm' : 'abcd') + '.png\';">' +
       '<div class="egg-title">Hidden persona “' + name + '”</div>' +
       '<div class="card"><p style="text-align:center;line-height:2;">' + note + '</p></div>' +
       '<div class="share-card-wrap">' +
@@ -5282,7 +5283,7 @@ function renderResult(persona, s) {
       '<div class="char-glow"></div>' +
       '<img class="result-character-img" loading="eager" alt="' + persona.name + '" ' +
         'src="' + imgKey + '.webp" ' +
-        'onerror="this.onerror=null;console.error(\'[img] load failed:\',this.src);this.src=\'' + imgKey + '.png\';">' +
+        'onerror="this.onerror=null;console.error(\'[img] load failed:\',this.src);this.src=\'' + '/' + imgKey + '.png\';">' +
     '</div>' : '';
   document.getElementById('result-body').innerHTML =
     '<div class="result-layout">' +
@@ -5681,7 +5682,7 @@ function bindShareCard(tpl, persona, match, ratio) {
   var social = tpl.querySelector('.sc-social');
   var proof = PERSONA_STATS[persona.word];
   if (proof) {
-    var s1 = 'Worldwide <span class="sc-num">' + bucketTotal(proof.total) + '</span> share your type';
+    var s1 = '全球 <span class="sc-num">' + bucketTotal(proof.total) + '</span> 人和你同型';
     var slogan = CLAN_SLOGAN[persona.code.substr(0, 2)] || '';
     social.innerHTML = s1 + (slogan ? '\\n' + slogan : '');
     social.style.display = '';
@@ -5729,10 +5730,9 @@ function generateShareCard(persona, match, ratio) {
     shareCardRatioReady[ratio] = true;
     if (window.gtag) { gtag('event', 'share_card_generate_success',
       { 'test_version': '48-question', 'persona_result': persona.code || persona.word || '', 'ratio': ratio }); }
-    track('share_card_generate_success', { 'test_version': '48-question', 'persona_result': persona.code || persona.word || '', 'ratio': ratio });
     return true;
   }).catch(function(e) {
-    if (ratio === '9:16') { /* 降级重试有界:9:16 失败用 4:5 兜底(低端机);4:5 再失败不递归 */
+    if (ratio === '9:16' && !shareGenerating) { /* 降级重试有界 */
       return generateShareCard(persona, match, '4:5').then(function(ok) {
         if (ok) toast(SHARE_LOWMEM);
         return ok;
@@ -5742,7 +5742,6 @@ function generateShareCard(persona, match, ratio) {
     console.error('[shareCard] generation failed:', e);
     if (window.gtag) { gtag('event', 'share_card_generate_failed',
       { 'test_version': '48-question', 'ratio': ratio }); }
-    track('share_card_generate_failed', { 'test_version': '48-question', 'ratio': ratio });
     return false;
   });
 }
@@ -5753,7 +5752,6 @@ function generateShareFlow() {
   var ratio = getShareRatio();
   if (window.gtag) { gtag('event', 'share_card_generate_start',
     { 'test_version': '48-question', 'persona_result': lastShareReq.persona.code || '', 'ratio': ratio }); }
-  track('share_card_generate_start', { 'test_version': '48-question', 'persona_result': lastShareReq.persona.code || '', 'ratio': ratio });
   shareGenerating = true;
   var btn = document.getElementById('btn-gen-share');
   if (btn) { btn.disabled = true; btn.textContent = 'Generating your share card…'; }
@@ -5761,31 +5759,16 @@ function generateShareFlow() {
   /* 主尺寸先出图,后台并行生成另一尺寸(无缝切换用) */
   shareCardRatio = ratio;
   shareCardUrls = {}; shareCardRatioReady = { '9:16': false, '4:5': false };
-  function resetShareState() {
-    shareGenerating = false;
-    if (btn) { btn.disabled = false; btn.textContent = 'Generate share card'; }
-  }
-  /* 同步/异步异常都复位锁,防止分享功能永久卡死 */
-  try {
-    generateShareCard(persona, match, ratio).then(function(ok) {
-      if (ok) track('share_card_generate', { personaCode: persona.code || '', ratio: ratio });
-      var other = (ratio === '4:5') ? '9:16' : '4:5';
-      generateShareCard(persona, match, other).then(function() {
-        resetShareState();
-        if (ok && shareCardUrls[ratio]) { openSharePreview(); }
-        else if (shareCardUrls[other]) { setShareRatio(other); openSharePreview(); } /* 主尺寸失败但兜底尺寸成功:自动切到可用尺寸 */
-        else { openSharePreviewError(); }
-      });
-    }).catch(function(e) {
-      console.error('[shareCard] flow error:', e);
-      resetShareState();
-      openSharePreviewError();
+  generateShareCard(persona, match, ratio).then(function(ok) {
+    if (ok) track('share_card_generate', { personaCode: persona.code || '', ratio: ratio });
+    var other = (ratio === '4:5') ? '9:16' : '4:5';
+    generateShareCard(persona, match, other).then(function() {
+      if (btn) { btn.disabled = false; btn.textContent = 'Generate share card'; }
+      shareGenerating = false;
+      if (ok && shareCardUrls[ratio]) { openSharePreview(); }
+      else { openSharePreviewError(); }
     });
-  } catch (e) {
-    console.error('[shareCard] flow sync error:', e);
-    resetShareState();
-    openSharePreviewError();
-  }
+  });
 }
 function renderRatioChips() {
   var sel = getShareRatio();
@@ -5812,7 +5795,6 @@ function updatePreview() {
     img.style.display = '';
     if (spin) spin.className = 'share-preview-spin';
   } else {
-    if (img) img.style.display = 'none'; /* 目标尺寸未就绪:隐藏旧图,避免误存上一尺寸 */
     if (spin) spin.className = 'share-preview-spin show';
   }
   if (dl) {
@@ -5889,11 +5871,6 @@ function loadProgress() {
     var d = JSON.parse(raw);
     if (!d || !Array.isArray(d.answers) || !d.answers.length) return null;
     if (d.answers.length > QUESTIONS.questions.length) return null;
-    /* 逐条校验:旧版本/损坏数据(缺 code 字段)直接丢弃,防止 score() 抛错且进度已清 */
-    for (var i = 0; i < d.answers.length; i++) {
-      var a = d.answers[i];
-      if (!a || typeof a.selectedOptionIndex !== 'number' || typeof a.code !== 'string') return null;
-    }
     return d;
   } catch (e) { return null; }
 }
@@ -5939,6 +5916,84 @@ document.getElementById('logo-blue-foot').src = 'NeuralFin.png';
 initTicker();
 initHome();
 restoreFromHash(); /* 幂等:head 的 DOMContentLoaded 亦会调用,已渲染则跳过 */
+</script>
+
+<script>
+/* ===== FLOW-TEST(验证用,非生产) ===== */
+(function() {
+  var out = document.createElement('div');
+  out.id = 'ftout';
+  out.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#111;color:#0f0;padding:10px 14px;font:bold 14px/1.6 monospace;white-space:pre-wrap;';
+  document.body.appendChild(out);
+  var res9 = {};
+  try { RESULTS.results.forEach(function(r) { res9[r.word] = r; }); } catch (e00) {}
+  var L = [];
+  function push(s) { L.push(s); out.textContent = L.join('\n'); }
+  setTimeout(function() {
+    try { localStorage.removeItem(getProgressKey()); } catch (e0) {}
+    push('parse-errs: ' + (window.__errs.join(' | ') || 'none'));
+    push('typeof startQuiz=' + typeof startQuiz + ' renderQuestion=' + typeof renderQuestion +
+         ' generateShareCard=' + typeof generateShareCard + ' initHome=' + typeof initHome +
+         ' bindShareCard=' + typeof bindShareCard + ' loadProgress=' + typeof loadProgress +
+         ' show=' + typeof show + ' proofTextPlain=' + typeof proofTextPlain);
+    try {
+      startQuiz();
+      push('startQuiz() ok');
+    } catch (e) {
+      push('startQuiz THREW: ' + e.message);
+    }
+    var quiz = document.getElementById('page-quiz');
+    push('quiz-active: ' + quiz.className);
+    push('q-title: ' + document.getElementById('q-title').textContent.slice(0, 40));
+    push('q-options count: ' + document.querySelectorAll('#q-options .opt').length);
+    push('q-count: ' + document.getElementById('q-count').textContent);
+    push('progress-fill width: ' + document.getElementById('progress-fill').style.width);
+    try {
+      var opt = document.querySelector('#q-options .opt');
+      choose(0, opt);
+      push('choose(0) ok');
+    } catch (e2) {
+      push('choose THREW: ' + e2.message);
+    }
+    var saved = null;
+    try { saved = localStorage.getItem(getProgressKey()); } catch (e3) {}
+    push('progress-saved: ' + (saved ? saved.slice(0, 60) : 'NULL'));
+    push('nav-button: ' + (document.getElementById('nav-button-area').innerHTML || '').slice(0, 40));
+    try {
+      showConfirm({ title: 't', desc: 'd', primary: 'p', secondary: 's', onPrimary: function() {}, onSecondary: function() {} });
+      push('showConfirm ok');
+    } catch (e4) { push('showConfirm THREW: ' + e4.message); }
+    push('runtime-errs: ' + (window.__errs.join(' | ') || 'none'));
+    /* 双尺寸预览:模拟结果页生成分享卡 → 两尺寸都应生成 */
+    /* finish 链路:答完全部 → submit → finish → 检查 section 状态 */
+    try {
+      userAnswers = [];
+      var qn = QUESTIONS.questions.length;
+      for (var qi = 0; qi < qn; qi++) { userAnswers.push({ selectedOptionIndex: 0, code: QUESTIONS.questions[qi].options[0].code }); }
+      current = qn;
+      submit();
+      setTimeout(function() {
+        var ids2 = ['page-home', 'page-quiz', 'page-loading', 'page-result'];
+        var st2 = [];
+        ids2.forEach(function(id2) {
+          var el2 = document.getElementById(id2);
+          st2.push(id2 + '=' + (el2.className.indexOf('active') > -1 ? 'ACTIVE' : 'hidden'));
+        });
+        push('FINISH后 sections: ' + st2.join(' | '));
+      }, 4500);
+    } catch (e6) { push('finish-path THREW: ' + e6.message); }
+    try {
+      lastShareReq = { persona: res9['SNIPER'], match: 87 };
+      generateShareFlow();
+      setTimeout(function() {
+        push('shareCardUrls 9:16=' + (shareCardUrls['9:16'] ? 'YES' : 'no') +
+             ' 4:5=' + (shareCardUrls['4:5'] ? 'YES' : 'no'));
+        push('shareCardRatioReady=' + JSON.stringify(shareCardRatioReady));
+        document.title = 'FLOWTEST-DONE';
+      }, 12000);
+    } catch (e5) { push('dual-gen THREW: ' + e5.message); document.title = 'FLOWTEST-DONE'; }
+  }, 2000);
+})();
 </script>
 </body>
 </html>

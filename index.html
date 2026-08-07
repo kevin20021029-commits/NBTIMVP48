@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NeuralFin 金融 NBTI —— 投资人格测试</title>
-<meta name="description" content="48 道题，5 分钟，测出你的投资人格。金融 NBTI —— 为刷屏一代而生的投资人格测试。">
+<meta name="description" content="48 道题，10 分钟，测出你的投资人格。金融 NBTI —— 为刷屏一代而生的投资人格测试。">
 <meta property="og:site_name" content="NeuralFin">
 <meta property="og:title" content="金融 NBTI —— 你是哪种投资人格？">
-<meta property="og:description" content="48 道题，5 分钟，测出你的投资人格。">
+<meta property="og:description" content="48 道题，10 分钟，测出你的投资人格。">
 <meta property="og:image" content="https://nbtimvp-48.vercel.app/NeuralFin.png">
 <meta property="og:url" content="https://nbtimvp-48.vercel.app/index.html">
 <meta property="og:type" content="website">
@@ -1137,211 +1137,6 @@ window.addEventListener('hashchange', syncLangLinks);
       </div>
     </div>
   </div>
-
-    <div class="header-right">
-      <span class="version">金融 NBTI v1.0</span>
-            <div class="lang-switcher">
-        <a href="index.html"    class="lang-option" data-lang="zh" aria-current="page">簡</a>
-        <span class="lang-divider">|</span>
-        <a href="index-hk.html"    class="lang-option" data-lang="hk">繁</a>
-        <span class="lang-divider">|</span>
-        <a href="index-en.html"    class="lang-option" data-lang="en">EN</a>
-      </div>
-    </div>
-  </header>
-
-  <section id="page-home" class="active">
-    <div class="home-hero">
-      <div class="eyebrow"><span class="eyebrow-dot"></span>AI 驱动投资社区</div>
-      <h1>金融 <b>NBTI</b></h1>
-      <div class="slogan">MBTI 已经过时，<b>NBTI</b> 来了。</div>
-      <div class="meta">48 题 · 10 分钟 · 16 种投资人格</div>
-      <button class="btn" onclick="startQuiz()">开始测试</button>
-      <div class="points">无需注册 · 纯属娱乐</div>
-    </div>
-
-    <div class="home-section reveal" id="sec-dims">
-      <h2 class="sec-title">四个维度，<b>测出你藏不住的投资本能</b></h2>
-      <p class="sec-sub">通过这四个方面的问题，测试你的投资本能。<br>答完不会得到生硬的代码——而是<b>中英文称号</b>，<br>比如「YOLO 梭哈战神」。</p>
-      <div class="dim-cards" id="dim-cards"></div>
-    </div>
-
-
-    <div class="home-section reveal" id="sec-clans">
-      <h2 class="clan-section-title">四种气质，<span class="highlight">你是哪一派</span></h2>
-      <p class="clan-section-subtitle">每一种派系，都是一种鲜明的投资人格画像</p>
-      <div class="clan-grid">
-        <div class="clan-card" data-accent="red">
-          <img src="clan-1.jpg" alt="冲动冒险派" class="clan-photo" loading="lazy">
-          <div class="clan-overlay">
-            <h3 class="clan-name">冲动冒险派</h3>
-            <p class="clan-tagline">跟着感觉走，敢想敢做，爱那种心跳的感觉</p>
-          </div>
-        </div>
-        <div class="clan-card" data-accent="blue">
-          <img src="clan-2.jpg" alt="理性分析派" class="clan-photo" loading="lazy">
-          <div class="clan-overlay">
-            <h3 class="clan-name">理性分析派</h3>
-            <p class="clan-tagline">数据说话，逻辑至上，决策前必有一张Excel</p>
-          </div>
-        </div>
-        <div class="clan-card" data-accent="green">
-          <img src="clan-3.jpg" alt="佛系情感派" class="clan-photo" loading="lazy">
-          <div class="clan-overlay">
-            <h3 class="clan-name">佛系情感派</h3>
-            <p class="clan-tagline">随缘随性，不争不抢，情绪稳定是超能力</p>
-          </div>
-        </div>
-        <div class="clan-card" data-accent="gold">
-          <img src="clan-4.jpg" alt="务实尽责派" class="clan-photo" loading="lazy">
-          <div class="clan-overlay">
-            <h3 class="clan-name">务实尽责派</h3>
-            <p class="clan-tagline">稳扎稳打，说到做到，靠谱到让人放心</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="home-section reveal" id="sec-personas">
-      <h2 class="sec-title">16 种投资人格，<b>你是哪一型？</b></h2>
-      <p class="sec-sub">每种人格，都是一句扎心的真相。</p>
-      <div class="p-cards" id="p-cards"></div>
-      <button class="btn" onclick="startQuiz()" style="margin-top:26px;">开始测试</button>
-      <p class="note">本测试仅供娱乐，别拿它相亲，不构成任何投资建议。</p>
-    </div>
-  </section>
-
-  <section id="page-quiz">
-    <div class="quiz-top">
-      <div class="left"><div class="nav-button-area" id="nav-button-area"></div><span id="q-count">第 01 题 / 共 48 题</span></div>
-      <span class="pct" id="q-pct">已完成 0%</span>
-    </div>
-    <div id="progress"><div id="progress-fill"></div></div>
-    <div class="quiz-note">世界已经够乱了，起码把题做完整——反正你也不敢提前平仓。</div>
-    <div class="q-title" id="q-title"></div>
-    <div id="q-options"></div>
-  </section>
-
-  <section id="page-loading">
-    <img class="load-sign" id="sign-load" alt="">
-    <div class="load-title">AI 深度分析中</div>
-    <div class="load-text" id="load-text">扫描交易 DNA……</div>
-    <div class="load-dots"><i></i><i></i><i></i></div>
-    <div class="load-foot">准确率 100%——不准是因为你撒谎了<br>点击屏幕可打断验算（真的）</div>
-  </section>
-
-  <section id="page-result">
-    <div id="result-body"></div>
-    <div class="footer-brand">
-      <img id="logo-blue-foot" src="NeuralFin.png" alt="NeuralFin">
-      <p>AI 驱动的投资社区 · www.neuralfin.ai<br>本测试不构成任何投资建议</p>
-    </div>
-  </section>
-
-</div>
-<div id="ticker"><div class="track" id="ticker-track"></div></div>
-
-    <!-- 分享卡 DOM 模板:9:16(1080×1920,默认) + 4:5(1080×1350);离屏渲染,html2canvas 导出 -->
-  <div class="share-card-template t916" id="shareCardTemplate916">
-    <div class="share-card-bg"></div>
-    <div class="sc-badge-row">
-      <span class="sc-badge" id="scBadge916"></span>
-      <span class="sc-badge-label" id="scBadgeLabel916"></span>
-      <span class="sc-badge-no" id="scBadgeNo916"></span>
-    </div>
-    <div class="share-card-charwrap">
-      <img class="share-card-character" alt="" crossorigin="anonymous">
-    </div>
-    <div class="sc-name-block">
-      <span class="sc-clan"></span>
-      <div class="sc-name-main"></div>
-      <div class="sc-match"></div>
-      <div class="sc-name-sub"></div>
-    </div>
-    <div class="sc-stat-bars" id="scStats916">
-      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
-      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
-      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
-      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
-    </div>
-    <div class="sc-tagline" id="scTagline916"></div>
-    <div class="sc-social" id="scSocial916"></div>
-    <div class="sc-qr-row">
-      <div class="sc-qrcode"><img alt="NeuralFin 二维码" crossorigin="anonymous"></div>
-      <div class="sc-qr-text">
-        <div class="sc-claim"></div>
-        <div class="sc-meta"></div>
-        <div class="sc-url">neuralfin.ai</div>
-        <div class="sc-scanhint"></div>
-      </div>
-    </div>
-    <div class="sc-disclaimer"><div></div><div></div></div>
-  </div>
-
-  <div class="share-card-template t45" id="shareCardTemplate45">
-    <div class="share-card-bg"></div>
-    <div class="sc-badge-row">
-      <span class="sc-badge" id="scBadge45"></span>
-      <span class="sc-badge-label" id="scBadgeLabel45"></span>
-      <span class="sc-badge-no" id="scBadgeNo45"></span>
-    </div>
-    <div class="share-card-charwrap">
-      <img class="share-card-character" alt="" crossorigin="anonymous">
-    </div>
-    <div class="sc-name-block">
-      <span class="sc-clan"></span>
-      <div class="sc-name-main"></div>
-      <div class="sc-match"></div>
-      <div class="sc-name-sub"></div>
-    </div>
-    <div class="sc-stat-bars" id="scStats45">
-      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
-      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
-      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
-      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
-    </div>
-    <div class="sc-tagline" id="scTagline45"></div>
-    <div class="sc-social" id="scSocial45"></div>
-    <div class="sc-qr-row">
-      <div class="sc-qrcode"><img alt="NeuralFin 二维码" crossorigin="anonymous"></div>
-      <div class="sc-qr-text">
-        <div class="sc-claim"></div>
-        <div class="sc-meta"></div>
-        <div class="sc-url">neuralfin.ai</div>
-        <div class="sc-scanhint"></div>
-      </div>
-    </div>
-    <div class="sc-disclaimer"><div></div><div></div></div>
-  </div>
-
-
-  <!-- 分享卡预览弹层:分步预览+长按分享(不禁用 touch-callout) -->
-  <div class="share-preview-modal" id="sharePreviewModal">
-    <div class="share-preview-overlay" onclick="closeSharePreview()"></div>
-    <div class="share-preview-content">
-      <button class="share-preview-close" onclick="closeSharePreview()">✕</button>
-      <div class="share-ratio-row" role="group" aria-label="Share size">
-        <button type="button" class="share-ratio-chip" data-ratio="9:16" aria-pressed="true" onclick="onRatioChipClick('9:16')">Story 9:16</button>
-        <button type="button" class="share-ratio-chip" data-ratio="4:5" aria-pressed="false" onclick="onRatioChipClick('4:5')">Feed 4:5</button>
-      </div>
-      <div class="share-preview-imgwrap">
-        <div class="share-preview-imgwrap">
-        <img class="share-preview-image" id="sharePreviewImg" alt="分享卡片预览">
-        <div class="share-preview-spin" id="sharePreviewSpin">生成中…</div>
-      </div>
-      </div>
-      <p class="share-preview-hint" id="sharePreviewHint"></p>
-      <button class="share-preview-download-btn btn" id="sharePreviewDl" onclick="sharePreviewAction()">下载分享图</button>
-    </div>
-  </div>
-<div id="confirmModal" class="confirm-overlay" style="display:none;">
-  <div class="confirm-panel">
-    <div class="confirm-title" id="confirmTitle"></div>
-    <div class="confirm-desc" id="confirmDesc"></div>
-    <button class="btn" id="confirmPrimary"></button>
-    <button class="btn confirm-secondary" id="confirmSecondary"></button>
-  </div>
-</div>
-<div id="toast"></div>
 
 <script>
 /* QR Code generator (MIT, Kazuhiko Arase) - 内嵌，无外部依赖 */
@@ -4187,7 +3982,7 @@ var QUESTIONS = {
         },
         {
           "text": "手抖着按下确认键，嘴里念叨\"别慌别慌\"",
-          "code": "FP"
+          "code": "FC"
         },
         {
           "text": "边加仓边后悔，加完还在纠结要不要撤",
@@ -4439,7 +4234,7 @@ var QUESTIONS = {
       "options": [
         {
           "text": "\"疯了吧，鸡蛋不能放一个篮子\"",
-          "code": "RS"
+          "code": "RS+HT"
         },
         {
           "text": "\"这才叫信仰，稳了\"",
@@ -4447,7 +4242,7 @@ var QUESTIONS = {
         },
         {
           "text": "\"拿三年？我三天都嫌久\"",
-          "code": "HT"
+          "code": "RG+HT"
         },
         {
           "text": "\"可以试试，反正闲钱\"",
@@ -4465,7 +4260,7 @@ var QUESTIONS = {
       "options": [
         {
           "text": "长：从未卖出的\"压箱底\"蓝筹；短：从没拿过隔夜仓的题材股",
-          "code": "HH+HT"
+          "code": "RS+HH"
         },
         {
           "text": "长：All-in 押上的梦想股；短：几乎不做短线，太伤肝",
@@ -4473,7 +4268,7 @@ var QUESTIONS = {
         },
         {
           "text": "长：几乎没有，我信仰的是\"T\"；短：我全部资产",
-          "code": "HT+RG/RS"
+          "code": "RG+HT"
         },
         {
           "text": "长：国债，稳到发霉；短：偶尔手痒做的超短",
@@ -4521,11 +4316,11 @@ var QUESTIONS = {
         },
         {
           "text": "\"疯了，鸡蛋不能放一个篮子里放三年\"",
-          "code": "RS"
+          "code": "RS+HT"
         },
         {
           "text": "\"拿这么久？早就该做T了\"",
-          "code": "HT"
+          "code": "RG+HT"
         },
         {
           "text": "\"小仓位可以试试，别赌上全部\"",
@@ -4655,11 +4450,11 @@ var QUESTIONS = {
         },
         {
           "text": "\"All-in 过，后悔过，但还想再 All-in 一次\"",
-          "code": "RG+FP"
+          "code": "RG+FC"
         },
         {
           "text": "\"小仓位可以，All-in？想都不敢想\"",
-          "code": "RS+FC"
+          "code": "RS+FP"
         },
         {
           "text": "说不清，好像都沾一点",
@@ -4945,7 +4740,7 @@ var QUESTIONS = {
         },
         {
           "text": "几年前了吧，反正现在心态早就佛了",
-          "code": "HH+FC"
+          "code": "HT+FC"
         },
         {
           "text": "说不清，好像都沾一点",
@@ -5223,7 +5018,6 @@ function initTicker() {
     '刷屏、学习、讨论、行动、复利——把每天滑手机的碎片时间，变成你的专属金融学习闭环',
     '关注专业人士、机构与博主，社区驱动学习，AI 把海量内容压缩成可行动的洞察',
     '从发现到执行，同一个界面完成，学到的当下就能行动',
-    '已接入香港证监会持牌机构德林证券，受监管交易，安心起步',
     '你的测试结果只是起点，点击下方，开启你的投资复利之旅 🚀'
   ];
   var marqueeText = '✦ ' + marqueeItems.join(' ✦ ') + ' ✦';
@@ -5391,7 +5185,7 @@ function score() {
   }
   QUESTIONS.questions.forEach(function(q, qi) {
     var ans = userAnswers[qi];
-    if (!ans || !q.options[ans.selectedOptionIndex]) return; // 防御:缺答跳过
+    if (!ans || typeof ans.code !== 'string' || !q.options[ans.selectedOptionIndex]) return; // 防御:缺答/结构损坏跳过
     parseCode(ans.code).forEach(function(v) {
       dims[v.d][v.p] += (v.w || 1);
     });
@@ -5425,6 +5219,11 @@ function finish() {
   if (egg) {
     var e = RESULTS.easterEggs[egg];
     renderEgg(e.persona, e.note, eggWordByKey(egg)); /* 与降级路径共用 EGG_MAP,日后加彩蛋只改一处 */
+        /* 彩蛋完成同样上报,保证漏斗不断 */
+    var eggWord = eggWordByKey(egg) || 'egg';
+    if (window._hmt) { window._hmt.push(['_trackEvent', 'test_completed', 'finish', eggWord]); }
+    if (window.gtag) { gtag('event', 'test_completed', { 'test_version': '48题版', 'persona_result': eggWord }); }
+    track('test_completed', { 'test_version': '48题版', 'persona_result': eggWord });
     return;
   }
   var s = score();
@@ -5439,7 +5238,7 @@ function renderEgg(name, note, word) {
   show('page-result');
   document.getElementById('result-body').innerHTML =
     '<div class="egg-wrap">' +
-      '<img class="egg-img" loading="eager" alt="' + name + '" src="/' + (word === 'ATM' ? 'atm' : 'abcd') + '.webp" onerror="this.onerror=null;this.src=\'/' + (word === 'ATM' ? 'atm' : 'abcd') + '.png\';">' +
+      '<img class="egg-img" loading="eager" alt="' + name + '" src="' + (word === 'ATM' ? 'atm' : 'abcd') + '.webp" onerror="this.onerror=null;this.src=\'' + (word === 'ATM' ? 'atm' : 'abcd') + '.png\';">' +
       '<div class="egg-title">隐藏人格「' + name + '」</div>' +
       '<div class="card"><p style="text-align:center;line-height:2;">' + note + '</p></div>' +
       '<div class="share-card-wrap">' +
@@ -5481,7 +5280,7 @@ function renderResult(persona, s) {
       '<div class="char-glow"></div>' +
       '<img class="result-character-img" loading="eager" alt="' + persona.name + '" ' +
         'src="' + imgKey + '.webp" ' +
-        'onerror="this.onerror=null;console.error(\'[img] load failed:\',this.src);this.src=\'' + '/' + imgKey + '.png\';">' +
+        'onerror="this.onerror=null;console.error(\'[img] load failed:\',this.src);this.src=\'' + imgKey + '.png\';">' +
     '</div>' : '';
   document.getElementById('result-body').innerHTML =
     '<div class="result-layout">' +
@@ -5928,9 +5727,10 @@ function generateShareCard(persona, match, ratio) {
     shareCardRatioReady[ratio] = true;
     if (window.gtag) { gtag('event', 'share_card_generate_success',
       { 'test_version': '48题版', 'persona_result': persona.code || persona.word || '', 'ratio': ratio }); }
+    track('share_card_generate_success', { 'test_version': '48题版', 'persona_result': persona.code || persona.word || '', 'ratio': ratio });
     return true;
   }).catch(function(e) {
-    if (ratio === '9:16' && !shareGenerating) { /* 降级重试有界 */
+    if (ratio === '9:16') { /* 降级重试有界:9:16 失败用 4:5 兜底(低端机);4:5 再失败不递归 */
       return generateShareCard(persona, match, '4:5').then(function(ok) {
         if (ok) toast(SHARE_LOWMEM);
         return ok;
@@ -5940,6 +5740,7 @@ function generateShareCard(persona, match, ratio) {
     console.error('[shareCard] generation failed:', e);
     if (window.gtag) { gtag('event', 'share_card_generate_failed',
       { 'test_version': '48题版', 'ratio': ratio }); }
+    track('share_card_generate_failed', { 'test_version': '48题版', 'ratio': ratio });
     return false;
   });
 }
@@ -5950,6 +5751,7 @@ function generateShareFlow() {
   var ratio = getShareRatio();
   if (window.gtag) { gtag('event', 'share_card_generate_start',
     { 'test_version': '48题版', 'persona_result': lastShareReq.persona.code || '', 'ratio': ratio }); }
+  track('share_card_generate_start', { 'test_version': '48题版', 'persona_result': lastShareReq.persona.code || '', 'ratio': ratio });
   shareGenerating = true;
   var btn = document.getElementById('btn-gen-share');
   if (btn) { btn.disabled = true; btn.textContent = '正在生成专属分享卡...'; }
@@ -5957,16 +5759,31 @@ function generateShareFlow() {
   /* 主尺寸先出图,后台并行生成另一尺寸(无缝切换用) */
   shareCardRatio = ratio;
   shareCardUrls = {}; shareCardRatioReady = { '9:16': false, '4:5': false };
-  generateShareCard(persona, match, ratio).then(function(ok) {
-    if (ok) track('share_card_generate', { personaCode: persona.code || '', ratio: ratio });
-    var other = (ratio === '4:5') ? '9:16' : '4:5';
-    generateShareCard(persona, match, other).then(function() {
-      if (btn) { btn.disabled = false; btn.textContent = '生成分享卡片'; }
-      shareGenerating = false;
-      if (ok && shareCardUrls[ratio]) { openSharePreview(); }
-      else { openSharePreviewError(); }
+  function resetShareState() {
+    shareGenerating = false;
+    if (btn) { btn.disabled = false; btn.textContent = '生成分享卡片'; }
+  }
+  /* 同步/异步异常都复位锁,防止分享功能永久卡死 */
+  try {
+    generateShareCard(persona, match, ratio).then(function(ok) {
+      if (ok) track('share_card_generate', { personaCode: persona.code || '', ratio: ratio });
+      var other = (ratio === '4:5') ? '9:16' : '4:5';
+      generateShareCard(persona, match, other).then(function() {
+        resetShareState();
+        if (ok && shareCardUrls[ratio]) { openSharePreview(); }
+        else if (shareCardUrls[other]) { setShareRatio(other); openSharePreview(); } /* 主尺寸失败但兜底尺寸成功:自动切到可用尺寸 */
+        else { openSharePreviewError(); }
+      });
+    }).catch(function(e) {
+      console.error('[shareCard] flow error:', e);
+      resetShareState();
+      openSharePreviewError();
     });
-  });
+  } catch (e) {
+    console.error('[shareCard] flow sync error:', e);
+    resetShareState();
+    openSharePreviewError();
+  }
 }
 function renderRatioChips() {
   var sel = getShareRatio();
@@ -5993,6 +5810,7 @@ function updatePreview() {
     img.style.display = '';
     if (spin) spin.className = 'share-preview-spin';
   } else {
+    if (img) img.style.display = 'none'; /* 目标尺寸未就绪:隐藏旧图,避免误存上一尺寸 */
     if (spin) spin.className = 'share-preview-spin show';
   }
   if (dl) {
@@ -6069,6 +5887,11 @@ function loadProgress() {
     var d = JSON.parse(raw);
     if (!d || !Array.isArray(d.answers) || !d.answers.length) return null;
     if (d.answers.length > QUESTIONS.questions.length) return null;
+    /* 逐条校验:旧版本/损坏数据(缺 code 字段)直接丢弃,防止 score() 抛错且进度已清 */
+    for (var i = 0; i < d.answers.length; i++) {
+      var a = d.answers[i];
+      if (!a || typeof a.selectedOptionIndex !== 'number' || typeof a.code !== 'string') return null;
+    }
     return d;
   } catch (e) { return null; }
 }

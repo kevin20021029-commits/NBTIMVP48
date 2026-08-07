@@ -4,6 +4,7 @@
  *   SUPABASE_URL           形如 https://xxxx.supabase.co
  *   SUPABASE_SERVICE_KEY   service_role key
  * 地域:从 Vercel 请求头免费获取 x-vercel-ip-country / x-vercel-ip-city
+ * 已知取舍:无鉴权/限频(白名单只限事件名),小项目可接受;若被灌水再按 IP 限频。
  */
 const { createClient } = require('@supabase/supabase-js');
 
@@ -26,23 +27,41 @@ const ALLOWED_EVENTS = new Set([
   'share_card_download'
 ]);
 
+/* CORS:生产同源(页面与 API 同在 vercel.app)不需要;但 file:// 打开页面或镜像域名时,
+ * sendBeacon 携带 application/json Blob 会先发 OPTIONS 预检——必须放行,否则事件静默丢失 */
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
+};
+
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_KEY
 );
 
-const clean = (s, max) => (typeof s === 'string' ? s.slice(0, max) : null);
+const clean = (s, max) => (typeof s === 'string' && s.trim() ? s.slice(0, max) : null);
 
 module.exports = async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ ok: false });
+  if (req.method === 'OPTIONS') { res.set(CORS); return res.status(204).end(); }
+  if (req.method !== 'POST') { res.set(CORS); return res.status(405).json({ ok: false }); }
 
   let body;
   try {
     body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
   } catch (e) {
+    res.set(CORS);
     return res.status(400).json({ ok: false });
   }
-  if (!ALLOWED_EVENTS.has(body.event_name)) return res.status(400).json({ ok: false });
+  /* 防 JSON.parse('null'|'[]'|数字) 等畸形体:缺 event_name 时直接 400,不抛未捕获 TypeError */
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    res.set(CORS);
+    return res.status(400).json({ ok: false });
+  }
+  if (!ALLOWED_EVENTS.has(body.event_name)) {
+    res.set(CORS);
+    return res.status(400).json({ ok: false });
+  }
 
   const params = (body.params && typeof body.params === 'object') ? body.params : {};
   const row = {
@@ -60,6 +79,11 @@ module.exports = async function handler(req, res) {
   };
 
   const { error } = await supabase.from('events').insert(row);
-  if (error) return res.status(500).json({ ok: false, error: error.message });
+  if (error) {
+    console.error('[event] supabase insert failed:', error.message);
+    res.set(CORS);
+    return res.status(500).json({ ok: false, error: error.message });
+  }
+  res.set(CORS);
   return res.status(200).json({ ok: true });
 };
