@@ -34,6 +34,7 @@ const ALLOWED_EVENTS = new Set([
   /* 导出遥测:重试/降级级别/比例切换/微信长按兜底 */
   'share_card_retry',
   'share_card_fallback_used',
+  'lang_switch',
   'card_ratio_switch',
   'share_card_longpress_shown',
   /* 内容断言失败(白图/缺图/文字缺失) */

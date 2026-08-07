@@ -736,7 +736,8 @@ function buildLangUrl(targetLang) {
   var q = (location.search || '').replace(/^\?/, '');
   if (q) {
     q.split('&').forEach(function(pair) {
-      if (!/^lang=/i.test(pair)) params.push(pair);
+      /* I1-3: lang(偏好)与 resume(一次性状态)不传播;归因参数(ref/refPersona/from)保留 */
+      if (!/^(lang|resume)=/i.test(pair)) params.push(pair);
     });
   }
   return target + (params.length ? '?' + params.join('&') : '') + location.hash;
@@ -5051,6 +5052,14 @@ function setView(view, pageId) {
       try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
     }
   }
+  /* I1-3: 状态参数管理 — resume 一次性(消费/离开即清);归因参数(ref/refPersona/from)永不清除 */
+  if (view === 'home' || view === 'result') {
+    var _q = (location.search || '').replace(/^\?/, '');
+    if (_q && /(^|&)resume=/i.test(_q)) {
+      var _params = _q.split('&').filter(function(pair) { return !/^resume=/i.test(pair); });
+      try { history.replaceState(null, '', location.pathname + (_params.length ? '?' + _params.join('&') : '') + location.hash); } catch (e) {}
+    }
+  }
   show(pageId || (view === 'home' ? 'page-home' : 'page-quiz'));
 }
 
@@ -6360,7 +6369,7 @@ function restoreProgress(d) {
   else { setView('quiz', 'page-quiz'); renderQuestion(); } /* I1-2 */
 }
 /* ============ 其他 ============ */
-function restart() { startQuiz(); }
+function restart() { setView('quiz', 'page-quiz'); startQuiz(); } /* I1-3: 先清 hash, 防 startQuiz 早退分支残留 */
 function goHome() {
   if (pendingTimer) { clearTimeout(pendingTimer); pendingTimer = null; }
   answerMoving = false;
