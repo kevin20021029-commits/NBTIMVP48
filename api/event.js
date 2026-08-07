@@ -75,8 +75,24 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ ok: false });
   }
   if (!ALLOWED_EVENTS.has(body.event_name)) {
+    /* K2b: 非白名单事件不再静默丢弃 — server log + 入库 rejected_event(当天可见, 修白名单遗漏) */
+    console.error('[event] rejected:', JSON.stringify({ name: body.event_name, lang: body.lang || null, ua: clean(body.ua, 120) }));
+    try {
+      await supabase.from('events').insert({
+        event_name: 'rejected_event',
+        user_id: clean(body.user_id, 64),
+        test_version: clean((body.params && body.params.test_version) || null, 20),
+        lang: clean(body.lang, 8),
+        page: clean(body.page, 40),
+        url: clean(body.url, 500),
+        ua: clean(body.ua, 300),
+        params: { rejected: body.event_name, reason: 'not_whitelisted' }
+      });
+    } catch (e) {
+      console.error('[event] rejected insert failed:', e.message);
+    }
     res.set(CORS);
-    return res.status(400).json({ ok: false });
+    return res.status(400).json({ ok: false, rejected: body.event_name });
   }
 
   const params = (body.params && typeof body.params === 'object') ? body.params : {};
