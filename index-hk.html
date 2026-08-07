@@ -486,7 +486,7 @@
   /* ---- 分享卡预览弹层(分步预览+长按分享) ---- */
   #sharePreviewModal { display: none; }
   #sharePreviewModal.show { display: block; }
-  .share-preview-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85);
+  .share-preview-overlay { position: fixed; inset: 0; background: rgba(4,6,12,.92); /* B3 不透明深色遮罩 */
     z-index: 999; transition: opacity .2s ease; }
   .share-preview-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
     z-index: 1000; display: flex; flex-direction: column; align-items: center;
@@ -6149,6 +6149,7 @@ function openSharePreview() {
   else { hint.textContent = '撳下面嘅掣下載圖片，用手機掃描 QR Code 分享體驗更佳'; }
   renderRatioChips();
   m.classList.add('show'); m.classList.remove('hide');
+  document.body.style.overflow = 'hidden'; /* B3 弹窗打开锁 body 滚动 */
   var dl = safeEl('sharePreviewDl'); if (dl) dl.style.display = '';
   var rb = safeEl('shareRetryBtn'); if (rb) rb.style.display = 'none';
   var fb = safeEl('shareFallbackBtn'); if (fb) fb.style.display = 'none';
@@ -6163,11 +6164,13 @@ function openSharePreviewError(reason) {
   var rb = safeEl('shareRetryBtn'); if (rb) rb.style.display = '';
   var fb = safeEl('shareFallbackBtn'); if (fb) fb.style.display = '';
   m.classList.add('show'); m.classList.remove('hide');
+  document.body.style.overflow = 'hidden'; /* B3 弹窗打开锁 body 滚动 */
 }
 function closeSharePreview() {
   var m = safeEl('sharePreviewModal');
   if (!m) return safeFail('sharePreviewModal');
   m.classList.add('hide');
+  document.body.style.overflow = ''; /* B3 弹窗关闭解锁滚动 */
   setTimeout(function() { m.classList.remove('show'); m.classList.remove('hide'); }, 200);
 }
 function sharePreviewAction() {
