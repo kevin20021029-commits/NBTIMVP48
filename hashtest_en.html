@@ -409,9 +409,10 @@
   .t45 .sc-stats { flex-direction: column; gap: 14px; }
   .sc-stat { display: flex; align-items: center; gap: 16px; }
   .t916 .sc-stat { width: calc(50% - 22px); }
-  .sc-stat-label { color: #9aa49d; flex-shrink: 0; }
-  .t916 .sc-stat-label { width: 142px; font-size: 25px; }
-  .t45 .sc-stat-label { width: 118px; font-size: 23px; }
+  .sc-stat-label { color: #9aa49d; flex-shrink: 0; display: flex; align-items: center;
+    line-height: 1.25; } /* B5: 固定高度容器, 两行标签也保持四格基线一致 */
+  .t916 .sc-stat-label { width: 142px; height: 64px; font-size: 25px; } /* 2 行 x 25 x 1.25 */
+  .t45 .sc-stat-label { width: 118px; height: 58px; font-size: 23px; } /* 2 行 x 23 x 1.25 */
   .sc-stat-bar { flex: 1; border-radius: 5px; background: rgba(255,255,255,.10); overflow: hidden; }
   .t916 .sc-stat-bar { height: 9px; }
   .t45 .sc-stat-bar { height: 8px; border-radius: 4px; }
