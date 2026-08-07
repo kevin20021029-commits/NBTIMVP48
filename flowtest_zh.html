@@ -6420,14 +6420,19 @@ restoreFromHash(); /* 幂等:head 的 DOMContentLoaded 亦会调用,已渲染则
 <script>
 /* ===== FLOW-TEST(验证用,非生产) ===== */
 (function() {
-  var out = document.createElement('div');
-  out.id = 'ftout';
-  out.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#111;color:#0f0;padding:10px 14px;font:bold 14px/1.6 monospace;white-space:pre-wrap;';
-  document.body.appendChild(out);
+  /* D2: 调试面板仅 ?diag= 参数下渲染(测试页被 Vercel 部署到生产, 默认静默自测, 不覆盖正文) */
+  var DIAG = /[?&]diag=/.test(location.search);
+  var out = null;
+  if (DIAG) {
+    out = document.createElement('div');
+    out.id = 'ftout';
+    out.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#111;color:#0f0;padding:10px 14px;font:bold 14px/1.6 monospace;white-space:pre-wrap;pointer-events:none;';
+    document.body.appendChild(out);
+  }
   var res9 = {};
   try { RESULTS.results.forEach(function(r) { res9[r.word] = r; }); } catch (e00) {}
   var L = [];
-  function push(s) { L.push(s); out.textContent = L.join('\n'); }
+  function push(s) { L.push(s); if (out) out.textContent = L.join('\n'); }
   setTimeout(function() {
     try { localStorage.removeItem(getProgressKey()); } catch (e0) {}
     push('parse-errs: ' + (window.__errs.join(' | ') || 'none'));
