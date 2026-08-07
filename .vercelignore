@@ -1,0 +1,12 @@
+# HOTFIX-C3 E1: 测试页与开发文件不得部署到生产(无 vercel.json 时 Vercel 默认全量部署)
+flowtest_zh.html
+flowtest_en.html
+flowtest_hk.html
+hashtest_zh.html
+hashtest_en.html
+hashtest_hk.html
+p02check.html
+tests/
+archive/
+docs/
+*.bak*
