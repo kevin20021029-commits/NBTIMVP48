@@ -97,3 +97,20 @@ E2-P1 已把生产 6 页 96 处裸访问改 safeEl/safeFail(no-bare-dom-access �
 
 **对策(写入 B5 层次一)**: tests/ docs/ shared/ 必须收进强 byte-identical 校验,
 不一致即 test:dom 报红(具体方案见 docs/architecture-card-prerender.md 与 B5 结论)。
+
+
+## 11. F4 证据追加: NBTI48 弱契约事件(2026-08-07 B0 追加核实)
+
+**事件**: B0 全量校验发现 NBTI48 的 tests/ 是 E2 时代旧版——dom-contract.spec.ts 仅 54 行/12 项
+REQUIRED_IDS(只覆盖分享弹窗 5 + confirmModal 5 + 模板 2), 而 NBTI16 权威版 88 行/39 项(全页
+DOM 覆盖)。text-check.spec.ts 亦为旧结构(缺 C3 后的负例与遥测 payload 完整性检查)。
+
+**影响**: C3(D6 容器/39 节点重构只进 16)之后所有「两仓库 test:dom 全绿」汇报中, 48 那一半是
+**弱契约**(12/39 节点)——48 的回归覆盖不足, 期间 48 独有的页面 DOM 回归不会被发现。
+
+**修复**: 已按 16 权威版同步 48(B0, e29ee6c), 新契约下 48 test:dom 15/15 全绿(39 节点 +
+96 组溢出断言 + 负例 + no-bare-dom)。
+
+**教训(本条目存在的原因)**: 「两边都绿」不等于「两边同标准」——shared-identity 测试
+(tests/shared-identity.spec.ts, B4 落地) 正是为此而生: 两仓库 tests/ docs/ shared/ 不一致
+即 test:dom 报红, 从机制上消灭弱契约复现的可能。
