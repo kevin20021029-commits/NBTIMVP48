@@ -9,7 +9,8 @@
     "@playwright/test": "^1.60.0"
   },
   "scripts": {
-    "test:dom": "playwright test tests/dom-contract.spec.ts tests/asset-contract.spec.ts tests/text-check.spec.ts tests/no-bare-dom-access.spec.ts tests/nav-state.spec.ts",
-    "build:cards": "node \"../shared/build-cards.mjs\" --repo nbti48"
+    "test:dom": "playwright test tests/dom-contract.spec.ts tests/asset-contract.spec.ts tests/text-check.spec.ts tests/no-bare-dom-access.spec.ts tests/nav-state.spec.ts tests/shared-identity.spec.ts",
+    "build:cards": "node \"../shared/build-cards.mjs\" --repo nbti48",
+    "sync:shared": "node ../shared/sync-shared.mjs"
   }
 }

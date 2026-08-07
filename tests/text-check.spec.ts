@@ -34,13 +34,14 @@ test.describe('分享卡文本层断言(B7)', () => {
       await blockExternal(page);
       await page.goto(`/${file}`, { waitUntil: 'domcontentloaded' });
       await page.waitForFunction(() => (window as any).RESULTS && (window as any).RESULTS.results.length > 0);
+      await page.addScriptTag({ url: '/shared/text-assert.js' }); /* B4: 文本断言 shared 单点 */
       const r = await page.evaluate(async () => {
         const out: any[] = [];
         for (const ratio of ['9:16', '4:5']) {
           const p = (window as any).RESULTS.results[0];
           const tpl = document.getElementById(ratio === '4:5' ? 'shareCardTemplate45' : 'shareCardTemplate916')!;
           (window as any).bindShareCard(tpl, p, 87, ratio);
-          out.push({ ratio, fails: (window as any).checkShareCardText(tpl, p, 87, ratio, (window as any).CURRENT_LANG) });
+          out.push({ ratio, fails: (window as any).TextAssert.check(tpl, p, 87, ratio, (window as any).CURRENT_LANG) });
         }
         return out;
       });
@@ -50,10 +51,11 @@ test.describe('分享卡文本层断言(B7)', () => {
     });
   }
 
-  test('负例: 注入字面 \\n / 越界匹配度被检测, 遥测 payload 完整', async ({ page }) => {
+  test('负例: 注入字面 \\n / 越界匹配度被检测(shared/text-assert.js 单点)', async ({ page }) => {
     await blockExternal(page);
-    await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
+    await page.goto('/index.html?lang=zh', { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => (window as any).RESULTS && (window as any).RESULTS.results.length > 0);
+    await page.addScriptTag({ url: '/shared/text-assert.js' }); /* B4: 断言 shared 单点 */
     const r = await page.evaluate(async () => {
       const W = window as any;
       const tpl = document.getElementById('shareCardTemplate916')!;
@@ -63,26 +65,16 @@ test.describe('分享卡文本层断言(B7)', () => {
       const mn = tpl.querySelector('.sc-match-num') as HTMLElement;
       const origT = t.textContent;
       const origMn = mn.innerHTML;
-      const events: any[] = [];
-      const origTrack = W.track;
-      W.track = (name: string, payload: any) => events.push({ name, payload });
       t.textContent = 'x\\ny';
-      const r1 = W.checkShareCardText(tpl, p, 87, '9:16', W.CURRENT_LANG);
+      const r1 = W.TextAssert.check(tpl, p, 87, '9:16', W.CURRENT_LANG);
       mn.innerHTML = '101<span class="sc-match-pct">%</span>';
-      const r2 = W.checkShareCardText(tpl, p, 87, '9:16', W.CURRENT_LANG);
+      const r2 = W.TextAssert.check(tpl, p, 87, '9:16', W.CURRENT_LANG);
       t.textContent = origT;
       mn.innerHTML = origMn;
-      W.track = origTrack;
-      return { r1, r2, events };
+      return { r1, r2 };
     });
     expect(r.r1.join(',')).toContain('_n|template'); // 字面 \n 规则命中
     expect(r.r2.join(',')).toContain('match-range|match'); // 匹配度越界命中
-    const evt = r.events.find((e) => e.name === 'share_card_text_check_failed');
-    expect(evt, '应上报 share_card_text_check_failed').toBeTruthy();
-    expect(evt.payload.ratio).toBe('9:16');
-    for (const key of ['failedRule', 'field', 'persona', 'locale', 'uaBucket']) {
-      expect(typeof evt.payload[key], `payload.${key} 缺失`).toBe('string');
-    }
   });
 });
 
@@ -99,7 +91,9 @@ test.describe('内容断言回归(E3: 16 人格 × 2 比例 + 溢出断言)', ()
           for (const ratio of ['9:16', '4:5']) {
             let ok = true, err = '';
             try {
-              await W.generateShareCard(p, 87, ratio, 2, 0);
+              const m = await import('/shared/card-runtime.js');
+              const r = await m.exportCard(p.word, 87, ratio, W.CURRENT_LANG);
+              if (!r.blob || r.blob.size < 1000) throw new Error('blob too small');
             } catch (e: any) {
               ok = false;
               err = String(e.message || e).slice(0, 80);

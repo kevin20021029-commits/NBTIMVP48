@@ -3,3 +3,6 @@ dist/
 .DS_Store
 test-results/
 playwright-report/
+
+# B4: 视觉迭代期构建产物不入库(里程碑时提交并 squash)
+cards/
