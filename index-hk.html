@@ -6,25 +6,25 @@
 <title>NeuralFin 金融 NBTI —— 投資人格測試</title>
 <meta name="robots" content="noindex">  <!-- TODO(港版文案定稿日): 必须摘除,否则港版永不被索引 -->
 <!-- TODO(港版上線日): 換成 og-hk.png 1200×630;換完須手動刷新 FB Sharing Debugger / Twitter Card Validator 緩存 -->
-<meta name="description" content="16 條題 · 5 分鐘 · 測出你嘅投資人格。金融 NBTI —— 為刷屏一代而設嘅投資人格測試。">
+<meta name="description" content="48 條題 · 10 分鐘 · 測出你嘅投資人格。金融 NBTI —— 為刷屏一代而設嘅投資人格測試。">
 <meta property="og:site_name" content="NeuralFin">
 <meta property="og:title" content="金融 NBTI —— 你係邊一型投資人格？">
-<meta property="og:description" content="16 條題 · 5 分鐘 · 測出你嘅投資人格。">
-<meta property="og:image" content="https://nbtimvp-16.vercel.app/NeuralFin.png">
-<meta property="og:url" content="https://nbtimvp-16.vercel.app/index-hk.html">
+<meta property="og:description" content="48 條題 · 10 分鐘 · 測出你嘅投資人格。">
+<meta property="og:image" content="https://nbtimvp-48.vercel.app/NeuralFin.png">
+<meta property="og:url" content="https://nbtimvp-48.vercel.app/index-hk.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="zh_HK">
 <meta property="og:locale:alternate" content="zh_CN">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://nbtimvp-16.vercel.app/NeuralFin.png">
+<meta name="twitter:image" content="https://nbtimvp-48.vercel.app/NeuralFin.png">
 <!-- hreflang 三版互指;noindex 期間(index-hk.html)被搜尋引擎忽略屬預期狀態,勿改 -->
-<link rel="canonical" href="https://nbtimvp-16.vercel.app/index-hk.html">
-<link rel="alternate" hreflang="zh-Hans"    href="https://nbtimvp-16.vercel.app/index.html">
-<link rel="alternate" hreflang="zh-Hant"    href="https://nbtimvp-16.vercel.app/index-hk.html">
-<link rel="alternate" hreflang="zh-Hant-HK" href="https://nbtimvp-16.vercel.app/index-hk.html">
-<link rel="alternate" hreflang="en"         href="https://nbtimvp-16.vercel.app/index-en.html">
-<link rel="alternate" hreflang="x-default"  href="https://nbtimvp-16.vercel.app/index-en.html">
+<link rel="canonical" href="https://nbtimvp-48.vercel.app/index-hk.html">
+<link rel="alternate" hreflang="zh-Hans"    href="https://nbtimvp-48.vercel.app/index.html">
+<link rel="alternate" hreflang="zh-Hant"    href="https://nbtimvp-48.vercel.app/index-hk.html">
+<link rel="alternate" hreflang="zh-Hant-HK" href="https://nbtimvp-48.vercel.app/index-hk.html">
+<link rel="alternate" hreflang="en"         href="https://nbtimvp-48.vercel.app/index-en.html">
+<link rel="alternate" hreflang="x-default"  href="https://nbtimvp-48.vercel.app/index-en.html">
 <link rel="icon" type="image/png" href="NeuralFin.png">
 <style>
   :root {
@@ -338,111 +338,142 @@
 
   /* ---- 分享卡 DOM 模板(离屏,html2canvas 导出 750x1200) ---- */
       /* ============ 分享卡 9:16 / 4:5(html2canvas 兼容:只用 flex,不用 grid) ============ */
+    /* ============ 分享卡 2a 9:16 / 2b 4:5(设计稿;html2canvas 兼容:flex + 绝对定位,不用 grid) ============ */
   .share-card-template { position: fixed; left: -9999px; top: 0; display: flex; flex-direction: column;
-    box-sizing: border-box; background: #0A0A0A; overflow: hidden; }
-  .share-card-template.t916 { width: 1080px; height: 1920px; padding: 80px 64px 48px; }
-  .share-card-template.t45 { width: 1080px; height: 1350px; padding: 56px 64px 40px; }
-  .share-card-bg { position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 0; background:
-    radial-gradient(ellipse 560px 500px at 50% 30%, var(--accent-08), transparent 70%),
-    radial-gradient(ellipse 420px 380px at 82% 78%, rgba(145,201,255,.05), transparent 70%),
-    var(--bg-primary); }
-  /* 徽章条:稀有度(可配置,待议) + NO.xx/16 */
-  .sc-badge-row { position: relative; z-index: 1; display: flex; align-items: center; gap: 24px; }
-  .t916 .sc-badge-row { margin-bottom: 28px; }
-  .t45 .sc-badge-row { margin-bottom: 16px; }
-  .sc-badge { font-weight: 900; color: var(--accent-primary); letter-spacing: 4px;
-    background: var(--accent-dim); border: 2px solid var(--accent-35); border-radius: 999px; }
-  .t916 .sc-badge { font-size: 34px; padding: 12px 30px; }
-  .t45 .sc-badge { font-size: 26px; padding: 8px 22px; }
-  .sc-badge-label { color: var(--text-secondary); letter-spacing: 3px; }
-  .t916 .sc-badge-label { font-size: 28px; }
-  .t45 .sc-badge-label { font-size: 22px; }
-  .sc-badge-no { margin-left: auto; color: var(--text-disabled); letter-spacing: 2px; }
-  .t916 .sc-badge-no { font-size: 26px; }
-  .t45 .sc-badge-no { font-size: 20px; }
-  /* 角色插画:9:16 约 33%(flex 可收缩),4:5 约 28%;不裁切 */
-  .share-card-charwrap { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center;
-    flex: 1 1 auto; min-height: 0; }
-  .t916 .share-card-charwrap { max-height: 634px; }
-  .t45 .share-card-charwrap { max-height: 378px; }
-  .share-card-character { max-width: 88%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
-  /* 固定内容区不参与 flex 压缩:超额高度全部由 charwrap(flex:1 1 auto)吸收,
-     否则 fitTagline 会因外部压缩误判溢出而过度缩字号 */
-  .sc-badge-row, .sc-name-block, .sc-stat-bars, .sc-tagline, .sc-social, .sc-qr-row, .sc-disclaimer { flex-shrink: 0; }
-  /* 名称区:9:16 派系+匹配环一行,名字独立两行;4:5 横向并排 */
-  .sc-name-block { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; }
-  .t916 .sc-name-block { margin-top: 36px; }
-  .t45 .sc-name-block { margin-top: 16px; }
-  .sc-clan { font-weight: 800; color: var(--text-primary); letter-spacing: 3px; }
-  .t916 .sc-clan { order: 1; width: 50%; font-size: 34px; text-align: left; }
-  .t916 .sc-match { order: 2; width: 50%; display: flex; justify-content: flex-end; }
-  .t45 .sc-clan { order: 1; font-size: 26px; }
-  .t45 .sc-name-main { order: 2; font-size: 60px; margin: 0 28px; }
-  .t45 .sc-match { order: 3; }
-  .sc-name-main { font-weight: 900; color: var(--text-primary); text-align: center; }
-  .t916 .sc-name-main { order: 3; width: 100%; font-size: 96px; letter-spacing: 6px; margin-top: 22px; }
-  .sc-name-sub { font-weight: 700; color: var(--text-secondary); text-align: center; letter-spacing: 10px; text-indent: 10px; }
-  .t916 .sc-name-sub { order: 4; width: 100%; font-size: 38px; margin-top: 10px; }
-  .t45 .sc-name-sub { order: 4; width: 100%; font-size: 24px; letter-spacing: 6px; text-indent: 6px; margin-top: 6px; }
-  .sc-match { width: 120px; height: 120px; flex-shrink: 0; }
-  .t45 .sc-match { width: 96px; height: 96px; }
-  .sc-match .mr-num { font-size: 28px; }
-  .sc-match .mr-label { font-size: 20px; }
-  .t45 .sc-match .mr-num { font-size: 22px; }
-  .t45 .sc-match .mr-label { font-size: 16px; }
-  /* 四维数值条 */
-  .sc-stat-bars { position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 20px; }
-  .t916 .sc-stat-bars { margin-top: 34px; }
-  .t45 .sc-stat-bars { margin-top: 16px; gap: 12px; }
-  .sc-stat { flex: 1; text-align: center; border-top: 2px solid var(--border-subtle); padding-top: 12px; }
-  .sc-stat-val { display: block; font-weight: 900; color: var(--accent-primary); }
-  .t916 .sc-stat-val { font-size: 42px; }
-  .t45 .sc-stat-val { font-size: 30px; }
-  .sc-stat-label { display: block; margin-top: 4px; color: var(--text-secondary); letter-spacing: 1px; }
-  .t916 .sc-stat-label { font-size: 21px; }
-  .t45 .sc-stat-label { font-size: 17px; }
-  /* tagline:第二视觉焦点,无底盒,直接置背景;容 3 行(下限 40px 后容 4 行) */
-  .sc-tagline { position: relative; z-index: 1; text-align: center; font-weight: 800; color: var(--text-primary);
-    line-height: 1.5; max-width: 920px; margin-left: auto; margin-right: auto; overflow: hidden; }
-  .t916 .sc-tagline { margin-top: 34px; }
-  .t45 .sc-tagline { margin-top: 16px; }
-  /* 社交证明两行(分桶 + 派系第二行) */
-  .sc-social { position: relative; z-index: 1; text-align: center; color: var(--text-secondary);
-    white-space: pre-line; line-height: 1.6; }
-  .t916 .sc-social { font-size: 30px; margin-top: 26px; }
-  .t45 .sc-social { font-size: 23px; margin-top: 14px; }
-  /* 二维码块 */
-  .sc-qr-row { position: relative; z-index: 1; display: flex; align-items: center; gap: 32px; margin-top: auto; }
-  .t45 .sc-qr-row { gap: 22px; }
-  .sc-qrcode { background: #fff; border-radius: 20px; padding: 14px; box-sizing: border-box; flex-shrink: 0; }
-  .t916 .sc-qrcode { width: 220px; height: 220px; }
-  .t45 .sc-qrcode { width: 170px; height: 170px; }
-  .sc-qrcode img { width: 100%; height: 100%; }
-  .sc-claim { font-weight: 800; color: var(--text-primary); }
-  .t916 .sc-claim { font-size: 34px; }
-  .t45 .sc-claim { font-size: 26px; }
-  .sc-meta, .sc-scanhint { color: var(--text-secondary); margin-top: 6px; }
-  .t916 .sc-meta, .t916 .sc-scanhint { font-size: 25px; }
-  .t45 .sc-meta, .t45 .sc-scanhint { font-size: 20px; }
-  .sc-url { font-weight: 800; color: var(--accent-primary); letter-spacing: 2px; margin-top: 10px; }
-  .t916 .sc-url { font-size: 30px; }
-  .t45 .sc-url { font-size: 24px; }
-  /* 免责两行:第一行中性,第二行玩梗 */
-  .sc-disclaimer { position: relative; z-index: 1; color: var(--text-disabled); }
-  .t916 .sc-disclaimer { margin-top: 26px; }
-  .t45 .sc-disclaimer { margin-top: 14px; }
-  .t916 .sc-disclaimer div { font-size: 21px; }
+    box-sizing: border-box; background: radial-gradient(120% 70% at 50% 0%, #12241d 0%, #0a100d 48%, #070908 100%);
+    overflow: hidden; font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif; }
+  .share-card-template.t916 { width: 1080px; height: 1920px; border-radius: 40px; }
+  .share-card-template.t45 { width: 1080px; height: 1350px; border-radius: 40px; }
+  .share-card-template .sc-topbar { position: absolute; top: 0; left: 0; width: 100%; height: 6px;
+    background: linear-gradient(90deg, #c9a227, #00e5a0 45%, #00e5a0 55%, #c9a227); z-index: 3; }
+  /* 斜向光带 */
+  .share-card-template::before { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: linear-gradient(115deg, transparent 32%, rgba(0,229,160,.055) 46%, rgba(201,162,39,.05) 54%, transparent 68%); }
+  .share-card-template > * { position: relative; z-index: 1; }
+  /* 徽章条 */
+  .sc-badge-row { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+  .t916 .sc-badge-row { padding: 64px 52px 0; }
+  .t45 .sc-badge-row { padding: 44px 46px 0; }
+  .sc-badge { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 700; letter-spacing: .12em;
+    color: #0a0b0a; background: linear-gradient(135deg, #f4dd8c, #c9a227); border-radius: 5px; }
+  .t916 .sc-badge { font-size: 32px; padding: 5px 16px; }
+  .t45 .sc-badge { font-size: 28px; padding: 4px 14px; }
+  .sc-badge-label { font-family: Consolas, 'Courier New', monospace; letter-spacing: .14em; color: #c9a227; }
+  .t916 .sc-badge-label { font-size: 22px; }
+  .t45 .sc-badge-label { font-size: 20px; }
+  .sc-badge-no { margin-left: auto; font-family: 'Arial Narrow', Arial, sans-serif; letter-spacing: .16em; color: #5d6b64; }
+  .t916 .sc-badge-no { font-size: 32px; }
+  .t45 .sc-badge-no { font-size: 28px; }
+  /* 主体:2a 纵向 / 2b 横向 */
+  .sc-body { display: flex; flex-shrink: 0; }
+  .t916 .sc-body { flex-direction: column; gap: 30px; padding: 30px 52px 0; }
+  .t45 .sc-body { flex-direction: row; gap: 24px; padding: 20px 46px 0; align-items: stretch; }
+  /* 插画区(cover 裁切,html2canvas 兼容:显式尺寸 + overflow hidden) */
+  .sc-char-stage { position: relative; overflow: hidden; background: #0d0f0e; box-shadow: inset 0 0 0 1px rgba(0,229,160,.22); }
+  .t916 .sc-char-stage { flex: 0 0 1000px; border-radius: 28px; }
+  .t45 .sc-char-stage { flex: 0 0 520px; height: 600px; border-radius: 24px; }
+  .share-card-character { display: block; position: absolute; }
+  .sc-stage-grad { position: absolute; inset: 0; pointer-events: none; }
+  .t916 .sc-stage-grad { background: linear-gradient(180deg, rgba(7,9,8,.35) 0%, transparent 20%, transparent 64%, rgba(7,9,8,.92) 100%); }
+  .t45 .sc-stage-grad { background: linear-gradient(180deg, rgba(7,9,8,.3) 0%, transparent 22%, transparent 66%, rgba(7,9,8,.9) 100%); }
+  /* 匹配度(2a 叠插画左下 / 2b 信息列内) */
+  .sc-match-block { display: flex; align-items: flex-end; gap: 20px; }
+  .t916 .sc-stage-match { position: absolute; left: 30px; bottom: 28px; }
+  .t916 .sc-match-info { display: none; }
+  .t45 .sc-stage-match { display: none; }
+  .sc-match-num { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 600; line-height: .8; color: #00e5a0; }
+  .t916 .sc-match-num { font-size: 104px; }
+  .t45 .sc-match-num { font-size: 86px; }
+  .t916 .sc-match-num .sc-match-pct { font-size: 52px; }
+  .t45 .sc-match-num .sc-match-pct { font-size: 44px; }
+  .sc-match-label { font-family: Consolas, 'Courier New', monospace; letter-spacing: .2em; color: #9aa49d; }
+  .t916 .sc-match-label { font-size: 22px; padding-bottom: 10px; }
+  .t45 .sc-match-label { font-size: 20px; padding-bottom: 8px; }
+  /* 派系胶囊(2a 右上 / 2b 左下) */
+  .sc-clan-pill { position: absolute; font-family: Consolas, 'Courier New', monospace; letter-spacing: .14em;
+    color: rgba(255,255,255,.72); border: 1px solid rgba(255,255,255,.28); border-radius: 999px; }
+  .t916 .sc-clan-pill { right: 28px; top: 28px; font-size: 21px; padding: 7px 16px; }
+  .t45 .sc-clan-pill { left: 22px; bottom: 20px; font-size: 19px; padding: 6px 14px; }
+  .sc-clan-pill:empty { display: none; }
+  /* 信息列:名字 + 匹配 + 四维条 */
+  .t916 .sc-info { display: flex; flex-direction: column; gap: 30px; }
+  .t45 .sc-info { flex: 1; display: flex; flex-direction: column; gap: 20px; justify-content: center; }
+  .sc-name-row { display: flex; align-items: baseline; gap: 24px; flex-wrap: wrap; }
+  .sc-name-main { font-weight: 900; line-height: 1; color: #ffffff; letter-spacing: .04em; }
+  .t916 .sc-name-main { font-size: 112px; }
+  .t45 .sc-name-main { font-size: 84px; }
+  .sc-name-sub { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 500; letter-spacing: .22em; color: #00e5a0; }
+  .t916 .sc-name-sub { font-size: 42px; }
+  .t45 .sc-name-sub { font-size: 32px; }
+  .sc-name-sub:empty { display: none; }
+  /* 四维条 */
+  .sc-stats { display: flex; }
+  .t916 .sc-stats { flex-wrap: wrap; gap: 18px 44px; }
+  .t45 .sc-stats { flex-direction: column; gap: 14px; }
+  .sc-stat { display: flex; align-items: center; gap: 16px; }
+  .t916 .sc-stat { width: calc(50% - 22px); }
+  .sc-stat-label { color: #9aa49d; flex-shrink: 0; }
+  .t916 .sc-stat-label { width: 142px; font-size: 25px; }
+  .t45 .sc-stat-label { width: 118px; font-size: 23px; }
+  .sc-stat-bar { flex: 1; border-radius: 5px; background: rgba(255,255,255,.10); overflow: hidden; }
+  .t916 .sc-stat-bar { height: 9px; }
+  .t45 .sc-stat-bar { height: 8px; border-radius: 4px; }
+  .sc-stat-fill { height: 100%; border-radius: inherit; background: #00e5a0; }
+  .sc-stat-fill.low { background: #e0533f; }
+  .sc-stat-fill.gold { background: linear-gradient(90deg, #c9a227, #f4dd8c); }
+  .sc-stat-val { font-family: 'Arial Narrow', Arial, sans-serif; color: #e8efea; width: 62px; text-align: right; flex-shrink: 0; }
+  .t916 .sc-stat-val { font-size: 28px; }
+  .t45 .sc-stat-val { font-size: 26px; width: 58px; }
+  .sc-stat-val.gold { color: #f4dd8c; }
+  /* tagline 灰底盒(设计稿) */
+  .sc-tagbox { display: flex; flex-direction: column; gap: 14px; padding: 28px 30px; border-radius: 22px;
+    background: rgba(255,255,255,.045); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); flex-shrink: 0; }
+  .t916 .sc-tagbox { margin: 0 52px; }
+  .t45 .sc-tagbox { margin: 0 46px; padding: 24px 26px; border-radius: 20px; gap: 12px; }
+  .sc-tagline { font-size: 36px; font-weight: 700; line-height: 1.45; color: #ffffff; overflow: hidden; }
+  .t45 .sc-tagline { font-size: 33px; }
+  .sc-social { font-size: 27px; line-height: 1.55; color: #98a29b; white-space: pre-line; }
+  .t45 .sc-social { font-size: 25px; }
+  .sc-social .sc-num { color: #00e5a0; font-family: 'Arial Narrow', Arial, sans-serif; }
+  /* 页脚 */
+  .sc-footer { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px;
+    border-top: 1px solid rgba(255,255,255,.09); flex-shrink: 0; }
+  .t916 .sc-footer { padding: 26px 52px 56px; }
+  .t45 .sc-footer { padding: 22px 46px 40px; gap: 28px; }
+  .sc-foot-left { display: flex; flex-direction: column; gap: 12px; }
+  .t45 .sc-foot-left { gap: 10px; }
+  .sc-logo { height: 34px; width: auto; opacity: .9; }
+  .t45 .sc-logo { height: 30px; }
+  .sc-version { font-family: Consolas, 'Courier New', monospace; letter-spacing: .1em; color: #6d766f; }
+  .t916 .sc-version { font-size: 21px; }
+  .t45 .sc-version { font-size: 19px; }
+  .sc-disclaimer { font-family: Consolas, 'Courier New', monospace; color: #6a736c; }
+  .t916 .sc-disclaimer { font-size: 19px; }
+  .t45 .sc-disclaimer { font-size: 17px; }
   .t916 .sc-disclaimer div + div { margin-top: 4px; }
-  .t45 .sc-disclaimer div { font-size: 17px; }
-  /* 尺寸切换 chip(预览弹层) */
+  .sc-foot-right { display: flex; align-items: center; gap: 18px; }
+  .t45 .sc-foot-right { gap: 16px; }
+  .sc-claim { text-align: right; font-size: 24px; line-height: 1.4; color: #9aa49d; display: flex; flex-direction: column; }
+  .t45 .sc-claim { font-size: 22px; }
+  .sc-claim-2 { color: #00e5a0; font-weight: 700; }
+  .sc-qrcode { padding: 10px; background: #fff; border-radius: 14px; flex-shrink: 0; }
+  .t916 .sc-qrcode img { width: 128px; height: 128px; display: block; }
+  .t45 .sc-qrcode { padding: 9px; border-radius: 12px; }
+  .t45 .sc-qrcode img { width: 112px; height: 112px; display: block; }
+  /* 尺寸 chip + 预览弹层 */
   .share-ratio-row { display: flex; justify-content: center; gap: 12px; margin: 0 0 14px; }
   .share-ratio-chip { font-size: 13px; font-weight: 800; padding: 8px 18px; border-radius: 999px;
     border: 1.5px solid var(--border-subtle); background: var(--bg-card); color: var(--text-secondary);
     cursor: pointer; letter-spacing: 1px; transition: border-color .2s, background .2s, color .2s; }
   .share-ratio-chip:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
   .share-ratio-chip.active { background: var(--accent-primary); color: var(--bg-primary);
-    border-color: var(--accent-primary); border-radius: 8px; font-weight: 900; } /* 形状+颜色双差异 */
+    border-color: var(--accent-primary); border-radius: 8px; font-weight: 900; }
+  .share-ratio-chip.busy::after { content: '…'; }
   .share-preview-imgwrap { position: relative; }
+  .share-preview-spin { display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    color: var(--accent-primary); font-weight: 800; letter-spacing: 1px; z-index: 2; }
+  .share-preview-spin.show { display: block; }
+
   .share-preview-mask { position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: none;
     align-items: center; justify-content: center; background: rgba(10,10,10,.55); color: var(--text-primary);
     font-size: 15px; font-weight: 800; letter-spacing: 1px; z-index: 2; border-radius: 12px; }
@@ -572,19 +603,19 @@
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?a4005e9244ab7fef06f8c3cd1c10e48d";
+  hm.src = "https://hm.baidu.com/hm.js?f591eb5e42cb61b202250c867f8b9e02";
   var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
 </script>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-39RKVC66E4"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8TGVEPYX0E"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-39RKVC66E4');
+  gtag('config', 'G-8TGVEPYX0E');
 </script>
 <script>
 /* NeuralFin NBTI 自建数据管道 (v1):用户标识 + page_view 补发(事件入库在 track() 内) */
@@ -599,7 +630,7 @@ var _hmt = _hmt || [];
   } catch (e) { uid = 'u-' + Date.now().toString(36); }
   window.__nfUid = uid;
   if (window.gtag) gtag('set', { user_id: uid });
-  var firePV = function() { if (window.track) window.track('page_view', { 'test_version': '16题版' }); };
+  var firePV = function() { if (window.track) window.track('page_view', { 'test_version': '48题版' }); };
   if (document.readyState !== 'loading') firePV();
   else document.addEventListener('DOMContentLoaded', firePV);
 })();
@@ -942,7 +973,7 @@ window.addEventListener('hashchange', syncLangLinks);
       <div class="eyebrow"><span class="eyebrow-dot"></span>AI 驅動投資社區</div>
       <h1>金融 <b>NBTI</b></h1>
       <div class="slogan">MBTI 已經過時，<b>NBTI</b> 嚟喇。</div>
-      <div class="meta">16 條題 · 5 分鐘 · 16 種投資人格</div>
+      <div class="meta">48 條題 · 10 分鐘 · 16 種投資人格</div>
       <button class="btn" onclick="startQuiz()">開始測試</button>
       <div class="points">無需註冊 · 純屬娛樂</div>
     </div>
@@ -999,7 +1030,208 @@ window.addEventListener('hashchange', syncLangLinks);
 
   <section id="page-quiz">
     <div class="quiz-top">
-      <div class="left"><div class="nav-button-area" id="nav-button-area"></div><span id="q-count">第 01 題 / 共 16 題</span></div>
+      <div class="left"><div class="nav-button-area" id="nav-button-area"></div><span id="q-count">第 01 題 / 共 48 題</span></div>
+      <span class="pct" id="q-pct">已完成 0%</span>
+    </div>
+    <div id="progress"><div id="progress-fill"></div></div>
+    <div class="quiz-note">世界已經夠亂，起碼將啲題答完先——反正你都唔敢提早平倉。</div>
+    <div class="q-title" id="q-title"></div>
+    <div id="q-options"></div>
+  </section>
+
+  <section id="page-loading">
+    <img class="load-sign" id="sign-load" alt="">
+    <div class="load-title">AI 深度分析中</div>
+    <div class="load-text" id="load-text">掃描交易 DNA……</div>
+    <div class="load-dots"><i></i><i></i><i></i></div>
+    <div class="load-foot">準確率 100%——唔準係因為你講大話<br>撳屏幕可以打斷驗算（真嘅）</div>
+  </section>
+
+  <section id="page-result">
+    <div id="result-body"></div>
+    <div class="footer-brand">
+      <img id="logo-blue-foot" src="NeuralFin.png" alt="NeuralFin">
+      <p>AI 驅動嘅投資社區 · www.neuralfin.ai<br>本測試不構成任何投資建議</p>
+    </div>
+  </section>
+
+</div>
+<div id="ticker"><div class="track" id="ticker-track"></div></div>
+
+      <!-- 分享卡 DOM 模板:2a 9:16(1080×1920,默认) + 2b 4:5(1080×1350);设计稿 NBTI 分享卡.dc.html -->
+  <div class="share-card-template t916" id="shareCardTemplate916">
+    <div class="sc-topbar"></div>
+    <div class="sc-badge-row">
+      <span class="sc-badge"></span>
+      <span class="sc-badge-label"></span>
+      <span class="sc-badge-no"></span>
+    </div>
+    <div class="sc-body">
+      <div class="sc-char-stage">
+        <img class="share-card-character" alt="" crossorigin="anonymous">
+        <div class="sc-stage-grad"></div>
+        <div class="sc-stage-match sc-match-block">
+          <span class="sc-match-num"></span>
+          <span class="sc-match-label"></span>
+        </div>
+        <span class="sc-clan-pill"></span>
+      </div>
+      <div class="sc-info">
+        <div class="sc-name-row">
+          <span class="sc-name-main"></span>
+          <span class="sc-name-sub"></span>
+        </div>
+        <div class="sc-match-info sc-match-block">
+          <span class="sc-match-num"></span>
+          <span class="sc-match-label"></span>
+        </div>
+        <div class="sc-stats">
+          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
+          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
+          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
+          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-tagbox">
+      <div class="sc-tagline"></div>
+      <div class="sc-social"></div>
+    </div>
+    <div class="sc-footer">
+      <div class="sc-foot-left">
+        <img class="sc-logo" alt="">
+        <div class="sc-version"></div>
+        <div class="sc-disclaimer"><div></div><div></div></div>
+      </div>
+      <div class="sc-foot-right">
+        <div class="sc-claim"><span class="sc-claim-1"></span><span class="sc-claim-2"></span></div>
+        <div class="sc-qrcode"><img alt="NeuralFin 二维码" crossorigin="anonymous"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-card-template t45" id="shareCardTemplate45">
+    <div class="sc-topbar"></div>
+    <div class="sc-badge-row">
+      <span class="sc-badge"></span>
+      <span class="sc-badge-label"></span>
+      <span class="sc-badge-no"></span>
+    </div>
+    <div class="sc-body">
+      <div class="sc-char-stage">
+        <img class="share-card-character" alt="" crossorigin="anonymous">
+        <div class="sc-stage-grad"></div>
+        <span class="sc-clan-pill"></span>
+      </div>
+      <div class="sc-info">
+        <div class="sc-name-row">
+          <span class="sc-name-main"></span>
+          <span class="sc-name-sub"></span>
+        </div>
+        <div class="sc-match-info sc-match-block">
+          <span class="sc-match-num"></span>
+          <span class="sc-match-label"></span>
+        </div>
+        <div class="sc-stats">
+          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
+          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
+          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
+          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-tagbox">
+      <div class="sc-tagline"></div>
+      <div class="sc-social"></div>
+    </div>
+    <div class="sc-footer">
+      <div class="sc-foot-left">
+        <img class="sc-logo" alt="">
+        <div class="sc-version"></div>
+        <div class="sc-disclaimer"><div></div><div></div></div>
+      </div>
+      <div class="sc-foot-right">
+        <div class="sc-claim"><span class="sc-claim-1"></span><span class="sc-claim-2"></span></div>
+        <div class="sc-qrcode"><img alt="NeuralFin 二维码" crossorigin="anonymous"></div>
+      </div>
+    </div>
+  </div>
+
+    <div class="header-right">
+      <span class="version">金融 NBTI v1.0</span>
+                  <div class="lang-switcher">
+        <a href="index.html"    class="lang-option" data-lang="zh">簡</a>
+        <span class="lang-divider">|</span>
+        <a href="index-hk.html"    class="lang-option" data-lang="hk" aria-current="page">繁</a>
+        <span class="lang-divider">|</span>
+        <a href="index-en.html"    class="lang-option" data-lang="en">EN</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="page-home" class="active">
+    <div class="home-hero">
+      <div class="eyebrow"><span class="eyebrow-dot"></span>AI 驅動投資社區</div>
+      <h1>金融 <b>NBTI</b></h1>
+      <div class="slogan">MBTI 已經過時，<b>NBTI</b> 嚟喇。</div>
+      <div class="meta">48 條題 · 10 分鐘 · 16 種投資人格</div>
+      <button class="btn" onclick="startQuiz()">開始測試</button>
+      <div class="points">無需註冊 · 純屬娛樂</div>
+    </div>
+
+    <div class="home-section reveal" id="sec-dims">
+      <h2 class="sec-title">四個維度，<b>測出你藏唔住嘅投資本能</b></h2>
+      <p class="sec-sub">透過四個方面嘅問題，測出你嘅投資本能。<br>答完唔會得到生硬嘅代碼——而係一個<b>中英雙語稱號</b>，<br>好似「YOLO 一鋪清袋戰神」。</p>
+      <div class="dim-cards" id="dim-cards"></div>
+    </div>
+
+
+    <div class="home-section reveal" id="sec-clans">
+      <h2 class="clan-section-title">四種氣質，<span class="highlight">你係邊一派</span></h2>
+      <p class="clan-section-subtitle">每一種派系，都係一種鮮明嘅投資人格畫像</p>
+      <div class="clan-grid">
+        <div class="clan-card" data-accent="red">
+          <img src="clan-1.jpg" alt="衝動冒險派" class="clan-photo" loading="lazy">
+          <div class="clan-overlay">
+            <h3 class="clan-name">衝動冒險派</h3>
+            <p class="clan-tagline">跟住感覺走，敢想敢做，鍾意嗰種心跳嘅感覺</p>
+          </div>
+        </div>
+        <div class="clan-card" data-accent="blue">
+          <img src="clan-2.jpg" alt="理性分析派" class="clan-photo" loading="lazy">
+          <div class="clan-overlay">
+            <h3 class="clan-name">理性分析派</h3>
+            <p class="clan-tagline">數據說話，邏輯至上，決策前必有一張 Excel</p>
+          </div>
+        </div>
+        <div class="clan-card" data-accent="green">
+          <img src="clan-3.jpg" alt="隨緣情感派" class="clan-photo" loading="lazy">
+          <div class="clan-overlay">
+            <h3 class="clan-name">隨緣情感派</h3>
+            <p class="clan-tagline">隨緣隨性，唔爭唔搶，情緒穩定係超能力</p>
+          </div>
+        </div>
+        <div class="clan-card" data-accent="gold">
+          <img src="clan-4.jpg" alt="務實盡責派" class="clan-photo" loading="lazy">
+          <div class="clan-overlay">
+            <h3 class="clan-name">務實盡責派</h3>
+            <p class="clan-tagline">穩紮穩打，講到做到，可靠到令人放心</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="home-section reveal" id="sec-personas">
+      <h2 class="sec-title">16 種投資人格，<b>你係邊一型？</b></h2>
+      <p class="sec-sub">每種人格，都係一句篤心嘅真相。</p>
+      <div class="p-cards" id="p-cards"></div>
+      <button class="btn" onclick="startQuiz()" style="margin-top:26px;">開始測試</button>
+      <p class="note">本測試純屬娛樂，不構成任何投資建議。</p>
+    </div>
+  </section>
+
+  <section id="page-quiz">
+    <div class="quiz-top">
+      <div class="left"><div class="nav-button-area" id="nav-button-area"></div><span id="q-count">第 01 題 / 共 48 題</span></div>
       <span class="pct" id="q-pct">已完成 0%</span>
     </div>
     <div id="progress"><div id="progress-fill"></div></div>
@@ -1111,10 +1343,11 @@ window.addEventListener('hashchange', syncLangLinks);
         <button type="button" class="share-ratio-chip" data-ratio="4:5" aria-pressed="false" onclick="onRatioChipClick('4:5')">Feed 4:5</button>
       </div>
       <div class="share-preview-imgwrap">
+        <div class="share-preview-imgwrap">
         <img class="share-preview-image" id="sharePreviewImg" alt="分享卡片預覽">
-        <div class="share-preview-mask" id="sharePreviewMask">已切換至 Feed 尺寸</div>
+        <div class="share-preview-spin" id="sharePreviewSpin">生成中…</div>
       </div>
-      <button class="share-preview-regen" id="sharePreviewRegen" onclick="regenerateShare(false)">重新生成</button>
+      </div>
       <p class="share-preview-hint" id="sharePreviewHint"></p>
       <button class="share-preview-download-btn btn" id="sharePreviewDl" onclick="sharePreviewAction()">下載分享圖</button>
     </div>
@@ -3512,11 +3745,6 @@ var QUESTIONS = {
         "FSTP": "恐慌割肉侠"
       }
     },
-    "blockMessages": [
-      "好嘞，第一波底褲已經俾我睇光晒，「研究派」定「玄學派」，我心中有數。繼續行，唔好縮。",
-      "過咗一半。你究竟係「賭仔」定「苟命型」，係「閃電俠」定「釘子戶」，我已經有八成把握，但仲想再確認多陣。",
-      "得返四條，頂住。呢幾條準備將你「口講嘅」同「心諗嘅」擺埋一齊對數，走唔甩㗎。"
-    ],
     "neutral": {
       "label": "講唔清，好似都沾啲",
       "halfVote": "两维各极各记 0.5 票"
@@ -3525,22 +3753,22 @@ var QUESTIONS = {
   "questions": [
     {
       "id": 1,
-      "question": "朋友半夜發訊息：「屌！我隻嘢今日直接起飛呀！」你第一個反應係——",
+      "question": "群組有人嗌「XX 就嚟爆升，快啲上車！」你嘅反應係——",
       "options": [
         {
-          "text": "先問冧巴，再問邏輯，半個鐘內翻完份年報",
+          "text": "開年報、翻公告、查機構持倉，30 分鐘出結論",
           "code": "DR"
         },
         {
-          "text": "恭喜完即刻追問：「而家上車仲嚟唔嚟得切？」",
+          "text": "「今次個感覺啱，衝」",
           "code": "DF"
         },
         {
-          "text": "「得 10%？我上禮拜嗰隻兩個板你唔記得咩？」",
+          "text": "直接全倉，跌咗當冇睇到",
           "code": "RG"
         },
         {
-          "text": "回一句「恭喜恭喜」，然後靜靜雞收埋部手機",
+          "text": "先睇吓自己戶口夠唔夠塞牙罅",
           "code": "RS"
         },
         {
@@ -3551,7 +3779,7 @@ var QUESTIONS = {
     },
     {
       "id": 2,
-      "question": "你決定買入一隻股票嘅「最後一條稻草」通常係——",
+      "question": "你決定買入一隻股票嘅「壓死駱駝嘅最後一條稻草」通常係——",
       "options": [
         {
           "text": "三張 Excel 交叉驗證過嘅估值模型",
@@ -3577,6 +3805,84 @@ var QUESTIONS = {
     },
     {
       "id": 3,
+      "question": "你覆盤一筆虧損交易嗰陣，最常講嘅一句係——",
+      "options": [
+        {
+          "text": "「邏輯係啱嘅，只係市場未反應得切」",
+          "code": "DR"
+        },
+        {
+          "text": "「憑感覺入嘅，都唔知邊度出咗問題」",
+          "code": "DF"
+        },
+        {
+          "text": "「蝕就蝕，下一個」",
+          "code": "RG"
+        },
+        {
+          "text": "「以後都唔入呢啲妖股」",
+          "code": "RS"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+RG/RS"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "人哋問你「點解買呢隻」，你嘅標準答案係——",
+      "options": [
+        {
+          "text": "掟出一份 20 頁 PPT，由行業邏輯講到財務模型",
+          "code": "DR"
+        },
+        {
+          "text": "「我發夢見到嘅，唔信就算」",
+          "code": "DF"
+        },
+        {
+          "text": "「升得咁癲呀，唔買等幾時」",
+          "code": "RG"
+        },
+        {
+          "text": "「穩陣，佢十年都未跌過 50%」",
+          "code": "RS"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+RG/RS"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "你嘅自選股入面，佔比最大嘅類型係——",
+      "options": [
+        {
+          "text": "一堆你研究過年報但仲未敢買嘅「候選股」",
+          "code": "DR"
+        },
+        {
+          "text": "喺抖音刷到、個名聽落好勁嘅股票",
+          "code": "DF"
+        },
+        {
+          "text": "升得最癲、最容易上頭嘅題材股",
+          "code": "RG"
+        },
+        {
+          "text": "銀行、公用事業呢啲「穩陣股」",
+          "code": "RS"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+RG/RS"
+        }
+      ]
+    },
+    {
+      "id": 6,
       "question": "當你嘅分析同市場走勢完全相反，你第一個反應係——",
       "options": [
         {
@@ -3602,7 +3908,33 @@ var QUESTIONS = {
       ]
     },
     {
-      "id": 4,
+      "id": 7,
+      "question": "你決定「今日唔睇市」嘅理由最可能係——",
+      "options": [
+        {
+          "text": "「反正邏輯冇變，睇唔睇都唔影響結論」",
+          "code": "DR"
+        },
+        {
+          "text": "「覺得今日唔啱睇市」",
+          "code": "DF"
+        },
+        {
+          "text": "「已經全倉啦，睇咗都改變唔到啲咩」",
+          "code": "RG"
+        },
+        {
+          "text": "「本來倉位就輕，睇唔睇都冇所謂」",
+          "code": "RS"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+RG/RS"
+        }
+      ]
+    },
+    {
+      "id": 8,
       "question": "如果幫你嘅投資風格拍一部戲，片名最可能係——",
       "options": [
         {
@@ -3628,215 +3960,215 @@ var QUESTIONS = {
       ]
     },
     {
-      "id": 5,
-      "question": "你嘅孖展使用習慣係——",
-      "options": [
-        {
-          "text": "從唔用孖展，本金打底先安樂",
-          "code": "RS"
-        },
-        {
-          "text": "該用就用，孖展係加速器",
-          "code": "RG"
-        },
-        {
-          "text": "用咗孖展就要快入快出，絕不留過夜倉",
-          "code": "HT"
-        },
-        {
-          "text": "孖展同長揸我都想要，雖然風險經理唔同意",
-          "code": "HH"
-        },
-        {
-          "text": "講唔清，好似樣樣都有啲",
-          "code": "RG/RS+HT/HH"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "question": "你理想嘅「持倉結構」係——",
-      "options": [
-        {
-          "text": "90% 穩陣藍籌 + 10% 娛樂資金",
-          "code": "RS+HH"
-        },
-        {
-          "text": "All-in 一個「夢想賽道」",
-          "code": "RG+HH"
-        },
-        {
-          "text": "日日換股，追熱點，絕不戀戰",
-          "code": "RG+HT"
-        },
-        {
-          "text": "保守型選手，只做即日鮮，賺咗就走",
-          "code": "RS+HT"
-        },
-        {
-          "text": "講唔清，好似樣樣都有啲",
-          "code": "RG/RS+HT/HH"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "question": "你對「全倉一隻股票，揸足三年唔郁」呢種操作嘅態度係——",
-      "options": [
-        {
-          "text": "「癲咗呀？雞蛋唔可以放喺一個籃」",
-          "code": "RS"
-        },
-        {
-          "text": "「呢啲先係信仰，穩喇」",
-          "code": "RG+HH"
-        },
-        {
-          "text": "「揸三年？我三日都嫌耐」",
-          "code": "HT"
-        },
-        {
-          "text": "「可以試吓，反正都係閒錢」",
-          "code": "RS+HH"
-        },
-        {
-          "text": "講唔清，好似樣樣都有啲",
-          "code": "RG/RS+HT/HH"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "question": "當行情劇烈震盪，人哋紛紛離場嗰陣，你嘅操作係——",
-      "options": [
-        {
-          "text": "加大孖展，越跌越買，撈底就要撈得狠",
-          "code": "RG"
-        },
-        {
-          "text": "將倉位降到最低，保命先，賺錢後",
-          "code": "RS"
-        },
-        {
-          "text": "高沽低揸，趁機做多幾轉",
-          "code": "HT"
-        },
-        {
-          "text": "熄咗個 App，當冇事發生，繼續長揸",
-          "code": "HH"
-        },
-        {
-          "text": "講唔清，好似樣樣都有啲",
-          "code": "RG/RS+HT/HH"
-        }
-      ]
-    },
-    {
       "id": 9,
-      "question": "你揸倉超過一年之後返睇，最真實嘅感受係——",
+      "question": "你對一隻股票「徹底放棄跟蹤」嘅時間點係——",
       "options": [
         {
-          "text": "「淡定，邏輯一直冇變」",
-          "code": "HH+FC"
+          "text": "年報連續兩季唔達標，邏輯證偽",
+          "code": "DR"
         },
         {
-          "text": "「日日睇市日日心慌，但就係唔想賣」",
-          "code": "HH+FP"
+          "text": "大 V 唔再吹，我都冇晒興趣",
+          "code": "DF"
         },
         {
-          "text": "「早就換咗十幾隻啦，邊有咩一年」",
-          "code": "HT+FC"
+          "text": "跌咗 3 日，直接刪自選",
+          "code": "HT"
         },
         {
-          "text": "「日日 T，日日慌，但就係停唔到」",
-          "code": "HT+FP"
+          "text": "唔記得咗……我根本唔知我買咗佢",
+          "code": "HH"
         },
         {
           "text": "講唔清，好似樣樣都有啲",
-          "code": "HT/HH+FC/FP"
+          "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 10,
-      "question": "一隻股票放咗三年終於返家鄉，你嘅反應係——",
+      "question": "你買入之前嘅「最後一步」通常係——",
       "options": [
         {
-          "text": "「早就唔記得咗，返咗家鄉都唔知」",
-          "code": "HH+FC"
+          "text": "開研報庫，橫向對比三家機構觀點",
+          "code": "DR"
         },
         {
-          "text": "「嘩終於生返！」感動到流眼淚",
-          "code": "HH+FP"
+          "text": "碌到第 5 條「穩賺唔蝕」嘅短片",
+          "code": "DF"
         },
         {
-          "text": "「三年？我早就轉咗幾十輪倉啦」",
-          "code": "HT+FC"
+          "text": "睇分鐘線，搵個「起爆點」",
+          "code": "HT"
         },
         {
-          "text": "「三年日日心慌，今晚終於瞓得安樂」",
-          "code": "HT+FP"
+          "text": "求其睇一眼，買咗就打算忘記佢",
+          "code": "HH"
         },
         {
           "text": "講唔清，好似樣樣都有啲",
-          "code": "HT/HH+FC/FP"
+          "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 11,
-      "question": "深夜覆盤嗰陣，你嘅狀態通常係——",
+      "question": "你部手機裝咗幾個炒股 App？",
       "options": [
         {
-          "text": "一杯茶、一本筆記，冷靜客觀咁總結",
-          "code": "HH+FC"
+          "text": "一個，配三個財務分析工具",
+          "code": "DR"
         },
         {
-          "text": "邊覆盤邊 emo，「我係咪唔啱做長線」",
-          "code": "HH+FP"
+          "text": "十幾個，邊個薦股準就信邊個",
+          "code": "DF"
         },
         {
-          "text": "快速睇一眼今日啲 T 做得點，然後瞓覺",
-          "code": "HT+FC"
+          "text": "一個專門盯盤、每秒刷新嘅",
+          "code": "HT"
         },
         {
-          "text": "手機螢光映住個焦慮樣，輾轉反側瞓唔着",
-          "code": "HT+FP"
+          "text": "一個，仲長年掛住「未讀訊息 999+」",
+          "code": "HH"
         },
         {
           "text": "講唔清，好似樣樣都有啲",
-          "code": "HT/HH+FC/FP"
+          "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 12,
-      "question": "假如幫你嘅投資生涯寫一句「墓誌銘」，會係——",
+      "question": "人哋問「呢隻你揸咗幾耐」，你嘅回答風格係——",
       "options": [
         {
-          "text": "「佢好少睇市，但每次睇都好冷靜」",
-          "code": "HH+FC"
+          "text": "「由佢上市第一日研究到而家，買咗半年」",
+          "code": "DR"
         },
         {
-          "text": "「佢日日睇市，日日好慌，但從冇賣過」",
-          "code": "HH+FP"
+          "text": "「唔記得啦，總之係感覺啱就買」",
+          "code": "DF"
         },
         {
-          "text": "「佢從不留過夜倉，瞓得比邊個都香」",
-          "code": "HT+FC"
+          "text": "「琴日買，今日準備賣」",
+          "code": "HT"
         },
         {
-          "text": "「佢日日 T，日日慌，直到最後一刻」",
-          "code": "HT+FP"
+          "text": "「耐到我差啲唔記得當初點解買佢」",
+          "code": "HH"
         },
         {
           "text": "講唔清，好似樣樣都有啲",
-          "code": "HT/HH+FC/FP"
+          "code": "DF/DR+HT/HH"
         }
       ]
     },
     {
       "id": 13,
+      "question": "你最信嘅「消息來源」係——",
+      "options": [
+        {
+          "text": "招股書、核數報告、行業白皮書",
+          "code": "DR"
+        },
+        {
+          "text": "朋友圈嗰個「消息好準」嘅神秘人",
+          "code": "DF"
+        },
+        {
+          "text": "分時圖突然放量嗰一支嘢",
+          "code": "HT"
+        },
+        {
+          "text": "反正我都唔係好睇消息，隨緣",
+          "code": "HH"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "question": "如果有人問你「你套交易系統點樣形成」，你嘅答案係——",
+      "options": [
+        {
+          "text": "十年年報堆出嚟嘅方法論，嚴謹到可以出論文",
+          "code": "DR"
+        },
+        {
+          "text": "「玄學，講唔清，但就係準」",
+          "code": "DF"
+        },
+        {
+          "text": "高沽低揸練出嚟嘅手速，全靠盤感",
+          "code": "HT"
+        },
+        {
+          "text": "系統？我連自己上次買咗啲咩都諗唔起",
+          "code": "HH"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "question": "如果叫你俾「新手」一句建議，你會話——",
+      "options": [
+        {
+          "text": "「先學識睇年報，咪聽消息亂咁買」",
+          "code": "DR"
+        },
+        {
+          "text": "「相信直覺，市場有時比邏輯更誠實」",
+          "code": "DF"
+        },
+        {
+          "text": "「快入快出，咪戀戰，戀戰嘅都係輸」",
+          "code": "HT"
+        },
+        {
+          "text": "「買咗就忘記佢，回本全靠命水」",
+          "code": "HH"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "question": "你最驕傲嘅一筆交易係——",
+      "options": [
+        {
+          "text": "靠深度研究提早埋伏、精準兌現嘅一仗",
+          "code": "DR"
+        },
+        {
+          "text": "憑直覺買入、事後諗起都後怕嘅神來之筆",
+          "code": "DF"
+        },
+        {
+          "text": "即日買即日賣、食到一啖肉就走嘅短打",
+          "code": "HT"
+        },
+        {
+          "text": "買咗唔記得、幾年後摷返出嚟發現翻倍嘅意外之喜",
+          "code": "HH"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 17,
       "question": "你持倉突然插水 10%，第一件事係——",
       "options": [
         {
@@ -3862,7 +4194,33 @@ var QUESTIONS = {
       ]
     },
     {
-      "id": 14,
+      "id": 18,
+      "question": "你決定「使唔使加倉」嗰陣嘅心理狀態係——",
+      "options": [
+        {
+          "text": "冷靜列出加倉三個理由先郁手",
+          "code": "DR"
+        },
+        {
+          "text": "「覺得而家啱時候」，然後就衝咗",
+          "code": "DF"
+        },
+        {
+          "text": "手震住撳確認鍵，口噏噏「唔好慌唔好慌」",
+          "code": "FP"
+        },
+        {
+          "text": "邊加倉邊後悔，加完仲諗緊要唔要撤",
+          "code": "FP"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 19,
       "question": "你對「利好消息」嘅第一反應通常係——",
       "options": [
         {
@@ -3888,7 +4246,7 @@ var QUESTIONS = {
       ]
     },
     {
-      "id": 15,
+      "id": 20,
       "question": "深夜突然諗起自己嘅持倉，你嘅狀態係——",
       "options": [
         {
@@ -3914,7 +4272,33 @@ var QUESTIONS = {
       ]
     },
     {
-      "id": 16,
+      "id": 21,
+      "question": "你喺直播間/群組見到「所有人都在嗌升」，你嘅反應係——",
+      "options": [
+        {
+          "text": "冷靜懷疑：「人逼埋一齊嘅地方係咪唔應該去」",
+          "code": "DR+FC"
+        },
+        {
+          "text": "血脈沸騰，覺得自己就嚟發達",
+          "code": "DF+FP"
+        },
+        {
+          "text": "心入面打鼓但口講「淡定，都係紙上富貴」",
+          "code": "DR+FP"
+        },
+        {
+          "text": "「氣氛到位，衝就啱」",
+          "code": "DF+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 22,
       "question": "當你嘅分析被市場證明係錯，你第一個情緒係——",
       "options": [
         {
@@ -3936,6 +4320,682 @@ var QUESTIONS = {
         {
           "text": "講唔清，好似樣樣都有啲",
           "code": "DF/DR+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "question": "你決定賣出嗰一刻，心入面嘅畫外音係——",
+      "options": [
+        {
+          "text": "「模型話估值到頂，賣」",
+          "code": "DR+FC"
+        },
+        {
+          "text": "「就係覺得唔對路，閃」",
+          "code": "DF+FC"
+        },
+        {
+          "text": "手心冒汗，「賣咗會唔會後悔呀」",
+          "code": "DF+FP"
+        },
+        {
+          "text": "反覆核對數據到最後一秒先撳賣出",
+          "code": "DR+FP"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "question": "如果幫你嘅心態配一句風格描述，會係——",
+      "options": [
+        {
+          "text": "平靜如水，專業冷靜，理性至上",
+          "code": "DR+FC"
+        },
+        {
+          "text": "跟住感覺走，揸實感覺隻手",
+          "code": "DF+FC"
+        },
+        {
+          "text": "心跳快到爆，數據講咗都唔算",
+          "code": "DR+FP"
+        },
+        {
+          "text": "唔問理由，只問升唔升，慌到震",
+          "code": "DF+FP"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "DF/DR+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "question": "你嘅孖展使用習慣係——",
+      "options": [
+        {
+          "text": "從唔用孖展，本金打底先安樂",
+          "code": "RS"
+        },
+        {
+          "text": "該用就用，孖展係加速器",
+          "code": "RG"
+        },
+        {
+          "text": "用咗孖展就要快入快出，絕不留過夜倉",
+          "code": "HT"
+        },
+        {
+          "text": "孖展同長揸我都想要，雖然風險經理唔同意",
+          "code": "HH"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "question": "你理想嘅「持倉結構」係——",
+      "options": [
+        {
+          "text": "90% 穩陣藍籌 + 10% 娛樂資金",
+          "code": "RS+HH"
+        },
+        {
+          "text": "All-in 一個「夢想賽道」",
+          "code": "RG+HH"
+        },
+        {
+          "text": "日日換股，追熱點，絕不戀戰",
+          "code": "RG+HT"
+        },
+        {
+          "text": "保守型選手，只做即日鮮，賺咗就走",
+          "code": "RS+HT"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "question": "面對「抽新股可以加 20 倍孖展」嘅誘惑，你會——",
+      "options": [
+        {
+          "text": "直接孖展拉滿，賭鋪大",
+          "code": "RG"
+        },
+        {
+          "text": "用自己本金老老實實抽",
+          "code": "RS"
+        },
+        {
+          "text": "中咗籤就即日賣，絕不過夜",
+          "code": "HT"
+        },
+        {
+          "text": "中咗籤當紀念品，壓箱底",
+          "code": "HH"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "question": "你對「全倉一隻股票，揸足三年唔郁」呢種操作嘅態度係——",
+      "options": [
+        {
+          "text": "「癲咗呀？雞蛋唔可以放喺一個籃」",
+          "code": "RS"
+        },
+        {
+          "text": "「呢啲先係信仰，穩喇」",
+          "code": "RG+HH"
+        },
+        {
+          "text": "「揸三年？我三日都嫌耐」",
+          "code": "HT"
+        },
+        {
+          "text": "「可以試吓，反正都係閒錢」",
+          "code": "RS+HH"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "question": "你揸得最耐嘅資產同最短嘅資產，分別係——",
+      "options": [
+        {
+          "text": "最長：從未賣出嘅「壓箱底」藍籌；最短：從未過夜嘅題材股",
+          "code": "HH+HT"
+        },
+        {
+          "text": "最長：All-in 押上嘅夢想股；最短：幾乎唔做短線，太傷肝",
+          "code": "RG+HH"
+        },
+        {
+          "text": "最長：幾乎冇，我信嘅係「T」；最短：我全部身家",
+          "code": "HT+RG/RS"
+        },
+        {
+          "text": "最長：政府債券，穩到發霉；最短：間中手痕做嘅即日鮮",
+          "code": "RS+HT"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "question": "當行情劇烈震盪，人哋紛紛離場嗰陣，你嘅操作係——",
+      "options": [
+        {
+          "text": "加大孖展，越跌越買，撈底就要撈得狠",
+          "code": "RG"
+        },
+        {
+          "text": "將倉位降到最低，保命先，賺錢後",
+          "code": "RS"
+        },
+        {
+          "text": "高沽低揸，趁機做多幾轉",
+          "code": "HT"
+        },
+        {
+          "text": "熄咗個 App，當冇事發生，繼續長揸",
+          "code": "HH"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "question": "你對「All-in 一隻概念股，揸到天荒地老」嘅睇法係——",
+      "options": [
+        {
+          "text": "「要玩就玩大，All-in 先係真愛」",
+          "code": "RG+HH"
+        },
+        {
+          "text": "「癲咗，雞蛋唔可以放一個籃放足三年」",
+          "code": "RS"
+        },
+        {
+          "text": "「揸咁耐？一早應該做咗 T 啦」",
+          "code": "HT"
+        },
+        {
+          "text": "「細倉可以試吓，唔好賭晒成副身家」",
+          "code": "RS+HH"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "question": "你嘅戶口曲線如果畫成心電圖，最貼切嘅形容係——",
+      "options": [
+        {
+          "text": "劇烈起伏，醫生睇到都要急救",
+          "code": "RG"
+        },
+        {
+          "text": "平靜如深睡狀態，幾乎冇波動",
+          "code": "RS"
+        },
+        {
+          "text": "高頻抽搐，一日畫得出十條線",
+          "code": "HT"
+        },
+        {
+          "text": "長期平線，間中一個尖峰然後又歸零",
+          "code": "HH"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+HT/HH"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "question": "你嘅持倉集體暴跌、戶口直接腰斬嗰一刻，你心入面係——",
+      "options": [
+        {
+          "text": "激昂亢奮，「機會嚟喇，衝！」",
+          "code": "RG+FP"
+        },
+        {
+          "text": "平靜，「都喺計劃入面」",
+          "code": "RS+FC"
+        },
+        {
+          "text": "恐懼，「死喇死喇要跳樓喇」",
+          "code": "RS+FP"
+        },
+        {
+          "text": "冷靜但壓抑，「加倉，邏輯冇變」",
+          "code": "RG+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "question": "你喺人哋恐慌拋售嗰陣嘅真實心理係——",
+      "options": [
+        {
+          "text": "「機會嚟喇」，興奮咁開始掃貨",
+          "code": "RG+FP"
+        },
+        {
+          "text": "「咪急，等確認企穩先講」",
+          "code": "RS+FC"
+        },
+        {
+          "text": "「個個都走，我係咪都應該走」",
+          "code": "RS+FP"
+        },
+        {
+          "text": "淡定補倉，口講「淡定」，隻手卻好快",
+          "code": "RG+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "question": "你重倉一隻股票之後，夜晚發夢最可能夢到——",
+      "options": [
+        {
+          "text": "爆升敲鑼嘅畫面，笑醒",
+          "code": "RG+FP"
+        },
+        {
+          "text": "乜都冇夢到，瞓得好冧",
+          "code": "RS+FC"
+        },
+        {
+          "text": "佢插水嘅畫面，嚇醒即刻攞手機",
+          "code": "RS+FP"
+        },
+        {
+          "text": "冷靜咁夢到自己喺度睇年報",
+          "code": "RG+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "question": "你對「All-in」呢件事嘅態度係——",
+      "options": [
+        {
+          "text": "「人生就係要 All-in，唔 All-in 枉少年」",
+          "code": "RG+FP"
+        },
+        {
+          "text": "「All-in？我連重倉都要諗三日」",
+          "code": "RS+FC"
+        },
+        {
+          "text": "「All-in 過，後悔過，但仲想再 All-in 一次」",
+          "code": "RG+FP"
+        },
+        {
+          "text": "「細倉可以，All-in？諗都唔敢諗」",
+          "code": "RS+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "question": "當你見到「人哋滿倉孖展捉到十倍股」嘅新聞，你嘅反應係——",
+      "options": [
+        {
+          "text": "熱血沸騰，磨拳擦掌準備複製",
+          "code": "RG+FP"
+        },
+        {
+          "text": "「好彩啫，唔好學」，然後繼續月供",
+          "code": "RS+FC"
+        },
+        {
+          "text": "羨慕到瞓唔着，但自己唔敢郁",
+          "code": "RS+FP"
+        },
+        {
+          "text": "冷靜分析佢嘅邏輯，睇吓能唔能夠複製",
+          "code": "RG+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "question": "你持倉「浮虧 50%」嗰陣最真實嘅狀態係——",
+      "options": [
+        {
+          "text": "血壓飆升但依然死撐「呢個係黃金坑」",
+          "code": "RG+FP"
+        },
+        {
+          "text": "心如止水，「蝕咗就蝕咗，反正都係閒錢」",
+          "code": "RS+FC"
+        },
+        {
+          "text": "半夜盯市盯到 3 點，塊面青晒",
+          "code": "RS+FP"
+        },
+        {
+          "text": "冷靜補倉，邊補邊話自己「鎮定」",
+          "code": "RG+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "question": "你對「止蝕」呢個動作嘅心理負擔係——",
+      "options": [
+        {
+          "text": "幾乎冇，該止就止，唔糾結",
+          "code": "RG+FC"
+        },
+        {
+          "text": "每次止蝕都似割自己肉，糾結到手震",
+          "code": "RS+FP"
+        },
+        {
+          "text": "從不止蝕，「頂住就係勝利」",
+          "code": "RG+FP"
+        },
+        {
+          "text": "止蝕前會計好晒各種情景，冷靜決定",
+          "code": "RS+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "question": "如果要用一種天氣形容你嘅投資心態，會係——",
+      "options": [
+        {
+          "text": "暴風雨中依然衝浪嘅癲佬",
+          "code": "RG+FP"
+        },
+        {
+          "text": "晴空萬里，永遠雲淡風輕",
+          "code": "RS+FC"
+        },
+        {
+          "text": "隨時可能地震嘅心理狀態",
+          "code": "RS+FP"
+        },
+        {
+          "text": "表面平靜，內裡係龍捲風",
+          "code": "RG+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "RG/RS+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "question": "你揸倉超過一年之後返睇，最真實嘅感受係——",
+      "options": [
+        {
+          "text": "「淡定，邏輯一直冇變」",
+          "code": "HH+FC"
+        },
+        {
+          "text": "「日日睇市日日心慌，但就係唔想賣」",
+          "code": "HH+FP"
+        },
+        {
+          "text": "「早就換咗十幾隻啦，邊有咩一年」",
+          "code": "HT+FC"
+        },
+        {
+          "text": "「日日 T，日日慌，但就係停唔到」",
+          "code": "HT+FP"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "HT/HH+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "question": "你對「過夜倉」嘅態度係——",
+      "options": [
+        {
+          "text": "從不留過夜倉，瞓唔着",
+          "code": "HT+FP"
+        },
+        {
+          "text": "過夜倉算咩，隔年倉都唔怕",
+          "code": "HH+FC"
+        },
+        {
+          "text": "留咗但成晚發夢都係佢嘅走勢",
+          "code": "HH+FP"
+        },
+        {
+          "text": "收市前必平倉，求個心安",
+          "code": "HT+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "HT/HH+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "question": "一隻股票放咗三年終於返家鄉，你嘅反應係——",
+      "options": [
+        {
+          "text": "「早就唔記得咗，返咗家鄉都唔知」",
+          "code": "HH+FC"
+        },
+        {
+          "text": "「嘩終於生返！」感動到流眼淚",
+          "code": "HH+FP"
+        },
+        {
+          "text": "「三年？我早就轉咗幾十輪倉啦」",
+          "code": "HT+FC"
+        },
+        {
+          "text": "「三年日日心慌，今晚終於瞓得安樂」",
+          "code": "HT+FP"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "HT/HH+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "question": "你對「今日大市暴跌 5%」呢件事嘅反應速度係——",
+      "options": [
+        {
+          "text": "完全唔知，因為我根本唔係成日睇市",
+          "code": "HH+FC"
+        },
+        {
+          "text": "知道咗，但心態好穩，照樣做自己嘢",
+          "code": "HH+FP"
+        },
+        {
+          "text": "秒知，心跳即刻加速，手心冒汗",
+          "code": "HT+FP"
+        },
+        {
+          "text": "知道咗但扮唔知，繼續扮工",
+          "code": "HT+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "HT/HH+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "question": "你對「持倉浮盈 50% 但遲遲唔賣」嘅心理描述係——",
+      "options": [
+        {
+          "text": "「淡定，未到目標價」",
+          "code": "HH+FC"
+        },
+        {
+          "text": "「日日計仲可以升幾多，瞓唔好」",
+          "code": "HH+FP"
+        },
+        {
+          "text": "「一早止賺走咗啦，邊揸得咁耐」",
+          "code": "HT+FC"
+        },
+        {
+          "text": "「揸一日就想賣，忍到而家已經係奇蹟」",
+          "code": "HT+FP"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "HT/HH+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "question": "深夜覆盤嗰陣，你嘅狀態通常係——",
+      "options": [
+        {
+          "text": "一杯茶、一本筆記，冷靜客觀咁總結",
+          "code": "HH+FC"
+        },
+        {
+          "text": "邊覆盤邊 emo，「我係咪唔啱做長線」",
+          "code": "HH+FP"
+        },
+        {
+          "text": "快速睇一眼今日啲 T 做得點，然後瞓覺",
+          "code": "HT+FC"
+        },
+        {
+          "text": "手機螢光映住個焦慮樣，輾轉反側瞓唔着",
+          "code": "HT+FP"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "HT/HH+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "question": "你上一次「情緒失控」同投資有關嘅時刻係——",
+      "options": [
+        {
+          "text": "完全諗唔起，我心態一直好穩",
+          "code": "HH+FC"
+        },
+        {
+          "text": "琴日，因為個過夜倉又令我夢到插水",
+          "code": "HH+FP"
+        },
+        {
+          "text": "每日都有，畢竟每日都喺度 T",
+          "code": "HT+FP"
+        },
+        {
+          "text": "幾年前啦，反正而家心態早就隨緣咗",
+          "code": "HH+FC"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "HT/HH+FC/FP"
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "question": "假如幫你嘅投資生涯寫一句「墓誌銘」，會係——",
+      "options": [
+        {
+          "text": "「佢好少睇市，但每次睇都好冷靜」",
+          "code": "HH+FC"
+        },
+        {
+          "text": "「佢日日睇市，日日好慌，但從冇賣過」",
+          "code": "HH+FP"
+        },
+        {
+          "text": "「佢從不留過夜倉，瞓得比邊個都香」",
+          "code": "HT+FC"
+        },
+        {
+          "text": "「佢日日 T，日日慌，直到最後一刻」",
+          "code": "HT+FP"
+        },
+        {
+          "text": "講唔清，好似樣樣都有啲",
+          "code": "HT/HH+FC/FP"
         }
       ]
     }
@@ -4227,7 +5287,7 @@ function goToPreviousQuestion() {
 function startQuiz() {
   if (window._hmt) { window._hmt.push(['_trackEvent', 'test_flow', 'start']); } /* 百度统计:開始測試 */
   if (window.gtag) { gtag('event', 'test_start',
-    { 'test_version': '16-hk' }); } track('test_start', { 'test_version': '16-hk' });  /* GA4:開始測試 */
+    { 'test_version': '48-hk' }); } track('test_start', { 'test_version': '48-hk' });  /* GA4:開始測試 */
   var saved = loadProgress();
   if (saved) {
     showConfirm({
@@ -4390,7 +5450,7 @@ function finish() {
   var s = score();
   if (window._hmt) { window._hmt.push(['_trackEvent', 'test_completed', 'finish', s.code]); } /* 百度统计:完成测试(含人格代码) */
   if (window.gtag) { gtag('event', 'test_completed',
-    { 'test_version': '16-hk', 'persona_result': s.code }); } track('test_completed', { 'test_version': '16-hk', 'persona_result': s.code });  /* GA4:完成测试 */
+    { 'test_version': '48-hk', 'persona_result': s.code }); } track('test_completed', { 'test_version': '48-hk', 'persona_result': s.code });  /* GA4:完成测试 */
   var persona = RESULTS.results.filter(function(r) { return r.code === s.code; })[0];
   renderResult(persona, s);
 }
@@ -4536,7 +5596,7 @@ function deepDiveHtml(persona) {
 function unlockDeepDive() {
   track('deep_dive_unlock_click', { personaCode: lastPersonaCode });
   if (window.gtag) { gtag('event', 'deep_dive_expand_click',
-    { 'test_version': '16-hk', 'persona_result': lastPersonaCode }); } track('deep_dive_expand_click', { 'test_version': '16-hk', 'persona_result': lastPersonaCode });  /* GA4:点击查看完整解读 */
+    { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } track('deep_dive_expand_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode });  /* GA4:点击查看完整解读 */
   var ov = document.getElementById('dd-overlay');
   var locked = document.querySelector('.dd-locked');
   if (locked) locked.classList.add('unlocked'); /* 修复:展开后容器自适应高度,防二维码被 overflow 裁切 */
@@ -4552,7 +5612,7 @@ function unlockDeepDive() {
     qimg.onerror = function() { console.log('[qr] load failed'); };
     qimg.addEventListener('click', function() {
       if (window.gtag) { gtag('event', 'deep_dive_qrcode_click',
-    { 'test_version': '16-hk', 'persona_result': lastPersonaCode }); } track('deep_dive_qrcode_click', { 'test_version': '16-hk', 'persona_result': lastPersonaCode });  /* GA4:点击二维码 */
+    { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } track('deep_dive_qrcode_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode });  /* GA4:点击二维码 */
     });
   }
   track('deep_dive_app_open_success', { personaCode: lastPersonaCode });
@@ -4656,7 +5716,7 @@ function waitForImagesLoaded(container) {
 var shareCardRatio = '9:16'; /* 当前已生成图的尺寸(切换后 stale 判定) */
 /* 稀有度可配置(待议):16 型全 SSR 不稀有,后续按真实分布改 UR/SR/SSR,只改此表 */
 var RARITY_CFG = { base: 'SSR', label: '稀有度 · 十六分之一', egg: '隱藏人格' };
-var SHARE_QR_TEXT = { claim: '掃碼認領你自己嗰張卡', meta: '16 條題 · 5 分鐘', url: 'neuralfin.ai', hint: '長按識別二維碼' };
+var SHARE_QR_TEXT = { claim: '掃碼認領你自己嗰張卡', meta: '48 條題 · 10 分鐘', url: 'neuralfin.ai', hint: '長按識別二維碼' };
 var SHARE_DISCLAIMER = ['本卡不構成任何投資建議 · 測試純屬娛樂', '只構成人格建議，且不接受申辯。'];
 var SHARE_LOWMEM = '你部機記憶體唔夠，已生成 Feed 尺寸';
 var SHARE_STALE = '已切換至 Feed 尺寸';
@@ -4716,7 +5776,7 @@ function bindShareCard(tpl, persona, match, ratio) {
   } else {
     social.style.display = 'none';
   }
-  tpl.querySelector('.sc-qrcode img').src = 'qrcode-16.png';
+  tpl.querySelector('.sc-qrcode img').src = 'qrcode-48.png';
   var qt = tpl.querySelector('.sc-qr-text');
   qt.querySelector('.sc-claim').textContent = SHARE_QR_TEXT.claim;
   qt.querySelector('.sc-meta').textContent = SHARE_QR_TEXT.meta;
@@ -4742,35 +5802,164 @@ function fitTagline(el, ratio) {
     el.style.maxHeight = (lines * fs * 1.5) + 'px';
   }
 }
+/* ============ 分享卡 2a/2b(设计稿;9:16 默认 / 4:5;html2canvas 内嵌) ============ */
+var shareCardRatio = '9:16'; /* 当前选中尺寸(下载/文件名用) */
+var shareCardUrls = {};      /* 两尺寸已生成图:shareCardUrls[ratio] = dataURL */
+var shareCardRatioReady = { '9:16': false, '4:5': false }; /* 该尺寸图是否已生成 */
+var RARITY_CFG = { base: 'SSR', label: '稀有度 · 十六分之一', egg: '隱藏人格' };
+var SHARE_VER_LINE = '金融 NBTI v1.0 · neuralfin.ai';
+var SHARE_DISCLAIMER = ['本卡不構成任何投資建議 · 測試純屬娛樂', '只構成人格建議，且不接受申辯。'];
+var SHARE_CLAIM = ['掃碼認領', '你自己嗰張卡'];
+var SHARE_LOWMEM = '你部機記憶體唔夠，已生成 Feed 尺寸';
+var SHARE_LOADING = '生成中…';
+function getShareRatio() {
+  try { return localStorage.getItem('nbti_share_ratio') === '4:5' ? '4:5' : '9:16'; } catch (e) { return '9:16'; }
+}
+function setShareRatio(r) {
+  try { localStorage.setItem('nbti_share_ratio', r === '4:5' ? '4:5' : '9:16'); } catch (e) {}
+}
+function personaNo(persona) {
+  for (var i = 0; i < RESULTS.results.length; i++) {
+    if (RESULTS.results[i].code === persona.code) { var n = i + 1; return ('0' + n).slice(-2); }
+  }
+  return '00';
+}
+/* cover 裁切(html2canvas 不支持 object-fit:cover,按 max 缩放 + 定位实现;object-position 50% 6%) */
+function coverFit(img, stage, posY) {
+  var iw = img.naturalWidth || 1440, ih = img.naturalHeight || 2560;
+  var sw = stage.clientWidth || 1080, sh = stage.clientHeight || 1000;
+  var s = Math.max(sw / iw, sh / ih);
+  img.style.width = Math.round(iw * s) + 'px';
+  img.style.height = Math.round(ih * s) + 'px';
+  var pos = (posY === undefined) ? 0.06 : posY; /* 设计稿 object-position 50% 6% */
+  img.style.left = Math.round((sw - iw * s) / 2) + 'px';
+  img.style.top = Math.round((sh - ih * s) * pos) + 'px';
+}
+/* ===== bindShareCard:2a/2b 共用同一份绑定(改一句文案只改此函数/上方配置) ===== */
+function bindShareCard(tpl, persona, match, ratio) {
+  var isEgg = !persona.code;
+  tpl.querySelector('.sc-badge').textContent = isEgg ? RARITY_CFG.egg : RARITY_CFG.base;
+  tpl.querySelector('.sc-badge-label').textContent = isEgg ? '' : RARITY_CFG.label;
+  tpl.querySelector('.sc-badge-no').textContent = isEgg ? '' : 'NO.' + personaNo(persona) + ' / 16';
+  var imgKey = PERSONA_IMG[persona.word] || null;
+  var stage = tpl.querySelector('.sc-char-stage');
+  var char = tpl.querySelector('.share-card-character');
+  if (imgKey) {
+    char.style.display = 'block';
+    char.src = imgKey + '.webp';
+    char.onerror = function() { this.onerror = null; this.src = imgKey + '.png'; };
+    char.onload = function() { coverFit(char, stage); };
+    if (char.complete && char.naturalWidth) { coverFit(char, stage); }
+  } else {
+    char.style.display = 'none';
+  }
+  /* 匹配度:2a 在插画内(104px),2b 在信息列(86px);两处都填,各模板 CSS 隐藏其一 */
+  var blocks = tpl.querySelectorAll('.sc-match-block');
+  for (var bi = 0; bi < blocks.length; bi++) {
+    blocks[bi].querySelector('.sc-match-num').innerHTML = match + '<span class="sc-match-pct">%</span>';
+    blocks[bi].querySelector('.sc-match-label').textContent = '匹配度';
+  }
+  tpl.querySelector('.sc-clan-pill').textContent = isEgg ? '' : (CLAN_MAP[persona.code.substr(0, 2)] || '');
+  tpl.querySelector('.sc-name-main').textContent = persona.name || '';
+  tpl.querySelector('.sc-name-sub').textContent = (isEgg ? '' : persona.word);
+  /* 四维条:数值→宽度%;MAX/∞→100% 金;MIN→0% 红;高值绿低值红 */
+  var data = PERSONA_STAT_BARS[persona.word];
+  var stats = tpl.querySelector('.sc-stats');
+  if (SHOW_STAT_BARS && data) {
+    stats.style.display = '';
+    var items = stats.querySelectorAll('.sc-stat');
+    for (var i = 0; i < items.length; i++) {
+      var v = data[i];
+      items[i].querySelector('.sc-stat-label').textContent = STAT_BAR_LABELS[i];
+      var valEl = items[i].querySelector('.sc-stat-val');
+      var fill = items[i].querySelector('.sc-stat-fill');
+      if (typeof v === 'number') {
+        valEl.textContent = (v < 10 ? '0' : '') + v;
+        valEl.className = 'sc-stat-val';
+        fill.className = 'sc-stat-fill' + (v >= 50 ? '' : ' low');
+        fill.style.width = Math.max(0, Math.min(100, v)) + '%';
+      } else if (v === 'MAX' || v === '∞') {
+        valEl.textContent = String(v);
+        valEl.className = 'sc-stat-val gold';
+        fill.className = 'sc-stat-fill gold';
+        fill.style.width = '100%';
+      } else {
+        valEl.textContent = String(v);
+        valEl.className = 'sc-stat-val';
+        fill.className = 'sc-stat-fill low';
+        fill.style.width = '0%';
+      }
+    }
+  } else {
+    stats.style.display = 'none';
+  }
+  /* tagline + 社交证明(分桶 + 派系第二行) */
+  var tag = tpl.querySelector('.sc-tagline');
+  tag.textContent = persona.tagline || '';
+  fitTagline(tag, ratio);
+  var social = tpl.querySelector('.sc-social');
+  var proof = PERSONA_STATS[persona.word];
+  if (proof) {
+    var s1 = '全球 <span class="sc-num">' + bucketTotal(proof.total) + '</span> 人和你同型';
+    var slogan = CLAN_SLOGAN[persona.code.substr(0, 2)] || '';
+    social.innerHTML = s1 + (slogan ? '\\n' + slogan : '');
+    social.style.display = '';
+  } else {
+    social.style.display = 'none';
+  }
+  /* 页脚:版本行 / 免责两行 / 扫码文案 / QR */
+  tpl.querySelector('.sc-version').textContent = SHARE_VER_LINE;
+  var disc = tpl.querySelectorAll('.sc-disclaimer > div');
+  disc[0].textContent = SHARE_DISCLAIMER[0];
+  disc[1].textContent = SHARE_DISCLAIMER[1];
+  var claim = tpl.querySelectorAll('.sc-claim span');
+  claim[0].textContent = SHARE_CLAIM[0];
+  claim[1].textContent = SHARE_CLAIM[1];
+  tpl.querySelector('.sc-qrcode img').src = 'qrcode-48.png';
+  tpl.querySelector('.sc-logo').src = 'NeuralFin.png';
+}
+/* tagline 自动缩字号:3 行起步,>40px 递减,仍溢出则容 4 行 */
+function fitTagline(el, ratio) {
+  var fs = (ratio === '4:5') ? 33 : 36;
+  var lines = 3;
+  el.style.fontSize = fs + 'px';
+  el.style.maxHeight = (lines * fs * 1.45) + 'px';
+  while (fs > 24 && el.scrollHeight > el.clientHeight + 2) {
+    fs -= 1;
+    el.style.fontSize = fs + 'px';
+    el.style.maxHeight = (lines * fs * 1.45) + 'px';
+  }
+  if (el.scrollHeight > el.clientHeight + 2) {
+    lines = 4;
+    el.style.maxHeight = (lines * fs * 1.45) + 'px';
+  }
+}
 function generateShareCard(persona, match, ratio) {
   ratio = ratio || getShareRatio();
   match = (match === undefined || match === null) ? 0 : match;
   var tpl = document.getElementById(ratio === '4:5' ? 'shareCardTemplate45' : 'shareCardTemplate916');
   bindShareCard(tpl, persona, match, ratio);
   return waitForImagesLoaded(tpl).then(function() {
-    fitShareChar(tpl);
-    /* scale 2 推导:输出 2160×3840(9:16)/2160×2700(4:5)=8.3M/5.8M px,与旧 5:8 scale:3
-       (2250×3750=8.4M px)同量级;scale:3 会到 18.7M px,低端 Android 爆内存,勿改回 3 */
+    /* scale 2 推导:输出 2160×3840 / 2160×2700,与旧 5:8 scale:3 同量级;勿改回 3(低端机爆内存) */
     return html2canvas(tpl, { scale: 2, backgroundColor: '#0A0A0A', width: 1080,
       height: (ratio === '4:5' ? 1350 : 1920), useCORS: true });
   }).then(function(canvas) {
-    shareCardUrl = canvas.toDataURL('image/png');
-    shareCardRatio = ratio;
+    shareCardUrls[ratio] = canvas.toDataURL('image/png');
+    shareCardRatioReady[ratio] = true;
     if (window.gtag) { gtag('event', 'share_card_generate_success',
-    { 'test_version': '16-hk', 'persona_result': persona.code || persona.word || '', 'ratio': ratio }); } track('share_card_generate_success', { 'test_version': '16-hk', 'persona_result': persona.code || persona.word || '', 'ratio': ratio });
+      { 'test_version': '48-hk', 'persona_result': persona.code || persona.word || '', 'ratio': ratio }); }
     return true;
   }).catch(function(e) {
-    /* 9:16 内存不足降级:自动用 4:5 重试一次(低端 Android) */
-    if (ratio === '9:16') { /* 降级重试有界:4:5 分支不再递归 */
+    if (ratio === '9:16' && !shareGenerating) { /* 降级重试有界 */
       return generateShareCard(persona, match, '4:5').then(function(ok) {
         if (ok) toast(SHARE_LOWMEM);
         return ok;
       });
     }
-    shareCardUrl = null;
+    shareCardUrls[ratio] = null;
     console.error('[shareCard] generation failed:', e);
     if (window.gtag) { gtag('event', 'share_card_generate_failed',
-    { 'test_version': '16-hk', 'ratio': ratio }); } track('share_card_generate_failed', { 'test_version': '16-hk', 'ratio': ratio });
+      { 'test_version': '48-hk', 'ratio': ratio }); }
     return false;
   });
 }
@@ -4780,19 +5969,23 @@ function generateShareFlow() {
   if (!lastShareReq || shareGenerating) return;
   var ratio = getShareRatio();
   if (window.gtag) { gtag('event', 'share_card_generate_start',
-    { 'test_version': '16-hk', 'persona_result': lastShareReq.persona.code || '', 'ratio': ratio }); } track('share_card_generate_start', { 'test_version': '16-hk', 'persona_result': lastShareReq.persona.code || '', 'ratio': ratio });
+    { 'test_version': '48-hk', 'persona_result': lastShareReq.persona.code || '', 'ratio': ratio }); }
   shareGenerating = true;
   var btn = document.getElementById('btn-gen-share');
   if (btn) { btn.disabled = true; btn.textContent = '正在生成專屬分享卡...'; }
-  generateShareCard(lastShareReq.persona, lastShareReq.match, ratio).then(function(ok) {
-    shareGenerating = false;
-    if (btn) { btn.disabled = false; btn.textContent = '生成分享卡片'; }
-    if (ok) {
-      track('share_card_generate', { personaCode: lastShareReq.persona.code || '', ratio: shareCardRatio });
-      openSharePreview();
-    } else {
-      openSharePreviewError();
-    }
+  var persona = lastShareReq.persona, match = lastShareReq.match;
+  /* 主尺寸先出图,后台并行生成另一尺寸(无缝切换用) */
+  shareCardRatio = ratio;
+  shareCardUrls = {}; shareCardRatioReady = { '9:16': false, '4:5': false };
+  generateShareCard(persona, match, ratio).then(function(ok) {
+    if (ok) track('share_card_generate', { personaCode: persona.code || '', ratio: ratio });
+    var other = (ratio === '4:5') ? '9:16' : '4:5';
+    generateShareCard(persona, match, other).then(function() {
+      if (btn) { btn.disabled = false; btn.textContent = '生成分享卡片'; }
+      shareGenerating = false;
+      if (ok && shareCardUrls[ratio]) { openSharePreview(); }
+      else { openSharePreviewError(); }
+    });
   });
 }
 function renderRatioChips() {
@@ -4803,39 +5996,36 @@ function renderRatioChips() {
     chips[i].setAttribute('aria-pressed', on ? 'true' : 'false');
     chips[i].className = 'share-ratio-chip' + (on ? ' active' : '');
   }
-  updateStaleUI();
+  updatePreview();
 }
 function onRatioChipClick(r) {
+  if (shareGenerating && !shareCardUrls[r]) { toast(SHARE_LOADING); }
   setShareRatio(r);
-  renderRatioChips(); /* 不自动重新生成:只改标记,点生成/下载时才按当前选择 */
+  renderRatioChips(); /* 已生成即瞬间切换,未生成则等后台出图 */
 }
-function updateStaleUI() {
-  var stale = shareCardRatio !== getShareRatio();
+function updatePreview() {
+  var sel = getShareRatio();
   var img = document.getElementById('sharePreviewImg');
-  var mask = document.getElementById('sharePreviewMask');
+  var spin = document.getElementById('sharePreviewSpin');
   var dl = document.getElementById('sharePreviewDl');
-  var regen = document.getElementById('sharePreviewRegen');
-  if (mask) mask.style.display = (stale && img && img.src) ? 'flex' : 'none';
-  if (dl) {
-    if (stale) { dl.textContent = SHARE_DL_STALE; dl.style.display = ''; }
-    else if (isWechat) { dl.style.display = 'none'; }
-    else { dl.textContent = '下載分享圖'; dl.style.display = ''; }
+  if (img && shareCardUrls[sel]) {
+    img.src = shareCardUrls[sel];
+    img.style.display = '';
+    if (spin) spin.className = 'share-preview-spin';
+  } else {
+    if (spin) spin.className = 'share-preview-spin show';
   }
-  if (regen) regen.style.display = (stale && isWechat) ? '' : 'none';
+  if (dl) {
+    if (isWechat) { dl.style.display = 'none'; }
+    else { dl.style.display = ''; dl.textContent = '下載分享圖'; }
+  }
 }
 function openSharePreview() {
-  var img = document.getElementById('sharePreviewImg');
-  img.style.display = '';
-  img.src = shareCardUrl;
   var hint = document.getElementById('sharePreviewHint');
-  if (isWechat) {
-    hint.textContent = '👆 長按上方圖片，揀「傳畀朋友」或「儲存圖片」';
-  } else if (isMobileDevice()) {
-    hint.textContent = '長按圖片儲存，或撳下面嘅掣下載';
-  } else {
-    hint.textContent = '撳下面嘅掣下載圖片，用手機掃描 QR Code 分享體驗更佳';
-  }
-  renderRatioChips(); /* 同步 chip 选中态 + stale 遮罩/按钮文案 */
+  if (isWechat) { hint.textContent = '👆 長按上方圖片，揀「傳畀朋友」或「儲存圖片」'; }
+  else if (isMobileDevice()) { hint.textContent = '長按圖片儲存，或撳下面嘅掣下載'; }
+  else { hint.textContent = '撳下面嘅掣下載圖片，用手機掃描 QR Code 分享體驗更佳'; }
+  renderRatioChips();
   var m = document.getElementById('sharePreviewModal');
   m.classList.add('show'); m.classList.remove('hide');
 }
@@ -4843,7 +6033,7 @@ function openSharePreviewError() {
   document.getElementById('sharePreviewImg').style.display = 'none';
   document.getElementById('sharePreviewHint').textContent = '生成失敗，請重試';
   var dl = document.getElementById('sharePreviewDl');
-  dl.textContent = '重新生成';
+  dl.textContent = '生成失敗，請重試';
   dl.style.display = '';
   var m = document.getElementById('sharePreviewModal');
   m.classList.add('show'); m.classList.remove('hide');
@@ -4853,37 +6043,21 @@ function closeSharePreview() {
   m.classList.add('hide');
   setTimeout(function() { m.classList.remove('show'); m.classList.remove('hide'); }, 200);
 }
-function regenerateShare(andDownload) {
-  if (!lastShareReq || shareGenerating) return;
-  var ratio = getShareRatio();
-  shareGenerating = true;
-  var dl = document.getElementById('sharePreviewDl');
-  if (dl) dl.disabled = true;
-  generateShareCard(lastShareReq.persona, lastShareReq.match, ratio).then(function(ok) {
-    shareGenerating = false;
-    if (dl) dl.disabled = false;
-    if (ok) {
-      openSharePreview();
-      if (andDownload && !isWechat) downloadCard();
-    } else {
-      openSharePreviewError();
-    }
-  });
-}
 function sharePreviewAction() {
-  if (!shareCardUrl) { generateShareFlow(); return; }
-  if (shareCardRatio !== getShareRatio()) { regenerateShare(true); return; } /* stale:先按当前选择生成再下载 */
+  if (!shareCardUrls[getShareRatio()]) { generateShareFlow(); return; }
   downloadCard();
 }
 function downloadCard() {
-  if (!shareCardUrl) { toast('分享卡生成中，稍等片刻…'); return; }
+  var ratio = getShareRatio();
+  var url = shareCardUrls[ratio];
+  if (!url) { toast('分享卡生成中，稍等片刻…'); return; }
   if (isWechat) { openSharePreview(); return; }
   var a = document.createElement('a');
   var word = (lastShareReq && lastShareReq.persona.word) || 'NBTI';
-  a.download = 'NBTI_' + word + '_' + (shareCardRatio === '4:5' ? '4x5' : '9x16') + '.png';
-  a.href = shareCardUrl;
+  a.download = 'NBTI_' + word + '_' + (ratio === '4:5' ? '4x5' : '9x16') + '.png';
+  a.href = url;
   a.click();
-  track('share_card_download', { ratio: shareCardRatio });
+  track('share_card_download', { ratio: ratio });
   toast('圖片已儲存，可以去相簿搵返，打開微信傳畀朋友啦');
 }
 /* ============ 进度保存与续答(确认弹层) ============ */
