@@ -5839,7 +5839,7 @@ function bindShareCard(tpl, persona, match, ratio) {
   tpl.querySelector('.sc-clan').textContent = isEgg ? '' : (CLAN_MAP[persona.code.substr(0, 2)] || '');
   tpl.querySelector('.sc-name-main').textContent = persona.name || '';
   fitText(tpl.querySelector('.sc-name-main'), 48); /* B6: 标题不折行,超宽自动降字号 */
-  tpl.querySelector('.sc-name-sub').textContent = '';
+  tpl.querySelector('.sc-name-sub').textContent = (isEgg ? '' : persona.word);
   tpl.querySelector('.sc-match').innerHTML = matchRing(match);
   var bars = tpl.querySelector('.sc-stat-bars');
   var data = PERSONA_STAT_BARS[persona.word];
@@ -5989,7 +5989,7 @@ function bindShareCard(tpl, persona, match, ratio) {
   tpl.querySelector('.sc-clan-pill').textContent = isEgg ? '' : (CLAN_MAP[persona.code.substr(0, 2)] || '');
   tpl.querySelector('.sc-name-main').textContent = persona.name || '';
   fitText(tpl.querySelector('.sc-name-main'), 48); /* B6: 标题不折行,超宽自动降字号 */
-  tpl.querySelector('.sc-name-sub').textContent = '';
+  tpl.querySelector('.sc-name-sub').textContent = (isEgg ? '' : persona.word);
   /* 四维条:数值→宽度%;MAX/∞→100% 金;MIN→0% 红;高值绿低值红 */
   var data = PERSONA_STAT_BARS[persona.word];
   var stats = tpl.querySelector('.sc-stats');
@@ -6079,6 +6079,41 @@ function fitTagline(el, ratio) {
     el.style.maxHeight = (lines * fs * 1.45) + 'px';
   }
 }
+/* B7: 文本层断言 — bindShareCard 完成后、渲染前执行;任一命中即失败并上报
+   R1 模板 textContent 敏感串(\n/undefined/NaN/null/[object Object]/{{/}})
+   R2 必填字段非空(人格名/英文名/匹配度/指标值/引言/品牌行)
+   R3 匹配度 0-100 整数 + 指标值数字或白名单枚举(MAX/MIN/∞) */
+function checkShareCardText(tpl, persona, match, ratio, locale) {
+  var fails = [];
+  function fail(rule, field) { fails.push(rule + '|' + field); }
+  var R1 = ['\\n', 'undefined', 'NaN', 'null', '[object Object]', '{{', '}}'];
+  var whole = tpl.textContent || '';
+  for (var i = 0; i < R1.length; i++) {
+    if (whole.indexOf(R1[i]) > -1) fail(R1[i].replace(/[^\w]/g, '_'), 'template');
+  }
+  function txt(sel) { var el = tpl.querySelector(sel); return el ? el.textContent : ''; }
+  var required = { '.sc-name-main': 'name', '.sc-match-num': 'match', '.sc-tagline': 'tagline', '.sc-version': 'version' };
+  for (var sel in required) { if (String(txt(sel)).trim() === '') fail('empty', required[sel]); }
+  if (persona && persona.code) { if (String(txt('.sc-name-sub')).trim() === '') fail('empty', 'nameSub'); }
+  var stats = tpl.querySelector('.sc-stats');
+  if (stats && stats.style.display !== 'none') {
+    var vals = stats.querySelectorAll('.sc-stat-val');
+    for (var si = 0; si < vals.length; si++) {
+      var sv = String(vals[si].textContent).trim();
+      if (sv === '') { fail('empty', 'stat' + si); continue; }
+      if (!/^\d{1,3}$/.test(sv) && ['MAX', 'MIN', '∞'].indexOf(sv) === -1) fail('stat-value', 'stat' + si);
+    }
+  }
+  var m = /^(\d{1,3})%$/.exec(txt('.sc-match-num'));
+  if (m) { var n = parseInt(m[1], 10); if (!(n >= 0 && n <= 100)) fail('match-range', 'match'); }
+  else if (persona && persona.code) fail('match-format', 'match');
+  if (fails.length) {
+    try { track('share_card_text_check_failed', { failedRule: fails.join(','), field: fails[0].split('|')[1],
+      ratio: ratio, persona: (persona && (persona.code || persona.word)) || '', locale: locale,
+      uaBucket: uaBucket(navigator.userAgent) }); } catch (e) {}
+  }
+  return fails;
+}
 function generateShareCard(persona, match, ratio, scale, depth, onPhase) {
   ratio = ratio || getShareRatio();
   match = (match === undefined || match === null) ? 0 : match;
@@ -6099,6 +6134,9 @@ function generateShareCard(persona, match, ratio, scale, depth, onPhase) {
     assetJobs.push(cardAssetBase64(CARD_QR_FILE));
     return Promise.all(assetJobs).then(function() {
       bindShareCard(tpl, persona, match, ratio);
+      /* B7: 文本层断言在渲染前执行,命中即抛错走降级链 */
+      var textFails = checkShareCardText(tpl, persona, match, ratio, (typeof CURRENT_LANG !== 'undefined' ? CURRENT_LANG : ''));
+      if (textFails.length) throw new Error('text check failed: ' + textFails.join(','));
       return waitForImagesLoaded(tpl);
     });
   });

@@ -9,6 +9,6 @@
     "@playwright/test": "^1.60.0"
   },
   "scripts": {
-    "test:dom": "playwright test tests/dom-contract.spec.ts"
+    "test:dom": "playwright test tests/dom-contract.spec.ts tests/asset-contract.spec.ts tests/text-check.spec.ts"
   }
 }
