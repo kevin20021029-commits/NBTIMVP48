@@ -24,7 +24,18 @@ const ALLOWED_EVENTS = new Set([
   'deep_dive_app_open_success',
   'share_card_click_from_friend',
   'share_card_generate',
-  'share_card_download'
+  'share_card_download',
+  /* 前端 DOM 契约自检:分享卡关键节点缺失时上报(生产静默) */
+  'share_dom_missing',
+  /* 漏斗补齐:进度(maxQ+每题耗时)/分享卡归因落地/归因转化 */
+  'test_progress',
+  'ref_landing',
+  'ref_convert',
+  /* 导出遥测:重试/降级级别/比例切换/微信长按兜底 */
+  'share_card_retry',
+  'share_card_fallback_used',
+  'card_ratio_switch',
+  'share_card_longpress_shown'
 ]);
 
 /* CORS:生产同源(页面与 API 同在 vercel.app)不需要;但 file:// 打开页面或镜像域名时,

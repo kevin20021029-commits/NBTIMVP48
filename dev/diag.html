@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>NeuralFin NBTI 导出自诊断 /dev/diag</title>
+<style>
+  body { background: #0d0f0e; color: #e6e6e6; font: 13px/1.6 'Segoe UI', 'PingFang SC', monospace; margin: 0; padding: 16px; }
+  h1 { font-size: 16px; color: #00e5a0; }
+  h2 { font-size: 14px; color: #c9a227; margin-top: 20px; }
+  button { background: #1c1c1e; color: #fff; border: 1px solid #2c2c2e; border-radius: 6px; padding: 8px 14px; margin: 4px 4px 4px 0; cursor: pointer; }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  #info, #errs, #summary { background: #161817; border: 1px solid #2c2c2e; border-radius: 8px; padding: 10px 12px; margin: 10px 0; white-space: pre-wrap; word-break: break-all; }
+  #errs { color: #ff6b6b; min-height: 2em; }
+  #log { background: #101210; border: 1px solid #2c2c2e; border-radius: 8px; padding: 10px 12px; min-height: 6em; max-height: 50vh; overflow: auto; white-space: pre; }
+  .ok { color: #00e5a0; } .fail { color: #ff6b6b; }
+  label { margin: 0 12px 0 4px; }
+  /* iframe 必须保留布局(display:none 会让内部无尺寸,html2canvas 渐变算 NaN),故 visibility:hidden + 移出视口 */
+  iframe { position: fixed; left: -9999px; top: 0; width: 1080px; height: 1920px; visibility: hidden; }
+</style>
+</head>
+<body>
+<h1>NeuralFin NBTI · 导出自诊断 <span style="color:#5d6b64">/dev/diag</span></h1>
+
+<h2>设备信息</h2>
+<div id="info">加载中…</div>
+
+<h2>导出压测</h2>
+<div>
+  <button id="run">导出压测（4:5 ×5 + 9:16 ×5）</button>
+  <label><input type="checkbox" id="parallel"> 模拟旧版并行双渲染（两尺寸同时）</label>
+  <label><input type="checkbox" id="extreal"> 加载真实外链（hm.js + gtag，真机复现 TCP 黑洞条件）</label>
+  <button id="copy">复制全部结果</button>
+</div>
+<div id="summary"></div>
+<pre id="log">（结果将逐条追加于此）</pre>
+
+<h2>运行时错误（onerror / unhandledrejection）</h2>
+<div id="errs">（无）</div>
+
+<iframe id="app" src="../index.html" title="主站(承载真实导出代码)"></iframe>
+
+<script>
+'use strict';
+/* ============================================================
+ * /dev/diag — 真机导出自诊断页(非生产,noindex)
+ * 通过 iframe 复用主站真实导出代码(bindShareCard/html2canvas/模板),
+ * 零复制零漂移,测量的是生产路径。
+ * ============================================================ */
+var $ = function(id) { return document.getElementById(id); };
+var results = [];
+
+/* ---- 全局错误捕获:渲染到页面 ---- */
+window.onerror = function(msg, src, line, col) {
+  var t = 'onerror: ' + msg + ' @' + (line || '?') + ':' + (col || '?');
+  logErr(t);
+};
+window.addEventListener('unhandledrejection', function(e) {
+  var r = e.reason;
+  logErr('unhandledrejection: ' + (r && (r.message || r) || r));
+});
+function logErr(t) {
+  var el = $('errs');
+  if (el.textContent === '（无）') el.textContent = '';
+  el.textContent += (el.textContent ? '\n' : '') + t;
+  results.push('ERR: ' + t);
+}
+
+/* ---- 设备信息 ---- */
+function collectDeviceInfo() {
+  var lines = [];
+  lines.push('UA: ' + navigator.userAgent);
+  lines.push('deviceMemory: ' + (navigator.deviceMemory !== undefined ? navigator.deviceMemory + ' GB' : '不可用(Safari 无此 API)'));
+  lines.push('devicePixelRatio: ' + (window.devicePixelRatio || 1));
+  lines.push('screen: ' + screen.width + 'x' + screen.height + ' (avail ' + screen.availWidth + 'x' + screen.availHeight + ')');
+  if (performance.memory) {
+    lines.push('performance.memory: usedJSHeap ' + Math.round(performance.memory.usedJSHeapSize / 1048576) + 'MB / totalJSHeap ' + Math.round(performance.memory.totalJSHeapSize / 1048576) + 'MB');
+  } else {
+    lines.push('performance.memory: 不可用(仅 Chromium)');
+  }
+  return lines.join('\n');
+}
+$('info').textContent = collectDeviceInfo();
+results.push('== 设备信息 ==\n' + collectDeviceInfo());
+
+/* ---- 压测 ---- */
+var iframe = $('app');
+var appReady = false;
+var pending = [];
+iframe.addEventListener('load', function() {
+  appReady = true;
+  var w = iframe.contentWindow;
+  if (typeof w.generateShareFlow !== 'function') {
+    logErr('iframe 主站 JS 未就绪(检查 ../index.html)');
+    return;
+  }
+  pending.forEach(function(fn) { fn(); });
+  pending = [];
+});
+function whenAppReady(fn) {
+  if (appReady) fn();
+  else pending.push(fn);
+}
+
+/* ---- 真实外链注入(真机复现黑洞条件):勾选后在 iframe 内真实加载 hm.js + gtag ---- */
+var extInjected = false;
+$('extreal').addEventListener('change', function() {
+  if (!this.checked) return;
+  whenAppReady(function() {
+    if (extInjected) return;
+    extInjected = true;
+    var w = iframe.contentWindow;
+    var doc = w.document;
+    var scripts = [
+      'https://hm.baidu.com/hm.js?a4005e9244ab7fef06f8c3cd1c10e48d',
+      'https://www.googletagmanager.com/gtag/js?id=G-39RKVC66E4'
+    ];
+    scripts.forEach(function(src) {
+      var s = doc.createElement('script');
+      s.src = src;
+      s.async = true;
+      (doc.getElementsByTagName('script')[0] || doc.head).appendChild(s);
+    });
+    logErr('已注入真实外链 ×2(hm.js + gtag)——真机弱网下可复现黑洞条件');
+    results.push('注入了真实外链: ' + scripts.join(' , '));
+  });
+});
+
+function timeout(ms, label) {
+  return new Promise(function(_, rej) { setTimeout(function() { rej(new Error(label + ' timeout ' + ms + 'ms')); }, ms); });
+}
+
+function fmt(ms) { return Math.round(ms) + 'ms'; }
+
+/* 单次导出:返回 {preparing, rendering, encode, ok, bytes} 或 {ok:false, err} */
+async function runOne(ratio) {
+  var w = iframe.contentWindow;
+  var doc = w.document;
+  var tpl = doc.getElementById(ratio === '4:5' ? 'shareCardTemplate45' : 'shareCardTemplate916');
+  var persona = w.RESULTS.results[0]; /* SNIPER */
+  var rec = { ratio: ratio, parallel: $('parallel').checked };
+  try {
+    var t0 = performance.now();
+    w.bindShareCard(tpl, persona, 87, ratio);
+    await w.waitForImagesLoaded(tpl);
+    var t1 = performance.now();
+    rec.preparing = t1 - t0;
+    var canvas = await Promise.race([
+      w.html2canvas(tpl, { scale: 2, backgroundColor: '#0A0A0A', width: 1080,
+        height: (ratio === '4:5' ? 1350 : 1920), useCORS: true }),
+      timeout(8000, 'html2canvas')
+    ]);
+    var t2 = performance.now();
+    rec.rendering = t2 - t1;
+    var url = canvas.toDataURL('image/png');
+    var t3 = performance.now();
+    rec.encode = t3 - t2;
+    rec.ok = true;
+    rec.bytes = url.length;
+  } catch (e) {
+    rec.ok = false;
+    rec.err = String(e && e.message || e);
+  }
+  return rec;
+}
+
+function renderRec(rec) {
+  if (rec.ok) {
+    return rec.ratio + ' ' + (rec.parallel ? '(并行) ' : '') +
+      'preparing=' + fmt(rec.preparing) + ' rendering=' + fmt(rec.rendering) +
+      ' encode=' + fmt(rec.encode) + ' 字节=' + rec.bytes;
+  }
+  return rec.ratio + ' ' + (rec.parallel ? '(并行) ' : '') + '失败: ' + rec.err;
+}
+
+var running = false;
+$('run').addEventListener('click', function() {
+  if (running) return;
+  running = true;
+  $('run').disabled = true;
+  whenAppReady(async function() {
+    var logEl = $('log');
+    logEl.textContent = '';
+    var all = [];
+    var parallel = $('parallel').checked;
+    for (var round = 1; round <= 5; round++) {
+      var line = '第 ' + round + ' 轮: ';
+      var recs;
+      if (parallel) {
+        /* 模拟旧版:两尺寸同时渲染 */
+        recs = await Promise.all([runOne('4:5'), runOne('9:16')]);
+      } else {
+        recs = [await runOne('4:5'), await runOne('9:16')];
+      }
+      line += recs.map(renderRec).join(' | ');
+      logEl.textContent += line + '\n';
+      all.push('Round ' + round + ': ' + line);
+    }
+    results.push('== 压测(' + (parallel ? '并行' : '串行') + ') ==\n' + all.join('\n'));
+    var okN = all.join('\n').match(/ok/g) ? 0 : 0;
+    okN = all.join(' ').split('preparing=').length - 1; /* 粗略:成功记录数 */
+    var failN = all.join(' ').split('失败').length - 1;
+    $('summary').textContent = '完成: 成功 ' + (okN - failN) + ' / ' + okN + ' 条, 失败 ' + failN + ' 条';
+    $('summary').className = failN ? 'fail' : 'ok';
+    running = false;
+    $('run').disabled = false;
+  });
+});
+
+/* ---- 复制全部结果(纯文本) ---- */
+$('copy').addEventListener('click', function() {
+  var txt = results.join('\n\n') + '\n\n== 错误 ==\n' + ($('errs').textContent === '（无）' ? '（无）' : $('errs').textContent);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(function() { alert('已复制'); }, function() { fallbackCopy(txt); });
+  } else {
+    fallbackCopy(txt);
+  }
+});
+function fallbackCopy(txt) {
+  var ta = document.createElement('textarea');
+  ta.value = txt;
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); alert('已复制(降级方式)'); } catch (e) { alert('复制失败,请手动选择'); }
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>
