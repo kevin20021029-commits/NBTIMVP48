@@ -269,6 +269,9 @@
   .result-head .type-badge { color: var(--text-secondary); font-size: 14px; letter-spacing: 1px; font-weight: 700; }
   .result-head .persona { font-size: 52px; font-weight: 800; margin: 10px 0 4px; letter-spacing: 0.02em; }
   .result-head .match { color: var(--accent-primary); font-size: 26px; font-weight: 800; }
+  .result-code { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 800; letter-spacing: .1em; color: #00e5a0; } /* G2: 人格代码高亮 */
+  .egg-code { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 800; letter-spacing: .12em; color: #00e5a0;
+    font-size: 22px; text-align: center; margin: -6px 0 12px; } /* G2: 彩蛋代码徽章 */
   .card {
     background: var(--bg-card); border: 1px solid var(--border-subtle);
     border-radius: 16px; padding: 20px; margin-bottom: 14px;
@@ -5242,6 +5245,7 @@ function renderEgg(name, note, word) {
     '<div class="egg-wrap">' +
       '<img class="egg-img" loading="eager" alt="' + name + '" src="/' + (word === 'ATM' ? 'atm' : 'abcd') + '.webp" onerror="this.onerror=null;this.src=\'/' + (word === 'ATM' ? 'atm' : 'abcd') + '.png\';">' +
       '<div class="egg-title">隱藏人格「' + name + '」</div>' +
+      '<div class="egg-code">' + word + '</div>' +
       '<div class="card"><p style="text-align:center;line-height:2;">' + note + '</p></div>' +
       '<div class="share-card-wrap">' +
         '<button class="btn" id="btn-gen-share" onclick="generateShareFlow()">生成分享卡片</button>' +
@@ -5290,7 +5294,7 @@ function renderResult(persona, s) {
       '<div class="result-main">' +
         '<div class="result-head">' +
           charHtml +
-          '<div class="type-badge">經AI認證，你就是—— ' + persona.word + '</div>' +
+          '<div class="type-badge">經AI認證，你就是—— <span class="result-code">' + persona.word + '</span></div>' +
           '<div class="persona">' + persona.name + '</div>' +
           matchHtml +
         '</div>' +
@@ -5368,7 +5372,7 @@ function deepDiveHtml(persona) {
   var locked = dd.sections.map(function(sec) {
     return '<h4>' + sec.title + '</h4><p>' + sec.content + '</p>';
   }).join('');
-  return '<div class="card deepdive"><h3>深度解讀</h3>' +
+  return '<div class="card deepdive"><h3>深度解讀 <span class="result-code">' + persona.word + '</span></h3>' +
     '<div class="dd-free">' + dd.preview + '</div>' +
     '<div class="dd-locked">' +
       '<div class="locked-content">' + locked + '</div>' +
