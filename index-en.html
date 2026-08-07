@@ -269,6 +269,8 @@
   .result-code { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 800; letter-spacing: .1em; color: #00e5a0; } /* G2: 人格代码高亮 */
   .egg-code { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 800; letter-spacing: .12em; color: #00e5a0;
     font-size: 22px; text-align: center; margin: -6px 0 12px; } /* G2: 彩蛋代码徽章 */
+  .friend-cta { text-align: center; margin-bottom: 14px; }
+  .friend-cta-title { font-weight: 800; margin-bottom: 6px; }
   .card {
     background: var(--bg-card); border: 1px solid var(--border-subtle);
     border-radius: 16px; padding: 20px; margin-bottom: 14px;
@@ -778,6 +780,7 @@ function initLangSwitcher() {
   eachLangOption(function(link) {
     link.addEventListener('click', function(ev) {
       lsSet('nbti_preferred_lang', this.getAttribute('data-lang'));
+      try { localStorage.setItem('nbti_lang_switch', '1'); } catch (e) {} /* I1-2: 切语言标记(新页上报 lang_switch, 防漏斗虚高误判) */
       /* 答题中切语言:目标 URL 补 ?resume=1,目标页加载后自动续答(仅普通左键点击) */
       if (quizResumePending() && !/[?&]resume=1/i.test(this.href)) {
         if (!ev.metaKey && !ev.ctrlKey && !ev.shiftKey && !ev.altKey) {
@@ -819,7 +822,13 @@ function migrateProgress() {
 var __hashRestored = false; /* 冪等:僅渲染成功才置位;hash 不合法保持 false */
 /* 渲染結果/彩蛋時寫入(renderResult / renderEgg 內調用) */
 function saveResultToSession(d) {
-  try { sessionStorage.setItem('nbti_last_result', JSON.stringify(d)); } catch (e) {}
+  try {
+    /* I1-2b/c: source='self'(自己做完) + len(题数维度, 合仓后跨版本校验) */
+    var full = JSON.parse(JSON.stringify(d));
+    full.source = 'self';
+    full.len = getQuizLen();
+    sessionStorage.setItem('nbti_last_result', JSON.stringify(full));
+  } catch (e) {}
 }
 function restoreFromHash() {
   if (__hashRestored) return;
@@ -841,7 +850,8 @@ function restoreFromHash() {
     var saved = sessionStorage.getItem('nbti_last_result');
     if (saved) {
       var d = JSON.parse(saved);
-      if (d && d.v === 1) {
+      /* I1-2c: len 校验(16/48 不匹配即忽略, 防合仓后跨版本串结果) */
+      if (d && d.v === 1 && d.len === getQuizLen()) {
         if (d.isEgg === true && EGG_MAP[d.eggKey]) {
           renderEgg(d.eggName, d.eggNote, d.eggWord);
           ok = true;
@@ -850,7 +860,7 @@ function restoreFromHash() {
           for (var i = 0; i < RESULTS.results.length; i++) {
             if (RESULTS.results[i].code === d.code) { p0 = RESULTS.results[i]; break; }
           }
-          if (p0) { renderResult(p0, d); ok = true; }
+          if (p0) { renderResult(p0, d, 'self'); ok = true; } /* I1-2b: source='self' */
         }
       }
     }
@@ -866,8 +876,9 @@ function restoreFromHash() {
       if (RESULTS.results[j].code.toUpperCase() === code.toUpperCase()) { persona = RESULTS.results[j]; break; }
     }
     if (persona) {
-      /* match 拿不到真值 → 隱藏匹配環(渲染層處理),不顯示假數字 */
-      renderResult(persona, { code: persona.code, match: undefined, edges: [] });
+      /* I1-2b: 降级路径(仅凭 hash code)= source='shared' — 好友分享结果
+         match 拿不到真值 → 隱藏匹配環(渲染層處理),不顯示假數字 */
+      renderResult(persona, { code: persona.code, match: undefined, edges: [] }, 'shared');
       ok = true;
     }
   }
@@ -5033,6 +5044,18 @@ function show(id) {
   window.scrollTo(0, 0);
 }
 
+/* I1-2: 视图与 hash 的唯一同步点。hash = 唯一真相源(跨页自动携带/可分享/可后退)。
+   'home'/'quiz' → 清空 hash(保留 pathname+search);'result' → 由调用方先写 hash,本函数不覆盖。
+   所有视图切换必须走 setView,禁止直接调 show() 或直接改 hash。 */
+function setView(view, pageId) {
+  if (view === 'home' || view === 'quiz') {
+    if (location.hash) {
+      try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    }
+  }
+  show(pageId || (view === 'home' ? 'page-home' : 'page-quiz'));
+}
+
 /* ============ 行情条 ============ */
 function initHome() {
   var dims = QUESTIONS.meta.scoring.dimensions;
@@ -5131,7 +5154,7 @@ function startQuiz() {
 }
 function freshStart() {
   userAnswers = []; current = 0;
-  show('page-quiz');
+  setView('quiz', 'page-quiz'); /* I1-2 */
   renderQuestion();
 }
 function renderQuestion() {
@@ -5188,7 +5211,7 @@ function advance() {
   renderQuestion();
 }
 function showSubmit() {
-  show('page-result');
+  setView('quiz', 'page-result'); /* I1-2: 待提交态, 无结果 hash */
   var _rb = safeEl('result-body'); if (_rb) _rb.innerHTML = /* E2-P1 */
     '<div class="card"><p style="text-align:center;font-size:16px;line-height:2.2;">Done? Alright. You answered with such honesty (and such guilt),<br>hold your phone steady — it\'s time for the reveal.</p></div>' +
     '<button class="btn" id="submit-btn" onclick="submit()">Submit and let the AI read your fortune</button>';
@@ -5196,7 +5219,7 @@ function showSubmit() {
 /* ============ AI 结算动画（3 秒）+ 连点彩蛋 ============ */
 var LOAD_MSGS = ['Scanning your trading DNA…', 'Calculating drawdowns…', 'Calibrating your exit-liquidity index…', 'Matching against all 16 personalities…', 'Topping up the copium tank…'];
 function submit() {
-  show('page-loading');
+  setView('quiz', 'page-loading'); /* I1-2: 结算动画中间态 */
   var i = 0;
   var _lt = safeEl('load-text'); if (_lt) _lt.textContent = LOAD_MSGS[0]; /* E2-P1 */
   loadActive = true;
@@ -5310,7 +5333,7 @@ function finish() {
 
 function renderEgg(name, note, word) {
   warmCardAssets(null); /* 彩蛋无角色图,仅预热二维码 */
-  show('page-result');
+  setView('result', 'page-result'); /* I1-2: hash 由下方 setResultHash 写入 */
   var _rb = safeEl('result-body'); if (_rb) _rb.innerHTML = /* E2-P1 */
     '<div class="egg-wrap">' +
       '<img class="egg-img" loading="eager" alt="' + name + '" src="' + (word === 'ATM' ? 'atm' : 'abcd') + '.webp" onerror="this.onerror=null;this.src=\'' + (word === 'ATM' ? 'atm' : 'abcd') + '.png\';">' +
@@ -5333,8 +5356,9 @@ function renderEgg(name, note, word) {
   syncLangLinks();
 }
 
-function renderResult(persona, s) {
-  show('page-result');
+function renderResult(persona, s, source) {
+  setView('result', 'page-result'); /* I1-2: hash 由下方 setResultHash 写入 */
+  var isShared = source === 'shared'; /* I1-2b: 好友分享降级路径 */
   lastPersonaCode = persona.code;
   var proof = PERSONA_STATS[persona.word] || null;
   var proofHtml = '';
@@ -5376,6 +5400,11 @@ function renderResult(persona, s) {
         deepDiveHtml(persona) +
       '</div>' +
       '<div class="result-side">' +
+        (isShared ? '<div class="card friend-cta">' +
+          '<p class="friend-cta-title">这是好友的测试结果</p>' +
+          '<p class="hint">匹配度与四维画像不随分享携带</p>' +
+          '<button class="btn" onclick="friendCtaStart()">测测我自己的</button>' +
+        '</div>' : '') +
         (hasMatch ? '<div class="share-card-wrap">' +
           '<button class="btn" id="btn-gen-share" onclick="generateShareFlow()">Generate share card</button>' +
           '<p class="hint">Once it\'s ready, press and hold to save it or send it to a friend</p>' +
@@ -5391,6 +5420,12 @@ function renderResult(persona, s) {
   track('deep_dive_preview_view', { personaCode: lastPersonaCode });
 }
 
+
+/* I1-2b: 好友分享结果页 CTA — 裂变埋点 + 开始自己的测试 */
+function friendCtaStart() {
+  track('share_card_click_from_friend', { personaCode: lastPersonaCode || '' });
+  startQuiz();
+}
 
 /* ============ 社交钩子 + 深度解读 + 埋点 ============ */
 var lastPersonaCode = null;
@@ -6321,7 +6356,7 @@ function restoreProgress(d) {
   userAnswers = d.answers;
   current = Math.min(d.current || 0, QUESTIONS.questions.length);
   if (current >= QUESTIONS.questions.length) { showSubmit(); }
-  else { show('page-quiz'); renderQuestion(); }
+  else { setView('quiz', 'page-quiz'); renderQuestion(); } /* I1-2 */
 }
 /* ============ 其他 ============ */
 function restart() { startQuiz(); }
@@ -6331,7 +6366,7 @@ function goHome() {
   /* 重置全部答题状态,保证下次"开始测试"是全新流程 */
   userAnswers = [];
   current = 0;
-  show('page-home');
+  setView('home', 'page-home'); /* I1-2 ★ 清 hash: 离开结果页即清, 切语言不再被拉回结果页 */
 }
 var toastTimer = null;
 function toast(msg) {
