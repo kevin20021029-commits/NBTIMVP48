@@ -5555,8 +5555,9 @@ function waitForImageLoad(imgEl) {
     if (imgEl.complete && imgEl.naturalWidth > 0) { resolve(); return; }
     var done = false;
     var finish = function() { if (!done) { done = true; resolve(); } };
-    imgEl.onload = finish;
-    imgEl.onerror = finish;
+    /* B2 修复: addEventListener 不覆盖既有 onload/onerror(如角色图 coverFit), 消除渲染竞态 */
+    imgEl.addEventListener('load', finish);
+    imgEl.addEventListener('error', finish);
     setTimeout(finish, 4000); /* 双格式都失败也放行,避免页面卡死 */
   });
 }
