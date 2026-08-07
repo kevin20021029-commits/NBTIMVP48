@@ -390,6 +390,8 @@
   .sc-name-sub { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 500; letter-spacing: .22em; color: #00e5a0; }
   .t916 .sc-name-sub { font-size: 42px; }
   .sc-name-sub:empty { display: none; }
+  .sc-code { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 600; letter-spacing: .18em; color: #00e5a0; font-size: 20px; }
+  .sc-code:empty { display: none; }
   /* 四维条 */
   .sc-stats { display: flex; }
   .t916 .sc-stats { flex-wrap: wrap; gap: 18px 44px; }
@@ -1038,6 +1040,7 @@ window.addEventListener('hashchange', syncLangLinks);
         <div class="sc-name-row">
           <span class="sc-name-main"></span>
           <span class="sc-name-sub"></span>
+          <span class="sc-code"></span>
         </div>
         <div class="sc-match-info sc-match-block">
           <span class="sc-match-num"></span>
@@ -4959,6 +4962,7 @@ function initHome() {
   var pb = safeEl('p-cards'); if (!pb) return; /* E2-P1 */
   pb.innerHTML = RESULTS.results.map(function(r) {
     return '<div class="p-card">' +
+      '<span class="p-code">' + r.code + '</span>' +
       '<span class="p-name">' + r.name + '</span>' +
       '<span class="p-tag">' + r.tagline + '</span>' +
     '</div>';
@@ -5276,7 +5280,7 @@ function renderResult(persona, s) {
       '<div class="result-main">' +
         '<div class="result-head">' +
           charHtml +
-          '<div class="type-badge">AI-certified. You are <span class="result-code">' + persona.word + '</span></div>' +
+          '<div class="type-badge">AI-certified. You are <span class="result-code">' + persona.code + '</span></div>' +
           '<div class="persona">' + persona.name + '</div>' +
           matchHtml +
         '</div>' +
@@ -5354,7 +5358,7 @@ function deepDiveHtml(persona) {
   var locked = dd.sections.map(function(sec) {
     return '<h4>' + sec.title + '</h4><p>' + sec.content + '</p>';
   }).join('');
-  return '<div class="card deepdive"><h3>The deep dive <span class="result-code">' + persona.word + '</span></h3>' +
+  return '<div class="card deepdive"><h3>The deep dive <span class="result-code">' + persona.code + '</span></h3>' +
     '<div class="dd-free">' + dd.preview + '</div>' +
     '<div class="dd-locked">' +
       '<div class="locked-content">' + locked + '</div>' +
@@ -5812,6 +5816,7 @@ function bindShareCard(tpl, persona, match, ratio) {
   tpl.querySelector('.sc-name-main').textContent = persona.name || '';
   fitText(tpl.querySelector('.sc-name-main'), 48); /* B6: 标题不折行,超宽自动降字号 */
   tpl.querySelector('.sc-name-sub').textContent = (isEgg ? '' : persona.word);
+  tpl.querySelector('.sc-code').textContent = (isEgg ? '' : persona.code); /* G2: 人格代码(RGHC) */
   /* 四维条:数值→宽度%;MAX/∞→100% 金;MIN→0% 红;高值绿低值红 */
   var data = PERSONA_STAT_BARS[persona.word];
   var stats = tpl.querySelector('.sc-stats');
@@ -6102,6 +6107,7 @@ function updatePreview() {
   }
 }
 function openSharePreview() {
+  updatePreview(); /* G2: 生成成功即刷新预览图(G1 删 chips 中断了调用链, 导致预览图空白) */
   var hint = safeEl('sharePreviewHint');
   var m = safeEl('sharePreviewModal');
   if (!hint || !m) return safeFail('sharePreviewHint/sharePreviewModal');
