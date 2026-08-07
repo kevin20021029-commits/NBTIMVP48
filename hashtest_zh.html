@@ -467,7 +467,8 @@
   .share-ratio-chip.active { background: var(--accent-primary); color: var(--bg-primary);
     border-color: var(--accent-primary); border-radius: 8px; font-weight: 900; }
   .share-ratio-chip.busy::after { content: '…'; }
-  .share-preview-imgwrap { position: relative; }
+  .share-preview-imgwrap { position: relative; flex: 1 1 auto; min-height: 0; width: 100%;
+    display: flex; align-items: center; justify-content: center; } /* B4: 卡片区可收缩,为提示行让位 */
   .share-preview-spin { display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
     color: var(--accent-primary); font-weight: 800; letter-spacing: 1px; z-index: 2; }
   .share-preview-spin.show { display: block; }
@@ -496,10 +497,10 @@
     from { opacity: 0; transform: translate(-50%, -50%) scale(.9); }
     to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   }
-  .share-preview-image { max-width: 100%; max-height: 70vh; object-fit: contain;
-    border-radius: 12px; box-shadow: 0 8px 32px rgba(0,217,160,.2); }
+  .share-preview-image { max-width: 100%; max-height: calc(90vh - 200px); width: auto; height: auto; object-fit: contain;
+    border-radius: 12px; box-shadow: 0 8px 32px rgba(0,217,160,.2); } /* B4: 高度上限为下方提示/按钮让位, 任何视口不重叠 */
   .share-preview-hint { color: var(--text-secondary); font-size: 14px; margin-top: 16px;
-    text-align: center; line-height: 1.6; }
+    text-align: center; line-height: 1.6; flex: 0 0 auto; max-width: 100%; } /* B4: 独立区域,不随卡片收缩,三语文案可换行 */
   .share-preview-close { position: absolute; top: -40px; right: 0; background: transparent;
     border: none; color: #fff; font-size: 24px; cursor: pointer; }
   .share-preview-download-btn { margin-top: 20px; }
