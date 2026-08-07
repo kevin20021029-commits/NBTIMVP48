@@ -396,10 +396,10 @@
   .t45 .sc-clan-pill { left: 22px; bottom: 20px; font-size: 19px; padding: 6px 14px; }
   .sc-clan-pill:empty { display: none; }
   /* 信息列:名字 + 匹配 + 四维条 */
-  .t916 .sc-info { display: flex; flex-direction: column; gap: 30px; }
-  .t45 .sc-info { flex: 1; display: flex; flex-direction: column; gap: 20px; justify-content: center; }
-  .sc-name-row { display: flex; align-items: baseline; gap: 24px; flex-wrap: wrap; }
-  .sc-name-main { font-weight: 900; line-height: 1; color: #ffffff; letter-spacing: .04em; }
+  .t916 .sc-info { display: flex; flex-direction: column; gap: 30px; min-width: 0; } /* B6: 防内容撑开列宽 */
+  .t45 .sc-info { flex: 1; display: flex; flex-direction: column; gap: 20px; justify-content: center; min-width: 0; } /* B6: 防内容撑开列宽 */
+  .sc-name-row { display: flex; align-items: baseline; gap: 24px; flex-wrap: wrap; max-width: 100%; } /* B6: 防内容撑开列宽 */
+  .sc-name-main { font-weight: 900; line-height: 1; color: #ffffff; letter-spacing: .04em; max-width: 100%; } /* B6: 防内容撑开列宽 */
   .t916 .sc-name-main { font-size: 112px; }
   .t45 .sc-name-main { font-size: 84px; }
   .sc-name-sub { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 500; letter-spacing: .22em; color: #00e5a0; }
@@ -5842,6 +5842,24 @@ function personaNo(persona) {
   return '00';
 }
 /* cover 裁切(html2canvas 不支持 object-fit:cover,按 max 缩放 + 定位实现;object-position 50% 6%) */
+/* B6: 标题不折行 — nowrap + 按容器宽度自动降字号;2/3 视觉阶段复用 */
+function fitText(el, minFs) {
+  if (!el || !el.textContent) return;
+  el.style.whiteSpace = 'nowrap';
+  /* B6: 基准用 .sc-info 列——name 元素与 name-row 都是 shrink-to-fit(flex min-width:auto),
+     只有 info 列宽度真正固定(4:5 下 444px),否则溢出列宽时 fitText 条件恒假 */
+  var host = el.closest ? (el.closest('.sc-info') || el.parentNode) : el.parentNode;
+  var baseW = host ? host.clientWidth : 0;
+  if (!baseW) return;
+  var fs = parseFloat(getComputedStyle(el).fontSize) || 84;
+  var min = minFs || 48;
+  el.style.fontSize = fs + 'px';
+  /* 留 16px 余量: html2canvas 克隆字体度量略宽于 DOM,恰好贴边会裁切 */
+  while (fs > min && el.scrollWidth > baseW - 16) {
+    fs -= 2;
+    el.style.fontSize = fs + 'px';
+  }
+}
 function coverFit(img, stage, posY) {
   var iw = img.naturalWidth || 1440, ih = img.naturalHeight || 2560;
   var sw = stage.clientWidth || 1080, sh = stage.clientHeight || 1000;
@@ -5878,7 +5896,8 @@ function bindShareCard(tpl, persona, match, ratio) {
   }
   tpl.querySelector('.sc-clan-pill').textContent = isEgg ? '' : (CLAN_MAP[persona.code.substr(0, 2)] || '');
   tpl.querySelector('.sc-name-main').textContent = persona.name || '';
-  tpl.querySelector('.sc-name-sub').textContent = (isEgg ? '' : persona.word);
+  fitText(tpl.querySelector('.sc-name-main'), 48); /* B6: 标题不折行,超宽自动降字号 */
+  tpl.querySelector('.sc-name-sub').textContent = '';
   /* 四维条:数值→宽度%;MAX/∞→100% 金;MIN→0% 红;高值绿低值红 */
   var data = PERSONA_STAT_BARS[persona.word];
   var stats = tpl.querySelector('.sc-stats');
