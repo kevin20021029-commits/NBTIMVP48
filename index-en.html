@@ -5815,7 +5815,7 @@ function bindShareCard(tpl, persona, match, ratio) {
   tpl.querySelector('.sc-clan-pill').textContent = isEgg ? '' : (CLAN_MAP[persona.code.substr(0, 2)] || '');
   tpl.querySelector('.sc-name-main').textContent = persona.name || '';
   fitText(tpl.querySelector('.sc-name-main'), 48); /* B6: 标题不折行,超宽自动降字号 */
-  tpl.querySelector('.sc-name-sub').textContent = (isEgg ? '' : persona.word);
+  tpl.querySelector('.sc-name-sub').textContent = ''; /* G3: en 版只显示 code+name, 不显示 word */
   tpl.querySelector('.sc-code').textContent = (isEgg ? '' : persona.code); /* G2: 人格代码(RGHC) */
   /* 四维条:数值→宽度%;MAX/∞→100% 金;MIN→0% 红;高值绿低值红 */
   var data = PERSONA_STAT_BARS[persona.word];
@@ -5921,7 +5921,8 @@ function checkShareCardText(tpl, persona, match, ratio, locale) {
   function txt(sel) { var el = tpl.querySelector(sel); return el ? el.textContent : ''; }
   var required = { '.sc-name-main': 'name', '.sc-match-num': 'match', '.sc-tagline': 'tagline', '.sc-version': 'version' };
   for (var sel in required) { if (String(txt(sel)).trim() === '') fail('empty', required[sel]); }
-  if (persona && persona.code) { if (String(txt('.sc-name-sub')).trim() === '') fail('empty', 'nameSub'); }
+  /* G3: en 版设计上不显示 word(name-sub 恒空); 仅非 en 语言检查 nameSub 必填 */
+  if (persona && persona.code && locale !== 'en') { if (String(txt('.sc-name-sub')).trim() === '') fail('empty', 'nameSub'); }
   var stats = tpl.querySelector('.sc-stats');
   if (stats && stats.style.display !== 'none') {
     var vals = stats.querySelectorAll('.sc-stat-val');

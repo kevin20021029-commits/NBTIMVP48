@@ -268,6 +268,8 @@
   .result-head .persona { font-size: 52px; font-weight: 800; margin: 10px 0 4px; letter-spacing: 0.02em; }
   .result-head .match { color: var(--accent-primary); font-size: 26px; font-weight: 800; }
   .result-code { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 800; letter-spacing: .1em; color: #00e5a0; } /* G2: 人格代码高亮 */
+  .result-word { color: var(--text-secondary); font-size: 14px; font-weight: 600; letter-spacing: .06em; } /* G3: 英文名 */
+  .p-en { color: var(--text-disabled); font-size: 11px; margin-left: 6px; letter-spacing: .5px; } /* G3: 英文名 */
   .egg-code { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 800; letter-spacing: .12em; color: #00e5a0;
     font-size: 22px; text-align: center; margin: -6px 0 12px; } /* G2: 彩蛋代码徽章 */
   .card {
@@ -4963,7 +4965,7 @@ function initHome() {
   var pb = document.getElementById('p-cards');
   pb.innerHTML = RESULTS.results.map(function(r) {
     return '<div class="p-card">' +
-      '<span class="p-code">' + r.code + '</span>' /* G2: 显示人格代码 */ +
+      '<span class="p-code">' + r.code + '</span><span class="p-en">' + r.word + '</span>' /* G2: 显示人格代码 */ +
       '<span class="p-name">' + r.name + '</span>' +
       '<span class="p-tag">' + r.tagline + '</span>' +
     '</div>';
@@ -5277,7 +5279,7 @@ function renderResult(persona, s) {
       '<div class="result-main">' +
         '<div class="result-head">' +
           charHtml +
-          '<div class="type-badge">经AI认证，你就是—— <span class="result-code">' + persona.code + '</span></div>' +
+          '<div class="type-badge">经AI认证，你就是—— <span class="result-code">' + persona.code + '</span> <span class="result-word">' + persona.word + '</span></div>' +
           '<div class="persona">' + persona.name + '</div>' +
           matchHtml +
         '</div>' +
@@ -6026,7 +6028,8 @@ function checkShareCardText(tpl, persona, match, ratio, locale) {
   function txt(sel) { var el = tpl.querySelector(sel); return el ? el.textContent : ''; }
   var required = { '.sc-name-main': 'name', '.sc-match-num': 'match', '.sc-tagline': 'tagline', '.sc-version': 'version' };
   for (var sel in required) { if (String(txt(sel)).trim() === '') fail('empty', required[sel]); }
-  if (persona && persona.code) { if (String(txt('.sc-name-sub')).trim() === '') fail('empty', 'nameSub'); }
+  /* G3: en 版设计上不显示 word(name-sub 恒空); 仅非 en 语言检查 nameSub 必填 */
+  if (persona && persona.code && locale !== 'en') { if (String(txt('.sc-name-sub')).trim() === '') fail('empty', 'nameSub'); }
   var stats = tpl.querySelector('.sc-stats');
   if (stats && stats.style.display !== 'none') {
     var vals = stats.querySelectorAll('.sc-stat-val');
