@@ -334,13 +334,12 @@
 
 
   /* ---- 分享卡 DOM 模板(离屏,html2canvas 导出 750x1200) ---- */
-      /* ============ 分享卡 9:16 / 4:5(html2canvas 兼容:只用 flex,不用 grid) ============ */
-    /* ============ 分享卡 2a 9:16 / 2b 4:5(设计稿;html2canvas 兼容:flex + 绝对定位,不用 grid) ============ */
+      /* ============ 分享卡 9:16(html2canvas 兼容:只用 flex,不用 grid) ============ */
+    /* ============ 分享卡 9:16(设计稿;html2canvas 兼容:flex + 绝对定位,不用 grid) ============ */
   .share-card-template { position: fixed; left: -9999px; top: 0; display: flex; flex-direction: column;
     box-sizing: border-box; background: radial-gradient(120% 70% at 50% 0%, #12241d 0%, #0a100d 48%, #070908 100%);
     overflow: hidden; font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif; }
   .share-card-template.t916 { width: 1080px; height: 1920px; border-radius: 40px; }
-  .share-card-template.t45 { width: 1080px; height: 1350px; border-radius: 40px; }
   .share-card-template .sc-topbar { position: absolute; top: 0; left: 0; width: 100%; height: 6px;
     background: linear-gradient(90deg, #c9a227, #00e5a0 45%, #00e5a0 55%, #c9a227); z-index: 3; }
   /* 斜向光带 */
@@ -350,123 +349,84 @@
   /* 徽章条 */
   .sc-badge-row { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
   .t916 .sc-badge-row { padding: 64px 52px 0; }
-  .t45 .sc-badge-row { padding: 44px 46px 0; }
   .sc-badge { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 700; letter-spacing: .12em;
     color: #0a0b0a; background: linear-gradient(135deg, #f4dd8c, #c9a227); border-radius: 5px; }
   .t916 .sc-badge { font-size: 32px; padding: 5px 16px; }
-  .t45 .sc-badge { font-size: 28px; padding: 4px 14px; }
   .sc-badge-label { font-family: Consolas, 'Courier New', monospace; letter-spacing: .14em; color: #c9a227; }
   .t916 .sc-badge-label { font-size: 22px; }
-  .t45 .sc-badge-label { font-size: 20px; }
   .sc-badge-no { margin-left: auto; font-family: 'Arial Narrow', Arial, sans-serif; letter-spacing: .16em; color: #5d6b64; }
   .t916 .sc-badge-no { font-size: 32px; }
-  .t45 .sc-badge-no { font-size: 28px; }
   /* 主体:2a 纵向 / 2b 横向 */
   .sc-body { display: flex; flex-shrink: 0; }
   .t916 .sc-body { flex-direction: column; gap: 30px; padding: 30px 52px 0; }
-  .t45 .sc-body { flex-direction: row; gap: 24px; padding: 20px 46px 0; align-items: stretch; }
   /* 插画区(cover 裁切,html2canvas 兼容:显式尺寸 + overflow hidden) */
   .sc-char-stage { position: relative; overflow: hidden; background: #0d0f0e; box-shadow: inset 0 0 0 1px rgba(0,229,160,.22); }
   .t916 .sc-char-stage { flex: 0 0 1000px; border-radius: 28px; }
-  .t45 .sc-char-stage { flex: 0 0 520px; height: 600px; border-radius: 24px; }
   .share-card-character { display: block; position: absolute; }
   .sc-stage-grad { position: absolute; inset: 0; pointer-events: none; }
   .t916 .sc-stage-grad { background: linear-gradient(180deg, rgba(7,9,8,.35) 0%, transparent 20%, transparent 64%, rgba(7,9,8,.92) 100%); }
-  .t45 .sc-stage-grad { background: linear-gradient(180deg, rgba(7,9,8,.3) 0%, transparent 22%, transparent 66%, rgba(7,9,8,.9) 100%); }
   /* 匹配度(2a 叠插画左下 / 2b 信息列内) */
   .sc-match-block { display: flex; align-items: flex-end; gap: 20px; }
   .t916 .sc-stage-match { position: absolute; left: 30px; bottom: 28px; }
   .t916 .sc-match-info { display: none; }
-  .t45 .sc-stage-match { display: none; }
   .sc-match-num { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 600; line-height: .8; color: #00e5a0; }
   .t916 .sc-match-num { font-size: 104px; }
-  .t45 .sc-match-num { font-size: 86px; }
   .t916 .sc-match-num .sc-match-pct { font-size: 52px; }
-  .t45 .sc-match-num .sc-match-pct { font-size: 44px; }
   .sc-match-label { font-family: Consolas, 'Courier New', monospace; letter-spacing: .2em; color: #9aa49d; }
   .t916 .sc-match-label { font-size: 22px; padding-bottom: 10px; }
-  .t45 .sc-match-label { font-size: 20px; padding-bottom: 8px; }
   /* 派系胶囊(2a 右上 / 2b 左下) */
   .sc-clan-pill { position: absolute; font-family: Consolas, 'Courier New', monospace; letter-spacing: .14em;
     color: rgba(255,255,255,.72); border: 1px solid rgba(255,255,255,.28); border-radius: 999px; }
   .t916 .sc-clan-pill { right: 28px; top: 28px; font-size: 21px; padding: 7px 16px; }
-  .t45 .sc-clan-pill { left: 22px; bottom: 20px; font-size: 19px; padding: 6px 14px; }
   .sc-clan-pill:empty { display: none; }
   /* 信息列:名字 + 匹配 + 四维条 */
   .t916 .sc-info { display: flex; flex-direction: column; gap: 30px; min-width: 0; } /* B6: 防内容撑开列宽 */
-  .t45 .sc-info { flex: 1; display: flex; flex-direction: column; gap: 20px; justify-content: center; min-width: 0; } /* B6: 防内容撑开列宽 */
   .sc-name-row { display: flex; align-items: baseline; gap: 24px; flex-wrap: wrap; max-width: 100%; } /* B6: 防内容撑开列宽 */
   .sc-name-main { font-weight: 900; line-height: 1; color: #ffffff; letter-spacing: .04em; max-width: 100%; } /* B6: 防内容撑开列宽 */
   .t916 .sc-name-main { font-size: 112px; }
-  .t45 .sc-name-main { font-size: 84px; }
   .sc-name-sub { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 500; letter-spacing: .22em; color: #00e5a0; }
   .t916 .sc-name-sub { font-size: 42px; }
-  .t45 .sc-name-sub { font-size: 32px; }
   .sc-name-sub:empty { display: none; }
   /* 四维条 */
   .sc-stats { display: flex; }
   .t916 .sc-stats { flex-wrap: wrap; gap: 18px 44px; }
-  .t45 .sc-stats { flex-direction: column; gap: 14px; }
   .sc-stat { display: flex; align-items: center; gap: 16px; }
   .t916 .sc-stat { width: calc(50% - 22px); }
   .sc-stat-label { color: #9aa49d; flex-shrink: 0; display: flex; align-items: center;
     line-height: 1.25; } /* B5: 固定高度容器, 两行标签也保持四格基线一致 */
   .t916 .sc-stat-label { width: 142px; height: 64px; font-size: 25px; } /* 2 行 x 25 x 1.25 */
-  .t45 .sc-stat-label { width: 118px; height: 58px; font-size: 23px; } /* 2 行 x 23 x 1.25 */
   .sc-stat-bar { flex: 1; border-radius: 5px; background: rgba(255,255,255,.10); overflow: hidden; }
   .t916 .sc-stat-bar { height: 9px; }
-  .t45 .sc-stat-bar { height: 8px; border-radius: 4px; }
   .sc-stat-fill { height: 100%; border-radius: inherit; background: #00e5a0; }
   .sc-stat-fill.low { background: #e0533f; }
   .sc-stat-fill.gold { background: linear-gradient(90deg, #c9a227, #f4dd8c); }
   .sc-stat-val { font-family: 'Arial Narrow', Arial, sans-serif; color: #e8efea; width: 62px; text-align: right; flex-shrink: 0; }
   .t916 .sc-stat-val { font-size: 28px; }
-  .t45 .sc-stat-val { font-size: 26px; width: 58px; }
   .sc-stat-val.gold { color: #f4dd8c; }
   /* tagline 灰底盒(设计稿) */
   .sc-tagbox { display: flex; flex-direction: column; gap: 14px; padding: 28px 30px; border-radius: 22px;
     background: rgba(255,255,255,.045); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); flex-shrink: 0; }
   .t916 .sc-tagbox { margin: 0 52px; }
-  .t45 .sc-tagbox { margin: 0 46px; padding: 24px 26px; border-radius: 20px; gap: 12px; }
   .sc-tagline { font-size: 36px; font-weight: 700; line-height: 1.25; color: #ffffff; overflow: hidden; } /* E3 */
-  .t45 .sc-tagline { font-size: 33px; }
   .sc-social { font-size: 27px; line-height: 1.36; color: #98a29b; white-space: pre-line; } /* E3 */
-  .t45 .sc-social { font-size: 25px; }
   .sc-social .sc-num { color: #00e5a0; font-family: 'Arial Narrow', Arial, sans-serif; }
   /* 页脚 */
   .sc-footer { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px;
     border-top: 1px solid rgba(255,255,255,.09); flex-shrink: 0; }
   .t916 .sc-footer { padding: 20px 52px 12px; } /* E3 */
-  .t45 .sc-footer { padding: 18px 46px 24px; gap: 28px; } /* E3 */
   .sc-foot-left { display: flex; flex-direction: column; gap: 12px; flex: 1 1 auto; min-width: 0; } /* E3: 占满可用宽, 防 shrink-to-fit 文字贴边被克隆度量裁切 */
-  .t45 .sc-foot-left { gap: 10px; }
   .sc-logo { height: 28px; width: auto; opacity: .9; align-self: flex-start; } /* E3: 防 foot-left stretch 拉宽变形 */
-  .t45 .sc-logo { height: 26px; } /* E3 */
   .sc-version { font-family: Consolas, 'Courier New', monospace; letter-spacing: .1em; color: #6d766f; }
   .t916 .sc-version { font-size: 16px; } /* E3 */
-  .t45 .sc-version { font-size: 17px; } /* E3 */
   .sc-disclaimer { font-family: Consolas, 'Courier New', monospace; color: #6a736c; }
   .t916 .sc-disclaimer { font-size: 15px; } /* E3: 法务文案右侧留余量, 防克隆字体度量裁切 */
-  .t45 .sc-disclaimer { font-size: 15px; } /* E3 */
   .t916 .sc-disclaimer div + div { margin-top: 4px; }
   .sc-foot-right { display: flex; align-items: center; gap: 18px; }
-  .t45 .sc-foot-right { gap: 16px; }
   .sc-claim { text-align: right; font-size: 18px; line-height: 1.4; color: #9aa49d; display: flex; flex-direction: column; } /* E3 */
-  .t45 .sc-claim { font-size: 19px; } /* E3 */
   .sc-claim-2 { color: #00e5a0; font-weight: 700; }
   .sc-qrcode { padding: 10px; background: #fff; border-radius: 14px; flex-shrink: 0; }
   .t916 .sc-qrcode img { width: 128px; height: 128px; display: block; }
-  .t45 .sc-qrcode { padding: 9px; border-radius: 12px; }
-  .t45 .sc-qrcode img { width: 112px; height: 112px; display: block; }
   /* 尺寸 chip + 预览弹层 */
-  .share-ratio-row { display: flex; justify-content: center; gap: 12px; margin: 0 0 14px; }
-  .share-ratio-chip { font-size: 13px; font-weight: 800; padding: 8px 18px; border-radius: 999px;
-    border: 1.5px solid var(--border-subtle); background: var(--bg-card); color: var(--text-secondary);
-    cursor: pointer; letter-spacing: 1px; transition: border-color .2s, background .2s, color .2s; }
-  .share-ratio-chip:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
-  .share-ratio-chip.active { background: var(--accent-primary); color: var(--bg-primary);
-    border-color: var(--accent-primary); border-radius: 8px; font-weight: 900; }
-  .share-ratio-chip.busy::after { content: '…'; }
   .share-preview-imgwrap { position: relative; flex: 1 1 auto; min-height: 0; width: 100%;
     display: flex; align-items: center; justify-content: center; } /* B4: 卡片区可收缩,为提示行让位 */
   .share-preview-spin { display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
@@ -1053,7 +1013,7 @@ window.addEventListener('hashchange', syncLangLinks);
 </div>
 <div id="ticker"><div class="track" id="ticker-track"></div></div>
 
-      <!-- 分享卡 DOM 模板:2a 9:16(1080×1920,默认) + 2b 4:5(1080×1350);设计稿 NBTI 分享卡.dc.html -->
+      <!-- 分享卡 DOM 模板:9:16(1080×1920);设计稿 NBTI 分享卡.dc.html -->
   <div class="share-card-template t916" id="shareCardTemplate916">
     <div class="sc-topbar"></div>
     <div class="sc-badge-row">
@@ -1105,61 +1065,10 @@ window.addEventListener('hashchange', syncLangLinks);
     </div>
   </div>
 
-  <div class="share-card-template t45" id="shareCardTemplate45">
-    <div class="sc-topbar"></div>
-    <div class="sc-badge-row">
-      <span class="sc-badge"></span>
-      <span class="sc-badge-label"></span>
-      <span class="sc-badge-no"></span>
-    </div>
-    <div class="sc-body">
-      <div class="sc-char-stage">
-        <img class="share-card-character" alt="" crossorigin="anonymous">
-        <div class="sc-stage-grad"></div>
-        <span class="sc-clan-pill"></span>
-      </div>
-      <div class="sc-info">
-        <div class="sc-name-row">
-          <span class="sc-name-main"></span>
-          <span class="sc-name-sub"></span>
-        </div>
-        <div class="sc-match-info sc-match-block">
-          <span class="sc-match-num"></span>
-          <span class="sc-match-label"></span>
-        </div>
-        <div class="sc-stats">
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-        </div>
-      </div>
-    </div>
-    <div class="sc-tagbox">
-      <div class="sc-tagline"></div>
-      <div class="sc-social"></div>
-    </div>
-    <div class="sc-footer">
-      <div class="sc-foot-left">
-        <img class="sc-logo" alt="">
-        <div class="sc-version"></div>
-        <div class="sc-disclaimer"><div></div><div></div></div>
-      </div>
-      <div class="sc-foot-right">
-        <div class="sc-claim"><span class="sc-claim-1"></span><span class="sc-claim-2"></span></div>
-        <div class="sc-qrcode"><img alt="NeuralFin QR code" crossorigin="anonymous"></div>
-      </div>
-    </div>
-  </div>
-
   <div class="share-preview-modal" id="sharePreviewModal">
     <div class="share-preview-overlay" onclick="closeSharePreview()"></div>
     <div class="share-preview-content">
       <button class="share-preview-close" onclick="closeSharePreview()">✕</button>
-      <div class="share-ratio-row" role="group" aria-label="Share size">
-        <button type="button" class="share-ratio-chip" data-ratio="9:16" aria-pressed="true" onclick="onRatioChipClick('9:16')">Story 9:16</button>
-        <button type="button" class="share-ratio-chip" data-ratio="4:5" aria-pressed="false" onclick="onRatioChipClick('4:5')">Feed 4:5</button>
-      </div>
       <div class="share-preview-imgwrap">
         <img class="share-preview-image" id="sharePreviewImg" alt="Share card preview">
         <div class="share-preview-spin" id="sharePreviewSpin">Generating…</div>
@@ -5326,7 +5235,7 @@ function renderEgg(name, note, word) {
       '<button class="home-link" onclick="goHome()">Back to home</button>' +
     '</div>';
   lastShareReq = { persona: { word: word, name: name, tagline: note }, match: 100 };
-  shareCardUrls = {}; shareCardRatioReady = { '9:16': false, '4:5': false }; /* 新结果:旧分享卡缓存失效 */
+  shareCardUrls = {}; shareCardRatioReady = { '9:16': false } /* G1 */; /* 新结果:旧分享卡缓存失效 */
   setResultHash('#result=' + eggHashByWord(word));
   saveResultToSession({ v: 1, isEgg: true, eggKey: eggHashByWord(word), eggName: name, eggNote: note, eggWord: word });
   syncLangLinks();
@@ -5385,7 +5294,7 @@ function renderResult(persona, s) {
     '</div>';
   if (hasMatch) { lastShareReq = { persona: persona, match: s.match }; } /* 降级时不设 lastShareReq,防止以 0% 生成分享卡 */
   warmCardAssets(persona); /* 结果页渲染完成即预热:点击生成时零请求 */
-  shareCardUrls = {}; shareCardRatioReady = { '9:16': false, '4:5': false }; /* 新结果:旧分享卡缓存失效 */
+  shareCardUrls = {}; shareCardRatioReady = { '9:16': false } /* G1 */; /* 新结果:旧分享卡缓存失效 */
   if (hasMatch) { setResultHash('#result=' + persona.code + '-' + s.match); saveResultToSession({ v: 1, code: persona.code, match: s.match, edges: s.edges || [], isEgg: false }); syncLangLinks(); }
   track('deep_dive_preview_view', { personaCode: lastPersonaCode });
 }
@@ -5589,14 +5498,14 @@ function fitShareChar(tpl) {
   if (!char || char.style.display === 'none') return;
   var wrap = tpl.querySelector('.share-card-charwrap');
   var availW = wrap.clientWidth || 1080;
-  var availH = wrap.clientHeight || (tpl.className.indexOf('t45') > -1 ? 378 : 634);
+  var availH = wrap.clientHeight || 634; /* G1 */
   var ratio = (char.naturalHeight || 2560) / (char.naturalWidth || 1440);
   var w = Math.min(availW, availH / ratio);
   char.style.width = Math.round(w) + 'px';
   char.style.height = Math.round(w * ratio) + 'px';
 }
 /* ===== 分享预览弹窗 DOM 契约(防回归:7 个关键节点缺一即报警) ===== */
-var SHARE_DOM_IDS = ['sharePreviewModal', 'sharePreviewImg', 'sharePreviewSpin', 'sharePreviewDl', 'sharePreviewHint', 'shareCardTemplate916', 'shareCardTemplate45'];
+var SHARE_DOM_IDS = ['sharePreviewModal', 'sharePreviewImg', 'sharePreviewSpin', 'sharePreviewDl', 'sharePreviewHint', 'shareCardTemplate916'] /* G1: 4:5 Feed 已删除 */;
 function safeEl(id) { return document.getElementById(id); }
 function safeFail(id) { console.error('[share] 缺少节点 #' + id + ',分享卡 DOM 契约被破坏'); return false; }
 function assertShareDom() {
@@ -5827,19 +5736,15 @@ function waitForImagesLoaded(container) {
 }
 var shareCardRatio = '9:16'; /* 当前选中尺寸(下载/文件名用) */
 var shareCardUrls = {};      /* 两尺寸已生成图:shareCardUrls[ratio] = dataURL */
-var shareCardRatioReady = { '9:16': false, '4:5': false }; /* 该尺寸图是否已生成 */
+var shareCardRatioReady = { '9:16': false } /* G1 */; /* 该尺寸图是否已生成 */
 var RARITY_CFG = { base: 'SSR', label: 'RARITY · 1 OF 16', egg: 'HIDDEN' };
 var SHARE_VER_LINE = 'Finance NBTI v1.0 · neuralfin.ai';
 var SHARE_DISCLAIMER = ['This card is not investment advice · For entertainment only', 'It contains personality advice. Non-negotiable.'];
 var SHARE_CLAIM = ['Scan to claim', 'your own card'];
 var SHARE_LOWMEM = 'Low memory — saved in Feed size';
 var SHARE_LOADING = 'Generating…';
-function getShareRatio() {
-  try { return localStorage.getItem('nbti_share_ratio') === '4:5' ? '4:5' : '9:16'; } catch (e) { return '9:16'; }
-}
-function setShareRatio(r) {
-  try { localStorage.setItem('nbti_share_ratio', r === '4:5' ? '4:5' : '9:16'); } catch (e) {}
-}
+function getShareRatio() { return '9:16'; } /* G1: 4:5 Feed 已删除 */
+function setShareRatio() {} /* G1: 4:5 Feed 已删除 */
 function personaNo(persona) {
   for (var i = 0; i < RESULTS.results.length; i++) {
     if (RESULTS.results[i].code === persona.code) { var n = i + 1; return ('0' + n).slice(-2); }
@@ -5852,7 +5757,7 @@ function fitText(el, minFs) {
   if (!el || !el.textContent) return;
   el.style.whiteSpace = 'nowrap';
   /* B6: 基准用 .sc-info 列——name 元素与 name-row 都是 shrink-to-fit(flex min-width:auto),
-     只有 info 列宽度真正固定(4:5 下 444px),否则溢出列宽时 fitText 条件恒假 */
+     只有 info 列宽度真正固定(444px),否则溢出列宽时 fitText 条件恒假 */
   var host = el.closest ? (el.closest('.sc-info') || el.parentNode) : el.parentNode;
   var baseW = host ? host.clientWidth : 0;
   if (!baseW) return;
@@ -5978,7 +5883,7 @@ function bindShareCard(tpl, persona, match, ratio) {
 }
 /* tagline 自动缩字号:3 行起步,>40px 递减,仍溢出则容 4 行 */
 function fitTagline(el, ratio) {
-  var fs = (ratio === '4:5') ? 33 : 36;
+  var fs = 36; /* G1 */
   var lines = 3;
   el.style.fontSize = fs + 'px';
   el.style.maxHeight = (lines * fs * 1.45) + 'px';
@@ -6033,7 +5938,7 @@ function generateShareCard(persona, match, ratio, scale, depth, onPhase) {
   scale = scale || 2;
   depth = depth || 0;
   var state = 'idle'; /* idle → preparing → rendering → done | error | timeout;任何分支 finally 由调用方复位锁 */
-  var tplId = (ratio === '4:5' ? 'shareCardTemplate45' : 'shareCardTemplate916');
+  var tplId = 'shareCardTemplate916'; /* G1: 仅 9:16 */
   var tpl = safeEl(tplId);
   if (!tpl) { console.error('[shareCard] 模板缺失 #' + tplId); return Promise.resolve(false); }
   /* 阶段事件:驱动进度文案(状态机优先,wall-clock 只做兜底) */
@@ -6069,7 +5974,7 @@ function generateShareCard(persona, match, ratio, scale, depth, onPhase) {
     setPhase('rendering:' + scale);
     /* scale 由降级链传入:2 → 1.5 → 服务端;禁止 1。rendering 5s 超时(总降级链 ≤15s) */
     return withTimeout(html2canvas(tpl, { scale: scale, backgroundColor: '#0A0A0A', width: 1080,
-      height: (ratio === '4:5' ? 1350 : 1920), useCORS: true,
+      height: 1920, useCORS: true, /* G1 */
       onclone: function(doc) {
         /* 克隆体只保留卡片渲染所需:移除统计/外链脚本与样式、非 base64 图片,防 iframe 内重新加载挂起 */
         var els = doc.querySelectorAll('script, link[rel="stylesheet"][href^="http"], iframe');
@@ -6172,31 +6077,8 @@ function generateShareFlow() {
     openSharePreviewError('Generation failed after multiple attempts. Tap “Retry” or “Use fallback method”.');
   }
 }
-function renderRatioChips() {
-  var sel = getShareRatio();
-  var chips = document.querySelectorAll('.share-ratio-chip');
-  for (var i = 0; i < chips.length; i++) {
-    var on = chips[i].getAttribute('data-ratio') === sel;
-    chips[i].setAttribute('aria-pressed', on ? 'true' : 'false');
-    chips[i].className = 'share-ratio-chip' + (on ? ' active' : '');
-  }
-  updatePreview();
-}
-function onRatioChipClick(r) {
-  if (shareGenerating && !shareCardUrls[r]) { toast(SHARE_LOADING); }
-  var prevRatio = getShareRatio();
-  if (prevRatio !== r) track('card_ratio_switch', { from: prevRatio, to: r, locale: CURRENT_LANG });
-  setShareRatio(r);
-  renderRatioChips();
-  /* 未缓存且空闲 → 后台补渲染该尺寸(懒加载,结果缓存内存,同一结果不重复渲染) */
-  if (!shareCardUrls[r] && !shareGenerating && lastShareReq) {
-    shareGenerating = true;
-    generateShareCard(lastShareReq.persona, lastShareReq.match, r, 2, 0).then(function() {
-      shareGenerating = false;
-      updatePreview();
-    });
-  }
-}
+
+
 function updatePreview() {
   var sel = getShareRatio();
   var img = safeEl('sharePreviewImg');
@@ -6222,7 +6104,6 @@ function openSharePreview() {
   if (isWechat) { hint.textContent = '👆 Press and hold the image above, then pick “Send to friend” or “Save image”'; track('share_card_longpress_shown', { ratio: getShareRatio(), locale: CURRENT_LANG }); }
   else if (isMobileDevice()) { hint.textContent = 'Press and hold to save the image, or tap the button below to download'; }
   else { hint.textContent = 'Tap below to download the image — scanning on your phone makes for a better share'; }
-  renderRatioChips();
   m.classList.add('show'); m.classList.remove('hide');
   document.body.style.overflow = 'hidden'; /* B3 弹窗打开锁 body 滚动 */
   var dl = safeEl('sharePreviewDl'); if (dl) dl.style.display = '';
@@ -6260,7 +6141,7 @@ function downloadCard() {
   if (isWechat) { track('share_card_download', { ratio: ratio, persona: dlPersona, method: 'longpress', locale: CURRENT_LANG }); openSharePreview(); return; }
   var a = document.createElement('a');
   var word = (lastShareReq && lastShareReq.persona.word) || 'NBTI';
-  a.download = 'NBTI_' + word + '_' + (ratio === '4:5' ? '4x5' : '9x16') + '.png';
+  a.download = 'NBTI_' + word + '_9x16.png'; /* G1 */
   a.href = url;
   a.click();
   track('share_card_download', { ratio: ratio, persona: dlPersona, method: 'download', locale: CURRENT_LANG });

@@ -36,12 +36,10 @@ test.describe('分享卡文本层断言(B7)', () => {
       await page.waitForFunction(() => (window as any).RESULTS && (window as any).RESULTS.results.length > 0);
       const r = await page.evaluate(async () => {
         const out: any[] = [];
-        for (const ratio of ['9:16', '4:5']) {
-          const p = (window as any).RESULTS.results[0];
-          const tpl = document.getElementById(ratio === '4:5' ? 'shareCardTemplate45' : 'shareCardTemplate916')!;
-          (window as any).bindShareCard(tpl, p, 87, ratio);
-          out.push({ ratio, fails: (window as any).checkShareCardText(tpl, p, 87, ratio, (window as any).CURRENT_LANG) });
-        }
+        const p = (window as any).RESULTS.results[0];
+        const tpl = document.getElementById('shareCardTemplate916')!;
+        (window as any).bindShareCard(tpl, p, 87, '9:16');
+        out.push({ ratio: '9:16', fails: (window as any).checkShareCardText(tpl, p, 87, '9:16', (window as any).CURRENT_LANG) });
         return out;
       });
       for (const x of r) {
@@ -56,9 +54,9 @@ test.describe('分享卡文本层断言(B7)', () => {
     await page.waitForFunction(() => (window as any).RESULTS && (window as any).RESULTS.results.length > 0);
     const r = await page.evaluate(async () => {
       const W = window as any;
-      const tpl = document.getElementById('shareCardTemplate45')!;
+      const tpl = document.getElementById('shareCardTemplate916')!;
       const p = W.RESULTS.results[0];
-      W.bindShareCard(tpl, p, 87, '4:5');
+      W.bindShareCard(tpl, p, 87, '9:16');
       const t = tpl.querySelector('.sc-name-main') as HTMLElement;
       const mn = tpl.querySelector('.sc-match-num') as HTMLElement;
       const origT = t.textContent;
@@ -67,9 +65,9 @@ test.describe('分享卡文本层断言(B7)', () => {
       const origTrack = W.track;
       W.track = (name: string, payload: any) => events.push({ name, payload });
       t.textContent = 'x\\ny';
-      const r1 = W.checkShareCardText(tpl, p, 87, '4:5', W.CURRENT_LANG);
+      const r1 = W.checkShareCardText(tpl, p, 87, '9:16', W.CURRENT_LANG);
       mn.innerHTML = '101<span class="sc-match-pct">%</span>';
-      const r2 = W.checkShareCardText(tpl, p, 87, '4:5', W.CURRENT_LANG);
+      const r2 = W.checkShareCardText(tpl, p, 87, '9:16', W.CURRENT_LANG);
       t.textContent = origT;
       mn.innerHTML = origMn;
       W.track = origTrack;
@@ -79,7 +77,7 @@ test.describe('分享卡文本层断言(B7)', () => {
     expect(r.r2.join(',')).toContain('match-range|match'); // 匹配度越界命中
     const evt = r.events.find((e) => e.name === 'share_card_text_check_failed');
     expect(evt, '应上报 share_card_text_check_failed').toBeTruthy();
-    expect(evt.payload.ratio).toBe('4:5');
+    expect(evt.payload.ratio).toBe('9:16');
     for (const key of ['failedRule', 'field', 'persona', 'locale', 'uaBucket']) {
       expect(typeof evt.payload[key], `payload.${key} 缺失`).toBe('string');
     }
@@ -96,21 +94,19 @@ test.describe('内容断言回归(E3: 16 人格 × 2 比例 + 溢出断言)', ()
         const W = window as any;
         const out: any[] = [];
         for (const p of W.RESULTS.results) {
-          for (const ratio of ['9:16', '4:5']) {
-            let ok = true, err = '';
-            try {
-              await W.generateShareCard(p, 87, ratio, 2, 0);
-            } catch (e: any) {
-              ok = false;
-              err = String(e.message || e).slice(0, 80);
-            }
-            out.push({ word: p.word, ratio, ok, err });
+          let ok = true, err = '';
+          try {
+            await W.generateShareCard(p, 87, '9:16', 2, 0);
+          } catch (e: any) {
+            ok = false;
+            err = String(e.message || e).slice(0, 80);
           }
+          out.push({ word: p.word, ratio: '9:16', ok, err });
         }
         return out;
       });
       for (const x of r) {
-        expect(x.ok, `${file} ${x.word} ${x.ratio} 失败: ${x.err}`).toBe(true);
+        expect(x.ok, `${file} ${x.word} 失败: ${x.err}`).toBe(true);
       }
     });
   }

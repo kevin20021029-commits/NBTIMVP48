@@ -22,7 +22,6 @@ const REQUIRED_IDS = [
   'sharePreviewDl', // 下载按钮
   'sharePreviewHint', // 提示文案
   'shareCardTemplate916', // 9:16 分享卡模板
-  'shareCardTemplate45', // 4:5 分享卡模板
   'confirmModal', // 确认弹层容器(E2-P0: 07d7f99 误删后恢复)
   'confirmTitle', // 确认弹层标题
   'confirmDesc', // 确认弹层描述
