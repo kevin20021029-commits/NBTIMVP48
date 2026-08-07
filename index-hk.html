@@ -337,49 +337,120 @@
 
 
   /* ---- 分享卡 DOM 模板(离屏,html2canvas 导出 750x1200) ---- */
-    .share-card-template { position: fixed; left: -9999px; top: 0; width: 750px; min-height: 1250px;
-    display: flex; flex-direction: column; padding: 16px 44px 0; box-sizing: border-box;
-    background: var(--bg-primary);
-    font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
-  /* 背景:角色位置光晕 + 双角微光,总透明度 ≤8% */
+      /* ============ 分享卡 9:16 / 4:5(html2canvas 兼容:只用 flex,不用 grid) ============ */
+  .share-card-template { position: fixed; left: -9999px; top: 0; display: flex; flex-direction: column;
+    box-sizing: border-box; background: #0A0A0A; overflow: hidden; }
+  .share-card-template.t916 { width: 1080px; height: 1920px; padding: 80px 64px 48px; }
+  .share-card-template.t45 { width: 1080px; height: 1350px; padding: 56px 64px 40px; }
   .share-card-bg { position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 0; background:
     radial-gradient(ellipse 560px 500px at 50% 30%, var(--accent-08), transparent 70%),
-    radial-gradient(ellipse 420px 340px at 92% 4%, var(--accent-08), transparent 70%),
-    radial-gradient(ellipse 380px 300px at 4% 98%, var(--accent-08), transparent 70%),
+    radial-gradient(ellipse 420px 380px at 82% 78%, rgba(145,201,255,.05), transparent 70%),
     var(--bg-primary); }
-  /* 顶部品牌区(Logo 与角色间距约 68px) */
-  .share-card-topbar { position: relative; z-index: 1; display: flex; align-items: center;
-    gap: 12px; margin-bottom: 12px; }
-  .share-card-logo { width: auto; height: 34px; border-radius: 0; }
-  .share-card-topname { font-size: 22px; font-weight: 700; color: var(--text-secondary); letter-spacing: 1px; }
-  /* 角色图:flex 区吸收剩余空间,JS 按原始比例精算显式尺寸(防 html2canvas 变形) */
-  .share-card-charwrap { position: relative; z-index: 1; flex: 1 1 auto; min-height: 580px;
-    display: flex; align-items: center; justify-content: center; }
-  .share-card-character { max-width: 88%; max-height: 100%; width: auto; height: auto;
-    object-fit: contain; }
-  /* 人格名称区(角色底部间距 36px) */
-  .share-card-word { position: relative; z-index: 1; text-align: center;
-    font-size: 66px; font-weight: 900; letter-spacing: 0.1em; text-indent: 0.1em;
-    color: var(--accent-primary); margin-top: 36px; }
-  .share-card-namebar { position: relative; z-index: 1; display: flex; align-items: center;
-    justify-content: center; gap: 28px; margin-top: 18px; }
-  .share-card-title-cn { font-size: 48px; font-weight: 800; letter-spacing: 2px; color: var(--text-primary); }
-  .share-card-match { width: 84px; height: 84px; flex-shrink: 0; }
-  /* tagline / 社交钩子:独立卡片容器分隔 */
-  .sc-card { position: relative; z-index: 1; background: var(--bg-card);
-    border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px 18px; }
-  .share-card-tagline { margin-top: 36px; text-align: center; font-size: 26px; font-weight: 600;
-    line-height: 1.7; color: var(--text-secondary); }
-  .share-card-social-proof { margin-top: 20px; text-align: center; font-size: 22px;
-    line-height: 1.65; color: var(--text-secondary); }
-  /* 底部品牌 + 二维码:flex 吸底,内容变长时被自然推下,不重叠 */
-  .share-card-footer { position: relative; z-index: 1; margin-top: auto; padding: 48px 0 56px;
-    display: flex; justify-content: space-between; align-items: flex-end; }
-  .share-card-brand { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700; color: var(--text-disabled); }
-  .share-card-brand-logo { width: auto; height: 26px; border-radius: 0; }
-  .share-card-qrcode { width: 150px; height: 150px; background: #fff; border-radius: 16px;
-    padding: 9px; box-sizing: border-box; }
-  .share-card-qrcode img { width: 100%; height: 100%; display: block; }
+  /* 徽章条:稀有度(可配置,待议) + NO.xx/16 */
+  .sc-badge-row { position: relative; z-index: 1; display: flex; align-items: center; gap: 24px; }
+  .t916 .sc-badge-row { margin-bottom: 28px; }
+  .t45 .sc-badge-row { margin-bottom: 16px; }
+  .sc-badge { font-weight: 900; color: var(--accent-primary); letter-spacing: 4px;
+    background: var(--accent-dim); border: 2px solid var(--accent-35); border-radius: 999px; }
+  .t916 .sc-badge { font-size: 34px; padding: 12px 30px; }
+  .t45 .sc-badge { font-size: 26px; padding: 8px 22px; }
+  .sc-badge-label { color: var(--text-secondary); letter-spacing: 3px; }
+  .t916 .sc-badge-label { font-size: 28px; }
+  .t45 .sc-badge-label { font-size: 22px; }
+  .sc-badge-no { margin-left: auto; color: var(--text-disabled); letter-spacing: 2px; }
+  .t916 .sc-badge-no { font-size: 26px; }
+  .t45 .sc-badge-no { font-size: 20px; }
+  /* 角色插画:9:16 约 33%(flex 可收缩),4:5 约 28%;不裁切 */
+  .share-card-charwrap { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center;
+    flex: 1 1 auto; min-height: 0; }
+  .t916 .share-card-charwrap { max-height: 634px; }
+  .t45 .share-card-charwrap { max-height: 378px; }
+  .share-card-character { max-width: 88%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+  /* 固定内容区不参与 flex 压缩:超额高度全部由 charwrap(flex:1 1 auto)吸收,
+     否则 fitTagline 会因外部压缩误判溢出而过度缩字号 */
+  .sc-badge-row, .sc-name-block, .sc-stat-bars, .sc-tagline, .sc-social, .sc-qr-row, .sc-disclaimer { flex-shrink: 0; }
+  /* 名称区:9:16 派系+匹配环一行,名字独立两行;4:5 横向并排 */
+  .sc-name-block { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; }
+  .t916 .sc-name-block { margin-top: 36px; }
+  .t45 .sc-name-block { margin-top: 16px; }
+  .sc-clan { font-weight: 800; color: var(--text-primary); letter-spacing: 3px; }
+  .t916 .sc-clan { order: 1; width: 50%; font-size: 34px; text-align: left; }
+  .t916 .sc-match { order: 2; width: 50%; display: flex; justify-content: flex-end; }
+  .t45 .sc-clan { order: 1; font-size: 26px; }
+  .t45 .sc-name-main { order: 2; font-size: 60px; margin: 0 28px; }
+  .t45 .sc-match { order: 3; }
+  .sc-name-main { font-weight: 900; color: var(--text-primary); text-align: center; }
+  .t916 .sc-name-main { order: 3; width: 100%; font-size: 96px; letter-spacing: 6px; margin-top: 22px; }
+  .sc-name-sub { font-weight: 700; color: var(--text-secondary); text-align: center; letter-spacing: 10px; text-indent: 10px; }
+  .t916 .sc-name-sub { order: 4; width: 100%; font-size: 38px; margin-top: 10px; }
+  .t45 .sc-name-sub { order: 4; width: 100%; font-size: 24px; letter-spacing: 6px; text-indent: 6px; margin-top: 6px; }
+  .sc-match { width: 120px; height: 120px; flex-shrink: 0; }
+  .t45 .sc-match { width: 96px; height: 96px; }
+  .sc-match .mr-num { font-size: 28px; }
+  .sc-match .mr-label { font-size: 20px; }
+  .t45 .sc-match .mr-num { font-size: 22px; }
+  .t45 .sc-match .mr-label { font-size: 16px; }
+  /* 四维数值条 */
+  .sc-stat-bars { position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 20px; }
+  .t916 .sc-stat-bars { margin-top: 34px; }
+  .t45 .sc-stat-bars { margin-top: 16px; gap: 12px; }
+  .sc-stat { flex: 1; text-align: center; border-top: 2px solid var(--border-subtle); padding-top: 12px; }
+  .sc-stat-val { display: block; font-weight: 900; color: var(--accent-primary); }
+  .t916 .sc-stat-val { font-size: 42px; }
+  .t45 .sc-stat-val { font-size: 30px; }
+  .sc-stat-label { display: block; margin-top: 4px; color: var(--text-secondary); letter-spacing: 1px; }
+  .t916 .sc-stat-label { font-size: 21px; }
+  .t45 .sc-stat-label { font-size: 17px; }
+  /* tagline:第二视觉焦点,无底盒,直接置背景;容 3 行(下限 40px 后容 4 行) */
+  .sc-tagline { position: relative; z-index: 1; text-align: center; font-weight: 800; color: var(--text-primary);
+    line-height: 1.5; max-width: 920px; margin-left: auto; margin-right: auto; overflow: hidden; }
+  .t916 .sc-tagline { margin-top: 34px; }
+  .t45 .sc-tagline { margin-top: 16px; }
+  /* 社交证明两行(分桶 + 派系第二行) */
+  .sc-social { position: relative; z-index: 1; text-align: center; color: var(--text-secondary);
+    white-space: pre-line; line-height: 1.6; }
+  .t916 .sc-social { font-size: 30px; margin-top: 26px; }
+  .t45 .sc-social { font-size: 23px; margin-top: 14px; }
+  /* 二维码块 */
+  .sc-qr-row { position: relative; z-index: 1; display: flex; align-items: center; gap: 32px; margin-top: auto; }
+  .t45 .sc-qr-row { gap: 22px; }
+  .sc-qrcode { background: #fff; border-radius: 20px; padding: 14px; box-sizing: border-box; flex-shrink: 0; }
+  .t916 .sc-qrcode { width: 220px; height: 220px; }
+  .t45 .sc-qrcode { width: 170px; height: 170px; }
+  .sc-qrcode img { width: 100%; height: 100%; }
+  .sc-claim { font-weight: 800; color: var(--text-primary); }
+  .t916 .sc-claim { font-size: 34px; }
+  .t45 .sc-claim { font-size: 26px; }
+  .sc-meta, .sc-scanhint { color: var(--text-secondary); margin-top: 6px; }
+  .t916 .sc-meta, .t916 .sc-scanhint { font-size: 25px; }
+  .t45 .sc-meta, .t45 .sc-scanhint { font-size: 20px; }
+  .sc-url { font-weight: 800; color: var(--accent-primary); letter-spacing: 2px; margin-top: 10px; }
+  .t916 .sc-url { font-size: 30px; }
+  .t45 .sc-url { font-size: 24px; }
+  /* 免责两行:第一行中性,第二行玩梗 */
+  .sc-disclaimer { position: relative; z-index: 1; color: var(--text-disabled); }
+  .t916 .sc-disclaimer { margin-top: 26px; }
+  .t45 .sc-disclaimer { margin-top: 14px; }
+  .t916 .sc-disclaimer div { font-size: 21px; }
+  .t916 .sc-disclaimer div + div { margin-top: 4px; }
+  .t45 .sc-disclaimer div { font-size: 17px; }
+  /* 尺寸切换 chip(预览弹层) */
+  .share-ratio-row { display: flex; justify-content: center; gap: 12px; margin: 0 0 14px; }
+  .share-ratio-chip { font-size: 13px; font-weight: 800; padding: 8px 18px; border-radius: 999px;
+    border: 1.5px solid var(--border-subtle); background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; letter-spacing: 1px; transition: border-color .2s, background .2s, color .2s; }
+  .share-ratio-chip:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
+  .share-ratio-chip.active { background: var(--accent-primary); color: var(--bg-primary);
+    border-color: var(--accent-primary); border-radius: 8px; font-weight: 900; } /* 形状+颜色双差异 */
+  .share-preview-imgwrap { position: relative; }
+  .share-preview-mask { position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: none;
+    align-items: center; justify-content: center; background: rgba(10,10,10,.55); color: var(--text-primary);
+    font-size: 15px; font-weight: 800; letter-spacing: 1px; z-index: 2; border-radius: 12px; }
+  .share-preview-regen { display: none; width: 100%; margin-top: 10px; padding: 12px; background: var(--bg-card);
+    border: 1px solid var(--border-subtle); border-radius: 12px; color: var(--text-primary);
+    font-size: 15px; font-weight: 700; cursor: pointer; }
+  .share-preview-regen:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
+.share-card-qrcode img { width: 100%; height: 100%; display: block; }
 
   /* ---- 分享卡预览弹层(分步预览+长按分享) ---- */
   #sharePreviewModal { display: none; }
@@ -515,6 +586,25 @@ var _hmt = _hmt || [];
   gtag('js', new Date());
   gtag('config', 'G-8TGVEPYX0E');
 </script>
+<script>
+/* NeuralFin NBTI 自建数据管道 (v1):用户标识 + page_view 补发(事件入库在 track() 内) */
+(function() {
+  var uid = null;
+  try {
+    uid = localStorage.getItem('nf_uid');
+    if (!uid) {
+      uid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('u-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10));
+      localStorage.setItem('nf_uid', uid);
+    }
+  } catch (e) { uid = 'u-' + Date.now().toString(36); }
+  window.__nfUid = uid;
+  if (window.gtag) gtag('set', { user_id: uid });
+  var firePV = function() { if (window.track) window.track('page_view', { 'test_version': '48题版' }); };
+  if (document.readyState !== 'loading') firePV();
+  else document.addEventListener('DOMContentLoaded', firePV);
+})();
+</script>
+
 <script>
 /* ============================================================
  * NeuralFin NBTI 三語路由與狀態(v1)
@@ -866,7 +956,7 @@ window.addEventListener('hashchange', syncLangLinks);
 
     <div class="home-section reveal" id="sec-clans">
       <h2 class="clan-section-title">四種氣質，<span class="highlight">你係邊一派</span></h2>
-      <p class="clan-section-subtitle">每一種派系，都係一種鮮明嘅投資性格畫像</p>
+      <p class="clan-section-subtitle">每一種派系，都係一種鮮明嘅投資人格畫像</p>
       <div class="clan-grid">
         <div class="clan-card" data-accent="red">
           <img src="clan-1.jpg" alt="衝動冒險派" class="clan-photo" loading="lazy">
@@ -937,35 +1027,94 @@ window.addEventListener('hashchange', syncLangLinks);
 </div>
 <div id="ticker"><div class="track" id="ticker-track"></div></div>
 
-  <!-- 分享卡 DOM 模板(离屏渲染,html2canvas 导出静态图) -->
-  <div class="share-card-template" id="shareCardTemplate">
+    <!-- 分享卡 DOM 模板:9:16(1080×1920,默认) + 4:5(1080×1350);离屏渲染,html2canvas 导出 -->
+  <div class="share-card-template t916" id="shareCardTemplate916">
     <div class="share-card-bg"></div>
-    <div class="share-card-topbar">
-      <img class="share-card-logo" alt="">
-      <span class="share-card-topname">金融 NBTI v1.0</span>
+    <div class="sc-badge-row">
+      <span class="sc-badge" id="scBadge916"></span>
+      <span class="sc-badge-label" id="scBadgeLabel916"></span>
+      <span class="sc-badge-no" id="scBadgeNo916"></span>
     </div>
     <div class="share-card-charwrap">
       <img class="share-card-character" alt="" crossorigin="anonymous">
     </div>
-    <div class="share-card-word"></div>
-    <div class="share-card-namebar">
-      <div class="share-card-title-cn"></div>
-      <div class="share-card-match" id="shareCardMatch"></div>
+    <div class="sc-name-block">
+      <span class="sc-clan"></span>
+      <div class="sc-name-main"></div>
+      <div class="sc-match"></div>
+      <div class="sc-name-sub"></div>
     </div>
-    <div class="sc-card share-card-tagline"></div>
-    <div class="sc-card share-card-social-proof"></div>
-    <div class="share-card-footer">
-      <div class="share-card-brand"><img class="share-card-brand-logo" src="NeuralFin.png" alt="NeuralFin"> 金融 NBTI</div>
-      <div class="share-card-qrcode"><img alt="NeuralFin 二維碼" crossorigin="anonymous"></div>
+    <div class="sc-stat-bars" id="scStats916">
+      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
+      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
+      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
+      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
     </div>
+    <div class="sc-tagline" id="scTagline916"></div>
+    <div class="sc-social" id="scSocial916"></div>
+    <div class="sc-qr-row">
+      <div class="sc-qrcode"><img alt="NeuralFin 二维码" crossorigin="anonymous"></div>
+      <div class="sc-qr-text">
+        <div class="sc-claim"></div>
+        <div class="sc-meta"></div>
+        <div class="sc-url">neuralfin.ai</div>
+        <div class="sc-scanhint"></div>
+      </div>
+    </div>
+    <div class="sc-disclaimer"><div></div><div></div></div>
   </div>
+
+  <div class="share-card-template t45" id="shareCardTemplate45">
+    <div class="share-card-bg"></div>
+    <div class="sc-badge-row">
+      <span class="sc-badge" id="scBadge45"></span>
+      <span class="sc-badge-label" id="scBadgeLabel45"></span>
+      <span class="sc-badge-no" id="scBadgeNo45"></span>
+    </div>
+    <div class="share-card-charwrap">
+      <img class="share-card-character" alt="" crossorigin="anonymous">
+    </div>
+    <div class="sc-name-block">
+      <span class="sc-clan"></span>
+      <div class="sc-name-main"></div>
+      <div class="sc-match"></div>
+      <div class="sc-name-sub"></div>
+    </div>
+    <div class="sc-stat-bars" id="scStats45">
+      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
+      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
+      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
+      <div class="sc-stat"><span class="sc-stat-label"></span><span class="sc-stat-val"></span></div>
+    </div>
+    <div class="sc-tagline" id="scTagline45"></div>
+    <div class="sc-social" id="scSocial45"></div>
+    <div class="sc-qr-row">
+      <div class="sc-qrcode"><img alt="NeuralFin 二维码" crossorigin="anonymous"></div>
+      <div class="sc-qr-text">
+        <div class="sc-claim"></div>
+        <div class="sc-meta"></div>
+        <div class="sc-url">neuralfin.ai</div>
+        <div class="sc-scanhint"></div>
+      </div>
+    </div>
+    <div class="sc-disclaimer"><div></div><div></div></div>
+  </div>
+
 
   <!-- 分享卡预览弹层:分步预览+长按分享(不禁用 touch-callout) -->
   <div class="share-preview-modal" id="sharePreviewModal">
     <div class="share-preview-overlay" onclick="closeSharePreview()"></div>
     <div class="share-preview-content">
       <button class="share-preview-close" onclick="closeSharePreview()">✕</button>
-      <img class="share-preview-image" id="sharePreviewImg" alt="分享卡片預覽">
+      <div class="share-ratio-row" role="group" aria-label="Share size">
+        <button type="button" class="share-ratio-chip" data-ratio="9:16" aria-pressed="true" onclick="onRatioChipClick('9:16')">Story 9:16</button>
+        <button type="button" class="share-ratio-chip" data-ratio="4:5" aria-pressed="false" onclick="onRatioChipClick('4:5')">Feed 4:5</button>
+      </div>
+      <div class="share-preview-imgwrap">
+        <img class="share-preview-image" id="sharePreviewImg" alt="分享卡片預覽">
+        <div class="share-preview-mask" id="sharePreviewMask">已切換至 Feed 尺寸</div>
+      </div>
+      <button class="share-preview-regen" id="sharePreviewRegen" onclick="regenerateShare(false)">重新生成</button>
       <p class="share-preview-hint" id="sharePreviewHint"></p>
       <button class="share-preview-download-btn btn" id="sharePreviewDl" onclick="sharePreviewAction()">下載分享圖</button>
     </div>
@@ -4620,6 +4769,7 @@ var QUESTIONS = {
   ]
 };
 
+/* shareText 为死数据,未渲染;若日后启用须先过合规审查 */
 var RESULTS = {
   "results": [
     { "code": "RGHC", "word": "SNIPER", "name": "狙擊手", "tagline": "你研究足十年先出手一次，隻獵物從未走甩——直到上次你喺半山腰撈底。", "traits": ["你係群組入面嘅「股神」，啲人輸錢先至嚟問你。", "你嘅問題唔係揀股，係揸唔住——邏輯啱晒，隻手唔聽話。", "冷靜係你嘅超能力，但冷靜得太耐，最肥嗰段永遠食唔到。"], "recommendedAsset": "你重倉嗰隻股票（你研究咗佢十年）", "shareText": "我係狙擊手型——研究十年，出手一次，從不 all-in。你呢？" },
@@ -4645,7 +4795,7 @@ var RESULTS = {
     "本測試純屬娛樂，唔好用嚟算命，更加唔好用嚟相睇。"
   ],
   "easterEggs": {
-    "allSameAnswer": { "persona": "人肉提款機", "note": "AI 檢測到你已經失去理智，建議即刻刪晒所有交易 App。" },
+    "allSameAnswer": { "persona": "人肉提款機", "note": "你連測試都唔敢企邊" },
     "rapidSubmit": { "note": "世界已經夠亂，起碼將啲題答完先。" },
     "abcdCycle": { "persona": "對稱美學鑑賞家", "note": "你連答題都要對稱，一定活得幾攰吓？" },
     "q9CNote": { "note": "放心，我哋嘅 AI 都俾人打過臉，佢而家學乖咗。" }
@@ -4655,9 +4805,11 @@ var RESULTS = {
 
 
 /* ============ 结果页数据:社交钩子统计 + 深度解读 + App二维码 ============ */
+/* total 为示意量级,非真实统计;展示时按 5,000+/10,000+/15,000+/20,000+ 分 4 档,勿直接渲染原值 */
+/* topic 已停用:社交证明改为分桶+派系两行式,此字段无渲染出口,勿再启用 */
 var PERSONA_STATS = {
   "SNIPER": { total: 9215, discussing: 216, topic: "呢隻票嘅年報到底應唔應該信" },
-  "TURTLE": { total: 14762, discussing: 58, topic: "仲要揸幾耐先返家鄉", note: "其他人都在睡觉" },
+  "TURTLE": { total: 14762, discussing: 58, topic: "仲要揸幾耐先返家鄉", note: "其他人都喺度瞓覺" },
   "BOT": { total: 6340, discussing: 512, topic: "今日個策略要唔要改參數" },
   "GRANDMA": { total: 13958, discussing: 189, topic: "呢筆到底值唔值得" },
   "PROPHET": { total: 7809, discussing: 743, topic: "要唔要撈底嗰隻信仰幣" },
@@ -4901,7 +5053,8 @@ function goToPreviousQuestion() {
 }
 function startQuiz() {
   if (window._hmt) { window._hmt.push(['_trackEvent', 'test_flow', 'start']); } /* 百度统计:開始測試 */
-  if (window.gtag) { gtag('event', 'test_start', { 'test_version': '48-hk' }); } /* GA4:開始測試 */
+  if (window.gtag) { gtag('event', 'test_start',
+    { 'test_version': '48-hk' }); } track('test_start', { 'test_version': '48-hk' });  /* GA4:開始測試 */
   var saved = loadProgress();
   if (saved) {
     showConfirm({
@@ -5063,7 +5216,8 @@ function finish() {
   }
   var s = score();
   if (window._hmt) { window._hmt.push(['_trackEvent', 'test_completed', 'finish', s.code]); } /* 百度统计:完成测试(含人格代码) */
-  if (window.gtag) { gtag('event', 'test_completed', { 'test_version': '48-hk', 'persona_result': s.code }); } /* GA4:完成测试 */
+  if (window.gtag) { gtag('event', 'test_completed',
+    { 'test_version': '48-hk', 'persona_result': s.code }); } track('test_completed', { 'test_version': '48-hk', 'persona_result': s.code });  /* GA4:完成测试 */
   var persona = RESULTS.results.filter(function(r) { return r.code === s.code; })[0];
   renderResult(persona, s);
 }
@@ -5149,13 +5303,48 @@ function renderResult(persona, s) {
 
 /* ============ 社交钩子 + 深度解读 + 埋点 ============ */
 var lastPersonaCode = null;
-function fmtNum(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
-function proofSentence(persona, proof) {
-  var s = '全網有 <b>' + fmtNum(proof.total) + '</b> 人和你一樣係「' + persona.name + '」，' +
-    '其中 <b>' + fmtNum(proof.discussing) + '</b> 人正在 NeuralFin 討論「' + proof.topic + '」';
-  if (proof.note) s += '（' + proof.note + '）';
-  return s + '。';
+
+/* ============ 社交证明(合规版:分桶 + 派系第二行;无具体数字/操作/topic) ============ */
+/* total 为示意量级,展示按 5,000+/10,000+/15,000+ 分桶(桶不得更细,勿直接渲染原值) */
+function bucketTotal(n) {
+  /* 4 档粗桶(按 16 条 total 实际分布 5.9k-20.4k 重定;桶不得更细,勿直接渲染原值) */
+  if (n >= 20000) return '20,000+';
+  if (n >= 15000) return '15,000+';
+  if (n >= 10000) return '10,000+';
+  return '5,000+';
 }
+/* 派系 = 计分码前两位(D×R 降维,与 MBTI 四气质同构;勿手工分派,勿改) */
+var CLAN_MAP = { 'FG': '衝動冒險派', 'RG': '理性分析派', 'FS': '隨緣情感派', 'RS': '務實盡責派' };
+var CLAN_SLOGAN = { 'FG': '你唔係一個人衝', 'RG': '你唔係一個人計', 'FS': '你唔係一個人縮', 'RS': '你唔係一個人孭' };
+function proofSentence(persona, proof) {
+  var slogan = CLAN_SLOGAN[persona.code.substr(0, 2)] || '';
+  return '全球 <b>' + bucketTotal(proof.total) + '</b> 人和你同型' + (slogan ? ' · ' + slogan : '');
+}
+
+/* ============ 分享卡配置(四维数值条,批次 2 渲染用) ============ */
+var SHOW_STAT_BARS = true; /* 四维条开关:D1 若 300px 缩图过噪,首个砍此(改 false 即隐藏) */
+var STAT_BAR_LABELS = ['信念值', '止蝕紀律', '翻睇頻率', '死撐指數']; /* 16 张卡统一标签(可比性=收藏感);hk 版「翻睇頻率/死撐指數」待港人同事确认 */
+/* 16×4 人设数值:[信念值, 止损纪律, 复盘频率, 嘴硬指数];纯人设描写非统计,无 % 无小数;
+   特殊写法全站仅 3 种:MAX(PROPHET 嘴硬) / MIN(MONK 嘴硬) / ∞(STALKER 复盘) */
+var PERSONA_STAT_BARS = {
+  'SNIPER': [85, 35, 99, 60],
+  'TURTLE': [98, 15, 3, 30],
+  'BOT': [70, 95, 99, 50],
+  'GRANDMA': [40, 90, 85, 45],
+  'PROPHET': [99, 12, 3, 'MAX'],
+  'MONK': [45, 75, 2, 'MIN'],
+  'God of Gamblers': [92, 20, 8, 88],
+  'GEAR': [35, 80, 65, 40],
+  'MARTYR': [90, 5, 55, 95],
+  'BAGHOLDER': [85, 10, 45, 90],
+  'FOMO': [65, 25, 70, 85],
+  'STALKER': [30, 40, '∞', 75],
+  'DREAMER': [97, 8, 15, 80],
+  'GHOST': [55, 70, 1, 85],
+  'YOLO': [88, 3, 10, 98],
+  'CHICKEN': [25, 8, 60, 70],
+};
+
 function deepDiveHtml(persona) {
   var dd = DEEP_DIVES[persona.word];
   if (!dd) return '';
@@ -5173,7 +5362,8 @@ function deepDiveHtml(persona) {
 }
 function unlockDeepDive() {
   track('deep_dive_unlock_click', { personaCode: lastPersonaCode });
-  if (window.gtag) { gtag('event', 'deep_dive_expand_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } /* GA4:点击查看完整解读 */
+  if (window.gtag) { gtag('event', 'deep_dive_expand_click',
+    { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } track('deep_dive_expand_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode });  /* GA4:点击查看完整解读 */
   var ov = document.getElementById('dd-overlay');
   var locked = document.querySelector('.dd-locked');
   if (locked) locked.classList.add('unlocked'); /* 修复:展开后容器自适应高度,防二维码被 overflow 裁切 */
@@ -5188,7 +5378,8 @@ function unlockDeepDive() {
     qimg.onload = function() { this.style.opacity = '1'; console.log('[qr] loaded', this.naturalWidth, this.naturalHeight); };
     qimg.onerror = function() { console.log('[qr] load failed'); };
     qimg.addEventListener('click', function() {
-      if (window.gtag) { gtag('event', 'deep_dive_qrcode_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } /* GA4:点击二维码 */
+      if (window.gtag) { gtag('event', 'deep_dive_qrcode_click',
+    { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } track('deep_dive_qrcode_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode });  /* GA4:点击二维码 */
     });
   }
   track('deep_dive_app_open_success', { personaCode: lastPersonaCode });
@@ -5208,7 +5399,25 @@ function track(name, payload) {
   if (fm) p.from = fm; /* KOL 归因白名单 */
   var ev = { name: name, payload: p, ts: Date.now() };
   window.__events.push(ev);
-  if (window.console && window.console.log) window.console.log('[track]', name, JSON.stringify(p));
+    if (window.console && window.console.log) window.console.log('[track]', name, JSON.stringify(p));
+  /* v1 自建管道:双写 Supabase(经 /api/event),失败静默 */
+  try {
+    var pv = location.pathname || '';
+    if (pv === '' || pv === '/') pv = '/index.html';
+    var payload = {
+      event_name: name,
+      params: p,
+      user_id: window.__nfUid || '',
+      lang: p.lang || '',
+      page: pv.split('/').pop() || 'index.html',
+      url: location.href,
+      ua: navigator.userAgent,
+      ts: new Date().toISOString()
+    };
+    var blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    if (navigator.sendBeacon) navigator.sendBeacon('/api/event', blob);
+    else fetch('/api/event', { method: 'POST', body: blob, keepalive: true }).catch(function() {});
+  } catch (e) {}
 }
 if (typeof location !== 'undefined' && location.search && location.search.indexOf('from=') > -1) {
   track('share_card_click_from_friend', {});
@@ -5228,10 +5437,8 @@ function isWeChatBrowser() { return /MicroMessenger/i.test(navigator.userAgent |
 function isMobileDevice() { return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || ''); }
 var isWechat = isWeChatBrowser();
 function proofTextPlain(persona, proof) {
-  var s = '全網有 ' + fmtNum(proof.total) + ' 人和你一樣係「' + persona.name + '」，其中 ' +
-    fmtNum(proof.discussing) + ' 人正在 NeuralFin 討論「' + proof.topic + '」';
-  if (proof.note) s += '（' + proof.note + '）';
-  return s + '。';
+  var slogan = CLAN_SLOGAN[persona.code.substr(0, 2)] || '';
+  return '全球 ' + bucketTotal(proof.total) + ' 人和你同型' + (slogan ? '\n' + slogan : '');
 }
 function matchRing(pct) {
   if (typeof pct !== 'number' || isNaN(pct) || pct < 0) return ''; /* 降级路径:隐藏匹配环,不显示假数字 */
@@ -5261,8 +5468,8 @@ function fitShareChar(tpl) {
   var char = tpl.querySelector('.share-card-character');
   if (!char || char.style.display === 'none') return;
   var wrap = tpl.querySelector('.share-card-charwrap');
-  var availW = wrap.clientWidth || 660;
-  var availH = wrap.clientHeight || 640;
+  var availW = wrap.clientWidth || 1080;
+  var availH = wrap.clientHeight || (tpl.className.indexOf('t45') > -1 ? 378 : 634);
   var ratio = (char.naturalHeight || 2560) / (char.naturalWidth || 1440);
   var w = Math.min(availW, availH / ratio);
   char.style.width = Math.round(w) + 'px';
@@ -5272,79 +5479,190 @@ function waitForImagesLoaded(container) {
   var imgs = container.querySelectorAll('img');
   return Promise.all(Array.prototype.map.call(imgs, function(img) { return waitForImageLoad(img); }));
 }
-function generateShareCard(persona, match) {
-  match = (match === undefined || match === null) ? 0 : match;
-  var tpl = document.getElementById('shareCardTemplate');
+/* ============ 分享卡(9:16 默认 / 4:5;模板 + html2canvas 内嵌) ============ */
+var shareCardRatio = '9:16'; /* 当前已生成图的尺寸(切换后 stale 判定) */
+/* 稀有度可配置(待议):16 型全 SSR 不稀有,后续按真实分布改 UR/SR/SSR,只改此表 */
+var RARITY_CFG = { base: 'SSR', label: '稀有度 · 十六分之一', egg: '隱藏人格' };
+var SHARE_QR_TEXT = { claim: '掃碼認領你自己嗰張卡', meta: '48 條題 · 10 分鐘', url: 'neuralfin.ai', hint: '長按識別二維碼' };
+var SHARE_DISCLAIMER = ['本卡不構成任何投資建議 · 測試純屬娛樂', '只構成人格建議，且不接受申辯。'];
+var SHARE_LOWMEM = '你部機記憶體唔夠，已生成 Feed 尺寸';
+var SHARE_STALE = '已切換至 Feed 尺寸';
+var SHARE_DL_STALE = '按 Feed 尺寸生成並下載';
+function getShareRatio() {
+  try { return localStorage.getItem('nbti_share_ratio') === '4:5' ? '4:5' : '9:16'; } catch (e) { return '9:16'; }
+}
+function setShareRatio(r) {
+  try { localStorage.setItem('nbti_share_ratio', r === '4:5' ? '4:5' : '9:16'); } catch (e) {}
+}
+function personaNo(persona) {
+  for (var i = 0; i < RESULTS.results.length; i++) {
+    if (RESULTS.results[i].code === persona.code) { var n = i + 1; return ('0' + n).slice(-2); }
+  }
+  return '00';
+}
+/* ===== bindShareCard:两个比例共用同一份绑定(改一句文案只改此函数/上方配置) ===== */
+function bindShareCard(tpl, persona, match, ratio) {
+  /* ---- 共用部分(9:16 / 4:5 同一份,差异只在本函数末尾的 ratio 分支) ---- */
   var imgKey = PERSONA_IMG[persona.word] || null;
   var char = tpl.querySelector('.share-card-character');
   char.style.display = imgKey ? '' : 'none';
   if (imgKey) {
     char.src = imgKey + '.webp';
-    char.onerror = function() { this.onerror = null; console.error('[shareCard] char image load failed:', this.src); this.src = imgKey + '.png'; };
+    char.onerror = function() { this.onerror = null; this.src = imgKey + '.png'; };
   }
-  var wordEl = tpl.querySelector('.share-card-word');
-  wordEl.textContent = persona.word;
-  wordEl.style.fontSize = (persona.word || '').length > 12 ? '44px' : '76px';
-  tpl.querySelector('.share-card-title-cn').textContent = persona.name;
-  tpl.querySelector('.share-card-tagline').textContent = persona.tagline || '';
+  var isEgg = !persona.code; /* 彩蛋:word=ATM/OCD,无计分码 */
+  tpl.querySelector('.sc-badge').textContent = isEgg ? RARITY_CFG.egg : RARITY_CFG.base;
+  tpl.querySelector('.sc-badge-label').textContent = isEgg ? '' : RARITY_CFG.label;
+  tpl.querySelector('.sc-badge-no').textContent = isEgg ? '' : 'NO.' + personaNo(persona) + '/16';
+  tpl.querySelector('.sc-clan').textContent = isEgg ? '' : (CLAN_MAP[persona.code.substr(0, 2)] || '');
+  tpl.querySelector('.sc-name-main').textContent = persona.name || '';
+  tpl.querySelector('.sc-name-sub').textContent = (isEgg ? '' : persona.word);
+  tpl.querySelector('.sc-match').innerHTML = matchRing(match);
+  var bars = tpl.querySelector('.sc-stat-bars');
+  var data = PERSONA_STAT_BARS[persona.word];
+  if (SHOW_STAT_BARS && data) {
+    bars.style.display = '';
+    var items = bars.querySelectorAll('.sc-stat');
+    for (var i = 0; i < items.length; i++) {
+      var v = data[i];
+      items[i].querySelector('.sc-stat-val').textContent =
+        (typeof v === 'number' && v < 10) ? ('0' + v) : String(v);
+      items[i].querySelector('.sc-stat-label').textContent = STAT_BAR_LABELS[i];
+    }
+  } else {
+    bars.style.display = 'none'; /* 收起不留空洞 */
+  }
+  var tag = tpl.querySelector('.sc-tagline');
+  tag.textContent = persona.tagline || '';
+  fitTagline(tag, ratio);
+  var social = tpl.querySelector('.sc-social');
   var proof = PERSONA_STATS[persona.word];
-  tpl.querySelector('.share-card-social-proof').textContent = proof ? proofTextPlain(persona, proof) : '';
-  tpl.querySelector('.share-card-qrcode img').src = 'qrcode-48.png'; /* 静态二维码,同域无需 CORS */
-  tpl.querySelector('.share-card-logo').src = 'NeuralFin.png';
-  tpl.querySelector('#shareCardMatch').innerHTML = matchRing(match);
+  if (proof) {
+    social.textContent = proofTextPlain(persona, proof);
+    social.style.display = '';
+  } else {
+    social.style.display = 'none';
+  }
+  tpl.querySelector('.sc-qrcode img').src = 'qrcode-48.png';
+  var qt = tpl.querySelector('.sc-qr-text');
+  qt.querySelector('.sc-claim').textContent = SHARE_QR_TEXT.claim;
+  qt.querySelector('.sc-meta').textContent = SHARE_QR_TEXT.meta;
+  qt.querySelector('.sc-url').textContent = SHARE_QR_TEXT.url;
+  qt.querySelector('.sc-scanhint').textContent = SHARE_QR_TEXT.hint;
+  var disc = tpl.querySelectorAll('.sc-disclaimer > div');
+  disc[0].textContent = SHARE_DISCLAIMER[0];
+  disc[1].textContent = SHARE_DISCLAIMER[1];
+}
+/* tagline 自动缩字号:3 行起步,>40px 递减,仍溢出则容 4 行 */
+function fitTagline(el, ratio) {
+  var fs = (ratio === '4:5') ? 48 : 56;
+  var lines = 3;
+  el.style.fontSize = fs + 'px';
+  el.style.maxHeight = (lines * fs * 1.5) + 'px';
+  while (fs > 40 && el.scrollHeight > el.clientHeight + 2) {
+    fs -= 2;
+    el.style.fontSize = fs + 'px';
+    el.style.maxHeight = (lines * fs * 1.5) + 'px';
+  }
+  if (el.scrollHeight > el.clientHeight + 2) {
+    lines = 4;
+    el.style.maxHeight = (lines * fs * 1.5) + 'px';
+  }
+}
+function generateShareCard(persona, match, ratio) {
+  ratio = ratio || getShareRatio();
+  match = (match === undefined || match === null) ? 0 : match;
+  var tpl = document.getElementById(ratio === '4:5' ? 'shareCardTemplate45' : 'shareCardTemplate916');
+  bindShareCard(tpl, persona, match, ratio);
   return waitForImagesLoaded(tpl).then(function() {
-    /* 按原始比例精算显式尺寸,防 html2canvas object-fit 渲染变形 */
     fitShareChar(tpl);
-    /* 高度不预设:按 flex 内容实际撑开尺寸截图(html2canvas 默认取元素实际尺寸) */
-    return html2canvas(tpl, { scale: 3, backgroundColor: '#0A0A0A', width: 750, useCORS: true });
+    /* scale 2 推导:输出 2160×3840(9:16)/2160×2700(4:5)=8.3M/5.8M px,与旧 5:8 scale:3
+       (2250×3750=8.4M px)同量级;scale:3 会到 18.7M px,低端 Android 爆内存,勿改回 3 */
+    return html2canvas(tpl, { scale: 2, backgroundColor: '#0A0A0A', width: 1080,
+      height: (ratio === '4:5' ? 1350 : 1920), useCORS: true });
   }).then(function(canvas) {
     shareCardUrl = canvas.toDataURL('image/png');
-    if (window.gtag) { gtag('event', 'share_card_generate_success', { 'test_version': '48-hk', 'persona_result': persona.code || persona.word || '' }); } /* GA4:生成成功 */
+    shareCardRatio = ratio;
+    if (window.gtag) { gtag('event', 'share_card_generate_success',
+    { 'test_version': '48-hk', 'persona_result': persona.code || persona.word || '', 'ratio': ratio }); } track('share_card_generate_success', { 'test_version': '48-hk', 'persona_result': persona.code || persona.word || '', 'ratio': ratio });
     return true;
   }).catch(function(e) {
+    /* 9:16 内存不足降级:自动用 4:5 重试一次(低端 Android) */
+    if (ratio === '9:16') { /* 降级重试有界:4:5 分支不再递归 */
+      return generateShareCard(persona, match, '4:5').then(function(ok) {
+        if (ok) toast(SHARE_LOWMEM);
+        return ok;
+      });
+    }
     shareCardUrl = null;
-    /* 详细错误日志(开发排障用) */
     console.error('[shareCard] generation failed:', e);
-    if (window.gtag) { gtag('event', 'share_card_generate_failed', { 'test_version': '48-hk' }); } /* GA4:生成失败 */
+    if (window.gtag) { gtag('event', 'share_card_generate_failed',
+    { 'test_version': '48-hk', 'ratio': ratio }); } track('share_card_generate_failed', { 'test_version': '48-hk', 'ratio': ratio });
     return false;
   });
 }
-var lastShareReq = null; /* 最近一次要生成分享卡的人格 */
+var lastShareReq = null;
 var shareGenerating = false;
 function generateShareFlow() {
   if (!lastShareReq || shareGenerating) return;
-  if (window.gtag) { gtag('event', 'share_card_generate_start', { 'test_version': '48-hk', 'persona_result': lastShareReq.persona.code || '' }); } /* GA4:生成开始 */
+  var ratio = getShareRatio();
+  if (window.gtag) { gtag('event', 'share_card_generate_start',
+    { 'test_version': '48-hk', 'persona_result': lastShareReq.persona.code || '', 'ratio': ratio }); } track('share_card_generate_start', { 'test_version': '48-hk', 'persona_result': lastShareReq.persona.code || '', 'ratio': ratio });
   shareGenerating = true;
   var btn = document.getElementById('btn-gen-share');
   if (btn) { btn.disabled = true; btn.textContent = '正在生成專屬分享卡...'; }
-  generateShareCard(lastShareReq.persona, lastShareReq.match).then(function(ok) {
+  generateShareCard(lastShareReq.persona, lastShareReq.match, ratio).then(function(ok) {
     shareGenerating = false;
     if (btn) { btn.disabled = false; btn.textContent = '生成分享卡片'; }
     if (ok) {
-      track('share_card_generate', { personaCode: lastShareReq.persona.code || '' });
+      track('share_card_generate', { personaCode: lastShareReq.persona.code || '', ratio: shareCardRatio });
       openSharePreview();
     } else {
       openSharePreviewError();
     }
   });
 }
+function renderRatioChips() {
+  var sel = getShareRatio();
+  var chips = document.querySelectorAll('.share-ratio-chip');
+  for (var i = 0; i < chips.length; i++) {
+    var on = chips[i].getAttribute('data-ratio') === sel;
+    chips[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    chips[i].className = 'share-ratio-chip' + (on ? ' active' : '');
+  }
+  updateStaleUI();
+}
+function onRatioChipClick(r) {
+  setShareRatio(r);
+  renderRatioChips(); /* 不自动重新生成:只改标记,点生成/下载时才按当前选择 */
+}
+function updateStaleUI() {
+  var stale = shareCardRatio !== getShareRatio();
+  var img = document.getElementById('sharePreviewImg');
+  var mask = document.getElementById('sharePreviewMask');
+  var dl = document.getElementById('sharePreviewDl');
+  var regen = document.getElementById('sharePreviewRegen');
+  if (mask) mask.style.display = (stale && img && img.src) ? 'flex' : 'none';
+  if (dl) {
+    if (stale) { dl.textContent = SHARE_DL_STALE; dl.style.display = ''; }
+    else if (isWechat) { dl.style.display = 'none'; }
+    else { dl.textContent = '下載分享圖'; dl.style.display = ''; }
+  }
+  if (regen) regen.style.display = (stale && isWechat) ? '' : 'none';
+}
 function openSharePreview() {
   var img = document.getElementById('sharePreviewImg');
   img.style.display = '';
   img.src = shareCardUrl;
   var hint = document.getElementById('sharePreviewHint');
-  var dl = document.getElementById('sharePreviewDl');
-  dl.textContent = '下載分享圖';
   if (isWechat) {
     hint.textContent = '👆 長按上方圖片，揀「傳畀朋友」或「儲存圖片」';
-    dl.style.display = 'none';
   } else if (isMobileDevice()) {
     hint.textContent = '長按圖片儲存，或撳下面嘅掣下載';
-    dl.style.display = '';
   } else {
     hint.textContent = '撳下面嘅掣下載圖片，用手機掃描 QR Code 分享體驗更佳';
-    dl.style.display = '';
   }
+  renderRatioChips(); /* 同步 chip 选中态 + stale 遮罩/按钮文案 */
   var m = document.getElementById('sharePreviewModal');
   m.classList.add('show'); m.classList.remove('hide');
 }
@@ -5362,58 +5680,38 @@ function closeSharePreview() {
   m.classList.add('hide');
   setTimeout(function() { m.classList.remove('show'); m.classList.remove('hide'); }, 200);
 }
+function regenerateShare(andDownload) {
+  if (!lastShareReq || shareGenerating) return;
+  var ratio = getShareRatio();
+  shareGenerating = true;
+  var dl = document.getElementById('sharePreviewDl');
+  if (dl) dl.disabled = true;
+  generateShareCard(lastShareReq.persona, lastShareReq.match, ratio).then(function(ok) {
+    shareGenerating = false;
+    if (dl) dl.disabled = false;
+    if (ok) {
+      openSharePreview();
+      if (andDownload && !isWechat) downloadCard();
+    } else {
+      openSharePreviewError();
+    }
+  });
+}
 function sharePreviewAction() {
-  if (!shareCardUrl) { generateShareFlow(); return; } /* 错误态:重新生成 */
+  if (!shareCardUrl) { generateShareFlow(); return; }
+  if (shareCardRatio !== getShareRatio()) { regenerateShare(true); return; } /* stale:先按当前选择生成再下载 */
   downloadCard();
 }
 function downloadCard() {
   if (!shareCardUrl) { toast('分享卡生成中，稍等片刻…'); return; }
-  if (isWechat) { openSharePreview(); return; } /* 微信:download 不稳定,引导长按保存 */
+  if (isWechat) { openSharePreview(); return; }
   var a = document.createElement('a');
-  a.download = 'neuralfin-nbti.png';
+  var word = (lastShareReq && lastShareReq.persona.word) || 'NBTI';
+  a.download = 'NBTI_' + word + '_' + (shareCardRatio === '4:5' ? '4x5' : '9x16') + '.png';
   a.href = shareCardUrl;
   a.click();
+  track('share_card_download', { ratio: shareCardRatio });
   toast('圖片已儲存，可以去相簿搵返，打開微信傳畀朋友啦');
-}
-
-/* ============ 进度保存与续答(确认弹层) ============ */
-var PROGRESS_KEY = getProgressKey(); /* v1:语言解耦,保留题数维度 */
-  migrateProgress(); /* 迁移旧语言后缀 key(幂等) */
-function showConfirm(opts) {
-  document.getElementById('confirmTitle').textContent = opts.title;
-  document.getElementById('confirmDesc').textContent = opts.desc;
-  var p = document.getElementById('confirmPrimary');
-  var s = document.getElementById('confirmSecondary');
-  p.textContent = opts.primary;
-  s.textContent = opts.secondary;
-  p.onclick = function() { hideConfirm(); if (opts.onPrimary) opts.onPrimary(); };
-  s.onclick = function() { hideConfirm(); if (opts.onSecondary) opts.onSecondary(); };
-  document.getElementById('confirmModal').style.display = 'flex';
-}
-function hideConfirm() { document.getElementById('confirmModal').style.display = 'none'; }
-function saveProgress() {
-  try {
-    /* 存下一未答题索引:续答后直接落在未答题上 */
-    var next = Math.min(userAnswers.length, QUESTIONS.questions.length);
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify({ answers: userAnswers, current: next }));
-  } catch (e) { /* 隐私模式等场景忽略 */ }
-}
-function loadProgress() {
-  try {
-    var raw = localStorage.getItem(PROGRESS_KEY);
-    if (!raw) return null;
-    var d = JSON.parse(raw);
-    if (!d || !Array.isArray(d.answers) || !d.answers.length) return null;
-    if (d.answers.length > QUESTIONS.questions.length) return null;
-    return d;
-  } catch (e) { return null; }
-}
-function clearProgress() { try { localStorage.removeItem(PROGRESS_KEY); } catch (e) {} }
-function restoreProgress(d) {
-  userAnswers = d.answers;
-  current = Math.min(d.current || 0, QUESTIONS.questions.length);
-  if (current >= QUESTIONS.questions.length) { showSubmit(); }
-  else { show('page-quiz'); renderQuestion(); }
 }
 /* ============ 其他 ============ */
 function restart() { startQuiz(); }
