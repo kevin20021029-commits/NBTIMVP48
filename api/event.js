@@ -35,7 +35,11 @@ const ALLOWED_EVENTS = new Set([
   'share_card_retry',
   'share_card_fallback_used',
   'card_ratio_switch',
-  'share_card_longpress_shown'
+  'share_card_longpress_shown',
+  /* 内容断言失败(白图/缺图/文字缺失) */
+  'share_card_content_check_failed',
+  /* 编码格式降级(WebP 不支持 → JPEG q92) */
+  'export_format_fallback'
 ]);
 
 /* CORS:生产同源(页面与 API 同在 vercel.app)不需要;但 file:// 打开页面或镜像域名时,

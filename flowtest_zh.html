@@ -5482,6 +5482,10 @@ window.__events = window.__events || [];
 function track(name, payload) {
   var p = payload || {};
   p.lang = CURRENT_LANG; /* 三语维度:按语言拆分漏斗 */
+  /* 遥测归一化:uaBucket/memBucket/dprBucket(枚举见 uaBucket 定义) */
+  p.uaBucket = uaBucket(navigator.userAgent);
+  p.memBucket = memBucket(navigator.deviceMemory);
+  p.dprBucket = dprBucket(window.devicePixelRatio);
   var fm = (location.search.match(/[?&]from=([A-Za-z0-9_-]{1,64})(?:&|$)/) || [])[1];
   if (fm) p.from = fm; /* KOL 归因白名单 */
   var ev = { name: name, payload: p, ts: Date.now() };
@@ -5600,6 +5604,33 @@ function withTimeout(promise, ms, label) {
 }
 /* ---- 遥测:失败/降级公共元数据(回答 WebKit 悬案:按 UA 归因) ---- */
 var SHARE_FLOW_START = 0;
+
+/* ---- 遥测归一化:uaBucket/memBucket/dprBucket(任务2 全量应用;内容断言已用) ---- */
+function uaBucket(ua) {
+  ua = ua || '';
+  var ios = /iPhone|iPad|iPod/i.test(ua);
+  var android = /Android/i.test(ua);
+  var wechat = /MicroMessenger/i.test(ua);
+  var webview = /Toutiao|aweme|NewsArticle|DingTalk|Alipay|UCBrowser|miniProgram|WebView/i.test(ua);
+  var chrome = /Chrome\//i.test(ua) && !/Edg\//i.test(ua);
+  var safari = /Safari\//i.test(ua) && !chrome;
+  if (ios) return wechat ? 'ios_wechat' : (webview ? 'ios_other_webview' : 'ios_safari');
+  if (android) return wechat ? 'android_wechat' : (webview ? 'android_other_webview' : 'android_chrome');
+  if (chrome) return 'desktop_chrome';
+  if (safari) return 'desktop_safari';
+  return 'desktop_other';
+}
+function memBucket(mem) {
+  if (mem === undefined || mem === null) return 'unknown';
+  if (mem < 4) return '<4';
+  if (mem <= 6) return '4-6';
+  return '>=8';
+}
+function dprBucket(dpr) {
+  if (dpr === 2) return '2';
+  if (dpr === 3) return '3';
+  return 'other';
+}
 function buildFailMeta(phase, reason, engine, scale, ratio) {
   return {
     phase: phase,
@@ -5634,6 +5665,90 @@ function serverCardFallback(persona, match, ratio) {
       track('share_card_generate_failed', buildFailMeta('server-fallback', e && e.message, 'server', 1.5, ratio));
       return false;
     });
+}
+
+/* ---- 导出内容断言:任一不过即判失败并降级(防白图/缺图/文字缺失) ----
+ * 阈值标定自正常输出(Chromium, 2026-08-07):
+ *   char 方差 2650 / qr 亮占比 63% / title 边缘占比 2.6% / full 方差 2570
+ */
+var CARD_CONTENT_THRESHOLDS = {
+  charVariance: 500,      /* 角色图区域像素方差(防纯色/缺图) */
+  qrBrightMin: 20,        /* 二维码黑白二值:亮像素占比下限 % */
+  qrBrightMax: 85,        /* 上限 % */
+  titleEdgeRatio: 1.0,    /* 主标题高对比边缘占比 %(防文字缺失) */
+  fullVariance: 500       /* 全图方差(防整体空白) */
+};
+function checkCardContent(canvas, ratio, tpl, scale) {
+  var ctx = canvas.getContext('2d');
+  var SCALE = scale || 2;
+  var rel = function(sel) {
+    var el = tpl.querySelector(sel);
+    var r = el.getBoundingClientRect();
+    var t = tpl.getBoundingClientRect();
+    return { x: Math.max(0, Math.round((r.left - t.left) * SCALE)), y: Math.max(0, Math.round((r.top - t.top) * SCALE)),
+             w: Math.round(r.width * SCALE), h: Math.round(r.height * SCALE) };
+  };
+  var region = function(sel) {
+    var reg = rel(sel);
+    if (reg.w <= 1 || reg.h <= 1) return null; /* 元素不可见(display:none 等):判该规则失败 */
+    reg.x = Math.min(reg.x, canvas.width - 2); reg.y = Math.min(reg.y, canvas.height - 2);
+    reg.w = Math.min(reg.w, canvas.width - reg.x); reg.h = Math.min(reg.h, canvas.height - reg.y);
+    return reg;
+  };
+  var stats = function(reg) {
+    var d = ctx.getImageData(reg.x, reg.y, reg.w, reg.h).data;
+    var sum = 0, sum2 = 0, n = reg.w * reg.h, bright = 0, edges = 0, edgeN = 0;
+    for (var i = 0; i < d.length; i += 4) {
+      var v = (d[i] + d[i+1] + d[i+2]) / 3;
+      sum += v; sum2 += v * v;
+      if (v > 128) bright++;
+    }
+    for (var y = 0; y < reg.h; y += 2) {
+      for (var x = 1; x < reg.w; x += 2) {
+        var idx = (y * reg.w + x) * 4;
+        var a = (d[idx] + d[idx+1] + d[idx+2]) / 3, b = (d[idx-4] + d[idx-3] + d[idx-2]) / 3;
+        if (Math.abs(a - b) > 60) edges++;
+        edgeN++;
+      }
+    }
+    var mean = sum / n;
+    return { variance: sum2 / n - mean * mean, brightRatio: bright / n * 100, edgeRatio: edges / edgeN * 100 };
+  };
+  var failed = [];
+  var th = CARD_CONTENT_THRESHOLDS;
+  var charReg = region('.share-card-character');
+  if (!charReg) failed.push('char_variance');
+  else { var charS = stats(charReg); if (charS.variance < th.charVariance) failed.push('char_variance'); }
+  var qrReg = region('.sc-qrcode img');
+  if (!qrReg) failed.push('qr_binary');
+  else { var qrS = stats(qrReg); if (qrS.brightRatio < th.qrBrightMin || qrS.brightRatio > th.qrBrightMax) failed.push('qr_binary'); }
+  var titleReg = region('.sc-name-main');
+  if (!titleReg) failed.push('title_edges');
+  else { var titleS = stats(titleReg); if (titleS.edgeRatio < th.titleEdgeRatio) failed.push('title_edges'); }
+  var fullS = stats({ x: 0, y: 0, w: canvas.width, h: canvas.height });
+  if (fullS.variance < th.fullVariance) failed.push('full_variance');
+  return failed;
+}
+
+/* ---- 编码格式链:WebP q90 优先 → 不支持则 JPEG q92 → 兜底 PNG;fallback 上报 ---- */
+function encodeCard(canvas, ratio) {
+  return new Promise(function(resolve, reject) {
+    canvas.toBlob(function(blob) {
+      if (blob && blob.type === 'image/webp') {
+        resolve({ url: URL.createObjectURL(blob), format: 'webp' });
+      } else {
+        /* WebP 不支持(旧 Safari/WebView):JPEG q92 重编 */
+        canvas.toBlob(function(blob2) {
+          if (blob2) {
+            try { track('export_format_fallback', { from: 'webp', to: 'jpeg92', ratio: ratio, uaBucket: uaBucket(navigator.userAgent) }); } catch (e) {}
+            resolve({ url: URL.createObjectURL(blob2), format: 'jpeg92' });
+          } else {
+            resolve({ url: canvas.toDataURL('image/png'), format: 'png' });
+          }
+        }, 'image/jpeg', 0.92);
+      }
+    }, 'image/webp', 0.9);
+  });
 }
 function retryShareGenerate() { track('share_card_retry', { ratio: getShareRatio(), locale: CURRENT_LANG }); generateShareFlow(); }
 function fallbackShareGenerate() {
@@ -5953,15 +6068,25 @@ function generateShareCard(persona, match, ratio, scale, depth, onPhase) {
       } }), 5000, 'rendering');
   }).then(function(canvas) {
     setPhase('done');
-    var url = canvas.toDataURL('image/png');
-    if (!url || url.length < 1000) throw new Error('empty canvas output');
-    if (scale < 2) toast(SHARE_LOWMEM);
-    shareCardUrls[ratio] = url;
-    shareCardRatioReady[ratio] = true;
-    if (window.gtag) { gtag('event', 'share_card_generate_success',
-      { 'test_version': '48题版', 'persona_result': persona.code || persona.word || '', 'ratio': ratio, 'scale': scale }); }
-    track('share_card_generate_success', { 'test_version': '48题版', 'persona_result': persona.code || persona.word || '', 'ratio': ratio, 'scale': scale });
-    return true;
+    /* 内容断言:任一不过即判失败并降级(防白图/缺图/文字缺失) */
+    var failedRules = checkCardContent(canvas, ratio, tpl, scale);
+    if (failedRules.length) {
+      var ccfMsg = failedRules.join(',');
+      track('share_card_content_check_failed', { failedRule: ccfMsg, ratio: ratio, persona: persona.code || persona.word || '', uaBucket: uaBucket(navigator.userAgent) });
+      throw new Error('content check failed: ' + ccfMsg);
+    }
+    return encodeCard(canvas, ratio).then(function(enc) {
+      if (!enc || !enc.url) throw new Error('empty canvas output');
+      if (scale < 2) toast(SHARE_LOWMEM);
+      /* 覆盖旧 blob URL 时释放,防内存泄漏 */
+      if (shareCardUrls[ratio] && shareCardUrls[ratio].indexOf('blob:') === 0) { try { URL.revokeObjectURL(shareCardUrls[ratio]); } catch (e) {} }
+      shareCardUrls[ratio] = enc.url;
+      shareCardRatioReady[ratio] = true;
+      if (window.gtag) { gtag('event', 'share_card_generate_success',
+        { 'test_version': '48题版', 'persona_result': persona.code || persona.word || '', 'ratio': ratio, 'scale': scale, 'format': enc.format }); }
+      track('share_card_generate_success', { 'test_version': '48题版', 'persona_result': persona.code || persona.word || '', 'ratio': ratio, 'scale': scale, 'format': enc.format });
+      return true;
+    });
   }).catch(function(e) {
     console.error('[shareCard] ' + state + ' failed:', e);
     if (depth === 0 && scale === 2) {

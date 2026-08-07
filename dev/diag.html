@@ -142,6 +142,12 @@ async function runOne(ratio) {
   var rec = { ratio: ratio, parallel: $('parallel').checked };
   try {
     var t0 = performance.now();
+    /* 预热内联(与生产 preparing 相同):避免 useCORS 重载相对路径被 CORS 拦截渲染白块 */
+    try {
+      var wk = (w.PERSONA_IMG && w.PERSONA_IMG[persona.word]) || null;
+      if (wk) await w.cardAssetBase64(wk + '.webp');
+      await w.cardAssetBase64(w.CARD_QR_FILE);
+    } catch (e) { /* 预热失败:与生产 warm 回退一致 */ }
     w.bindShareCard(tpl, persona, 87, ratio);
     await w.waitForImagesLoaded(tpl);
     var t1 = performance.now();
@@ -153,11 +159,18 @@ async function runOne(ratio) {
     ]);
     var t2 = performance.now();
     rec.rendering = t2 - t1;
+    /* 内容断言(新标准):任一规则不过 → 判失败 */
+    var rules = w.checkCardContent(canvas, ratio, tpl, 2);
     var url = canvas.toDataURL('image/png');
     var t3 = performance.now();
     rec.encode = t3 - t2;
-    rec.ok = true;
     rec.bytes = url.length;
+    if (rules && rules.length) {
+      rec.ok = false;
+      rec.err = 'content check: ' + rules.join(',');
+    } else {
+      rec.ok = true;
+    }
   } catch (e) {
     rec.ok = false;
     rec.err = String(e && e.message || e);

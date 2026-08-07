@@ -79,10 +79,6 @@
   @media (max-width: 480px) { .logo-image { height: 36px; } } /* 移动端 36px(比例 3.556:1,宽约 128px,width:auto 自动等比) */
   .brand span { color: var(--brand-gold); font-weight: 800; font-size: 15px; letter-spacing: 1px; }
   .version { color: var(--text-disabled); font-size: 12px; }
-  /* logo 链接(跳转 neuralfin.ai 官网) */
-  .brand a { display: inline-flex; border-radius: 6px; }
-  .brand a:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 3px; }
-  .brand a:hover .logo-image { opacity: .88; }
 
   /* ---- 首页（滑动式） ---- */
   .header-right { display: flex; align-items: center; gap: 12px; }
@@ -337,151 +333,49 @@
 
 
   /* ---- 分享卡 DOM 模板(离屏,html2canvas 导出 750x1200) ---- */
-      /* ============ 分享卡 9:16 / 4:5(html2canvas 兼容:只用 flex,不用 grid) ============ */
-    /* ============ 分享卡 2a 9:16 / 2b 4:5(设计稿;html2canvas 兼容:flex + 绝对定位,不用 grid) ============ */
-  .share-card-template { position: fixed; left: -9999px; top: 0; display: flex; flex-direction: column;
-    box-sizing: border-box; background: radial-gradient(120% 70% at 50% 0%, #12241d 0%, #0a100d 48%, #070908 100%);
-    overflow: hidden; font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif; }
-  .share-card-template.t916 { width: 1080px; height: 1920px; border-radius: 40px; }
-  .share-card-template.t45 { width: 1080px; height: 1350px; border-radius: 40px; }
-  .share-card-template .sc-topbar { position: absolute; top: 0; left: 0; width: 100%; height: 6px;
-    background: linear-gradient(90deg, #c9a227, #00e5a0 45%, #00e5a0 55%, #c9a227); z-index: 3; }
-  /* 斜向光带 */
-  .share-card-template::before { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    background: linear-gradient(115deg, transparent 32%, rgba(0,229,160,.055) 46%, rgba(201,162,39,.05) 54%, transparent 68%); }
-  .share-card-template > * { position: relative; z-index: 1; }
-  /* 徽章条 */
-  .sc-badge-row { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
-  .t916 .sc-badge-row { padding: 64px 52px 0; }
-  .t45 .sc-badge-row { padding: 44px 46px 0; }
-  .sc-badge { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 700; letter-spacing: .12em;
-    color: #0a0b0a; background: linear-gradient(135deg, #f4dd8c, #c9a227); border-radius: 5px; }
-  .t916 .sc-badge { font-size: 32px; padding: 5px 16px; }
-  .t45 .sc-badge { font-size: 28px; padding: 4px 14px; }
-  .sc-badge-label { font-family: Consolas, 'Courier New', monospace; letter-spacing: .14em; color: #c9a227; }
-  .t916 .sc-badge-label { font-size: 22px; }
-  .t45 .sc-badge-label { font-size: 20px; }
-  .sc-badge-no { margin-left: auto; font-family: 'Arial Narrow', Arial, sans-serif; letter-spacing: .16em; color: #5d6b64; }
-  .t916 .sc-badge-no { font-size: 32px; }
-  .t45 .sc-badge-no { font-size: 28px; }
-  /* 主体:2a 纵向 / 2b 横向 */
-  .sc-body { display: flex; flex-shrink: 0; }
-  .t916 .sc-body { flex-direction: column; gap: 30px; padding: 30px 52px 0; }
-  .t45 .sc-body { flex-direction: row; gap: 24px; padding: 20px 46px 0; align-items: stretch; }
-  /* 插画区(cover 裁切,html2canvas 兼容:显式尺寸 + overflow hidden) */
-  .sc-char-stage { position: relative; overflow: hidden; background: #0d0f0e; box-shadow: inset 0 0 0 1px rgba(0,229,160,.22); }
-  .t916 .sc-char-stage { flex: 0 0 1000px; border-radius: 28px; }
-  .t45 .sc-char-stage { flex: 0 0 520px; height: 600px; border-radius: 24px; }
-  .share-card-character { display: block; position: absolute; }
-  .sc-stage-grad { position: absolute; inset: 0; pointer-events: none; }
-  .t916 .sc-stage-grad { background: linear-gradient(180deg, rgba(7,9,8,.35) 0%, transparent 20%, transparent 64%, rgba(7,9,8,.92) 100%); }
-  .t45 .sc-stage-grad { background: linear-gradient(180deg, rgba(7,9,8,.3) 0%, transparent 22%, transparent 66%, rgba(7,9,8,.9) 100%); }
-  /* 匹配度(2a 叠插画左下 / 2b 信息列内) */
-  .sc-match-block { display: flex; align-items: flex-end; gap: 20px; }
-  .t916 .sc-stage-match { position: absolute; left: 30px; bottom: 28px; }
-  .t916 .sc-match-info { display: none; }
-  .t45 .sc-stage-match { display: none; }
-  .sc-match-num { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 600; line-height: .8; color: #00e5a0; }
-  .t916 .sc-match-num { font-size: 104px; }
-  .t45 .sc-match-num { font-size: 86px; }
-  .t916 .sc-match-num .sc-match-pct { font-size: 52px; }
-  .t45 .sc-match-num .sc-match-pct { font-size: 44px; }
-  .sc-match-label { font-family: Consolas, 'Courier New', monospace; letter-spacing: .2em; color: #9aa49d; }
-  .t916 .sc-match-label { font-size: 22px; padding-bottom: 10px; }
-  .t45 .sc-match-label { font-size: 20px; padding-bottom: 8px; }
-  /* 派系胶囊(2a 右上 / 2b 左下) */
-  .sc-clan-pill { position: absolute; font-family: Consolas, 'Courier New', monospace; letter-spacing: .14em;
-    color: rgba(255,255,255,.72); border: 1px solid rgba(255,255,255,.28); border-radius: 999px; }
-  .t916 .sc-clan-pill { right: 28px; top: 28px; font-size: 21px; padding: 7px 16px; }
-  .t45 .sc-clan-pill { left: 22px; bottom: 20px; font-size: 19px; padding: 6px 14px; }
-  .sc-clan-pill:empty { display: none; }
-  /* 信息列:名字 + 匹配 + 四维条 */
-  .t916 .sc-info { display: flex; flex-direction: column; gap: 30px; }
-  .t45 .sc-info { flex: 1; display: flex; flex-direction: column; gap: 20px; justify-content: center; }
-  .sc-name-row { display: flex; align-items: baseline; gap: 24px; flex-wrap: wrap; }
-  .sc-name-main { font-weight: 900; line-height: 1; color: #ffffff; letter-spacing: .04em; }
-  .t916 .sc-name-main { font-size: 112px; }
-  .t45 .sc-name-main { font-size: 84px; }
-  .sc-name-sub { font-family: 'Arial Narrow', Arial, sans-serif; font-weight: 500; letter-spacing: .22em; color: #00e5a0; }
-  .t916 .sc-name-sub { font-size: 42px; }
-  .t45 .sc-name-sub { font-size: 32px; }
-  .sc-name-sub:empty { display: none; }
-  /* 四维条 */
-  .sc-stats { display: flex; }
-  .t916 .sc-stats { flex-wrap: wrap; gap: 18px 44px; }
-  .t45 .sc-stats { flex-direction: column; gap: 14px; }
-  .sc-stat { display: flex; align-items: center; gap: 16px; }
-  .t916 .sc-stat { width: calc(50% - 22px); }
-  .sc-stat-label { color: #9aa49d; flex-shrink: 0; }
-  .t916 .sc-stat-label { width: 142px; font-size: 25px; }
-  .t45 .sc-stat-label { width: 118px; font-size: 23px; }
-  .sc-stat-bar { flex: 1; border-radius: 5px; background: rgba(255,255,255,.10); overflow: hidden; }
-  .t916 .sc-stat-bar { height: 9px; }
-  .t45 .sc-stat-bar { height: 8px; border-radius: 4px; }
-  .sc-stat-fill { height: 100%; border-radius: inherit; background: #00e5a0; }
-  .sc-stat-fill.low { background: #e0533f; }
-  .sc-stat-fill.gold { background: linear-gradient(90deg, #c9a227, #f4dd8c); }
-  .sc-stat-val { font-family: 'Arial Narrow', Arial, sans-serif; color: #e8efea; width: 62px; text-align: right; flex-shrink: 0; }
-  .t916 .sc-stat-val { font-size: 28px; }
-  .t45 .sc-stat-val { font-size: 26px; width: 58px; }
-  .sc-stat-val.gold { color: #f4dd8c; }
-  /* tagline 灰底盒(设计稿) */
-  .sc-tagbox { display: flex; flex-direction: column; gap: 14px; padding: 28px 30px; border-radius: 22px;
-    background: rgba(255,255,255,.045); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); flex-shrink: 0; }
-  .t916 .sc-tagbox { margin: 0 52px; }
-  .t45 .sc-tagbox { margin: 0 46px; padding: 24px 26px; border-radius: 20px; gap: 12px; }
-  .sc-tagline { font-size: 36px; font-weight: 700; line-height: 1.45; color: #ffffff; overflow: hidden; }
-  .t45 .sc-tagline { font-size: 33px; }
-  .sc-social { font-size: 27px; line-height: 1.55; color: #98a29b; white-space: pre-line; }
-  .t45 .sc-social { font-size: 25px; }
-  .sc-social .sc-num { color: #00e5a0; font-family: 'Arial Narrow', Arial, sans-serif; }
-  /* 页脚 */
-  .sc-footer { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px;
-    border-top: 1px solid rgba(255,255,255,.09); flex-shrink: 0; }
-  .t916 .sc-footer { padding: 26px 52px 56px; }
-  .t45 .sc-footer { padding: 22px 46px 40px; gap: 28px; }
-  .sc-foot-left { display: flex; flex-direction: column; gap: 12px; }
-  .t45 .sc-foot-left { gap: 10px; }
-  .sc-logo { height: 34px; width: auto; opacity: .9; }
-  .t45 .sc-logo { height: 30px; }
-  .sc-version { font-family: Consolas, 'Courier New', monospace; letter-spacing: .1em; color: #6d766f; }
-  .t916 .sc-version { font-size: 21px; }
-  .t45 .sc-version { font-size: 19px; }
-  .sc-disclaimer { font-family: Consolas, 'Courier New', monospace; color: #6a736c; }
-  .t916 .sc-disclaimer { font-size: 19px; }
-  .t45 .sc-disclaimer { font-size: 17px; }
-  .t916 .sc-disclaimer div + div { margin-top: 4px; }
-  .sc-foot-right { display: flex; align-items: center; gap: 18px; }
-  .t45 .sc-foot-right { gap: 16px; }
-  .sc-claim { text-align: right; font-size: 24px; line-height: 1.4; color: #9aa49d; display: flex; flex-direction: column; }
-  .t45 .sc-claim { font-size: 22px; }
-  .sc-claim-2 { color: #00e5a0; font-weight: 700; }
-  .sc-qrcode { padding: 10px; background: #fff; border-radius: 14px; flex-shrink: 0; }
-  .t916 .sc-qrcode img { width: 128px; height: 128px; display: block; }
-  .t45 .sc-qrcode { padding: 9px; border-radius: 12px; }
-  .t45 .sc-qrcode img { width: 112px; height: 112px; display: block; }
-  /* 尺寸 chip + 预览弹层 */
-  .share-ratio-row { display: flex; justify-content: center; gap: 12px; margin: 0 0 14px; }
-  .share-ratio-chip { font-size: 13px; font-weight: 800; padding: 8px 18px; border-radius: 999px;
-    border: 1.5px solid var(--border-subtle); background: var(--bg-card); color: var(--text-secondary);
-    cursor: pointer; letter-spacing: 1px; transition: border-color .2s, background .2s, color .2s; }
-  .share-ratio-chip:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
-  .share-ratio-chip.active { background: var(--accent-primary); color: var(--bg-primary);
-    border-color: var(--accent-primary); border-radius: 8px; font-weight: 900; }
-  .share-ratio-chip.busy::after { content: '…'; }
-  .share-preview-imgwrap { position: relative; }
-  .share-preview-spin { display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-    color: var(--accent-primary); font-weight: 800; letter-spacing: 1px; z-index: 2; }
-  .share-preview-spin.show { display: block; }
-
-  .share-preview-mask { position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: none;
-    align-items: center; justify-content: center; background: rgba(10,10,10,.55); color: var(--text-primary);
-    font-size: 15px; font-weight: 800; letter-spacing: 1px; z-index: 2; border-radius: 12px; }
-  .share-preview-regen { display: none; width: 100%; margin-top: 10px; padding: 12px; background: var(--bg-card);
-    border: 1px solid var(--border-subtle); border-radius: 12px; color: var(--text-primary);
-    font-size: 15px; font-weight: 700; cursor: pointer; }
-  .share-preview-regen:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
-.share-card-qrcode img { width: 100%; height: 100%; display: block; }
+    .share-card-template { position: fixed; left: -9999px; top: 0; width: 750px; min-height: 1250px;
+    display: flex; flex-direction: column; padding: 16px 44px 0; box-sizing: border-box;
+    background: var(--bg-primary);
+    font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+  /* 背景:角色位置光晕 + 双角微光,总透明度 ≤8% */
+  .share-card-bg { position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 0; background:
+    radial-gradient(ellipse 560px 500px at 50% 30%, var(--accent-08), transparent 70%),
+    radial-gradient(ellipse 420px 340px at 92% 4%, var(--accent-08), transparent 70%),
+    radial-gradient(ellipse 380px 300px at 4% 98%, var(--accent-08), transparent 70%),
+    var(--bg-primary); }
+  /* 顶部品牌区(Logo 与角色间距约 68px) */
+  .share-card-topbar { position: relative; z-index: 1; display: flex; align-items: center;
+    gap: 12px; margin-bottom: 12px; }
+  .share-card-logo { width: auto; height: 34px; border-radius: 0; }
+  .share-card-topname { font-size: 22px; font-weight: 700; color: var(--text-secondary); letter-spacing: 1px; }
+  /* 角色图:flex 区吸收剩余空间,JS 按原始比例精算显式尺寸(防 html2canvas 变形) */
+  .share-card-charwrap { position: relative; z-index: 1; flex: 1 1 auto; min-height: 580px;
+    display: flex; align-items: center; justify-content: center; }
+  .share-card-character { max-width: 88%; max-height: 100%; width: auto; height: auto;
+    object-fit: contain; }
+  /* 人格名称区(角色底部间距 36px) */
+  .share-card-word { position: relative; z-index: 1; text-align: center;
+    font-size: 66px; font-weight: 900; letter-spacing: 0.1em; text-indent: 0.1em;
+    color: var(--accent-primary); margin-top: 36px; }
+  .share-card-namebar { position: relative; z-index: 1; display: flex; align-items: center;
+    justify-content: center; gap: 28px; margin-top: 18px; }
+  .share-card-title-cn { font-size: 48px; font-weight: 800; letter-spacing: 2px; color: var(--text-primary); }
+  .share-card-match { width: 84px; height: 84px; flex-shrink: 0; }
+  /* tagline / 社交钩子:独立卡片容器分隔 */
+  .sc-card { position: relative; z-index: 1; background: var(--bg-card);
+    border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px 18px; }
+  .share-card-tagline { margin-top: 36px; text-align: center; font-size: 26px; font-weight: 600;
+    line-height: 1.7; color: var(--text-secondary); }
+  .share-card-social-proof { margin-top: 20px; text-align: center; font-size: 22px;
+    line-height: 1.65; color: var(--text-secondary); }
+  /* 底部品牌 + 二维码:flex 吸底,内容变长时被自然推下,不重叠 */
+  .share-card-footer { position: relative; z-index: 1; margin-top: auto; padding: 48px 0 56px;
+    display: flex; justify-content: space-between; align-items: flex-end; }
+  .share-card-brand { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700; color: var(--text-disabled); }
+  .share-card-brand-logo { width: auto; height: 26px; border-radius: 0; }
+  .share-card-qrcode { width: 150px; height: 150px; background: #fff; border-radius: 16px;
+    padding: 9px; box-sizing: border-box; }
+  .share-card-qrcode img { width: 100%; height: 100%; display: block; }
 
   /* ---- 分享卡预览弹层(分步预览+长按分享) ---- */
   #sharePreviewModal { display: none; }
@@ -600,55 +494,23 @@
 </style>
 
 <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?f591eb5e42cb61b202250c867f8b9e02";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
 </script>
 
 <!-- Google tag (gtag.js) -->
-<!-- Google tag (gtag.js):load 后异步注入,不进首屏关键路径;gtag() 占位先立,事件预排队 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8TGVEPYX0E"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-8TGVEPYX0E');
-  (function() {
-    var injected = false;
-    function injectGtag() {
-      if (injected) return;
-      injected = true;
-      var s = document.createElement('script');
-      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-8TGVEPYX0E';
-      s.async = true;
-      (document.getElementsByTagName('script')[0] || document.head).appendChild(s);
-    }
-    if (document.readyState === 'complete') { injectGtag(); }
-    else { window.addEventListener('load', injectGtag, { once: true }); }
-  })();
 </script>
-<script>
-/* NeuralFin NBTI 自建数据管道 (v1):用户标识 + page_view 补发(事件入库在 track() 内) */
-(function() {
-  var uid = null;
-  try {
-    uid = localStorage.getItem('nf_uid');
-    if (!uid) {
-      uid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('u-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10));
-      localStorage.setItem('nf_uid', uid);
-    }
-  } catch (e) { uid = 'u-' + Date.now().toString(36); }
-  window.__nfUid = uid;
-  if (window.gtag) gtag('set', { user_id: uid });
-  /* ref_landing:分享卡带 ?ref= 落地即发(单请求);移入 firePV 保证 track 已定义(DOMContentLoaded) */
-  var __refM = (location.search.match(/[?&]ref=([A-Za-z0-9_-]{1,64})/) || [])[1];
-  var __refP = (location.search.match(/[?&]refPersona=([A-Za-z0-9_-]{1,40})/) || [])[1];
-  if (__refM) { window.__refTag = { ref: __refM, refPersona: __refP || '' }; }
-  var firePV = function() {
-    if (window.track) window.track('page_view', { 'test_version': '48-hk' });
-    if (__refM && window.track) window.track('ref_landing', { ref: __refM, refPersona: __refP || '', locale: CURRENT_LANG });
-  };
-  if (document.readyState !== 'loading') firePV();
-  else document.addEventListener('DOMContentLoaded', firePV);
-})();
-</script>
-
 <script>
 /* ============================================================
  * NeuralFin NBTI 三語路由與狀態(v1)
@@ -720,7 +582,7 @@ function resolveRedirectTarget() {
   if (/bot|crawl|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|twitterbot|linkedinbot|embedly|discordbot|pinterest|applebot|quora link preview/i.test(ua)) return;
   var target = null;
   try { target = resolveRedirectTarget(); } catch (e) { target = null; }
-  if (target) { window.__nbtiRedirecting = true; location.replace(target); } /* 本 IIFE 內不存在任何會跳過此行 replace 的 return(全部 return 僅出現在 resolveRedirectTarget 內,與執行層分離) */
+  if (target) location.replace(target); /* 本 IIFE 內不存在任何會跳過此行 replace 的 return(全部 return 僅出現在 resolveRedirectTarget 內,與執行層分離) */
 })();
 
 /* 讀 navigator.languages 陣列,逐項判斷;統一正規化 + 前綴匹配(ES5) */
@@ -794,17 +656,8 @@ function syncLangLinks() {
 /* 偏好寫入綁定:只綁一次(DOMContentLoaded 內),syncLangLinks 可重複調用不重複綁定 */
 function initLangSwitcher() {
   eachLangOption(function(link) {
-    link.addEventListener('click', function(ev) {
+    link.addEventListener('click', function() {
       lsSet('nbti_preferred_lang', this.getAttribute('data-lang'));
-      /* 答题中切语言:目标 URL 补 ?resume=1,目标页加载后自动续答(仅普通左键点击) */
-      if (quizResumePending() && !/[?&]resume=1/i.test(this.href)) {
-        if (!ev.metaKey && !ev.ctrlKey && !ev.shiftKey && !ev.altKey) {
-          ev.preventDefault();
-          var h = this.href, hash = '', sharp = h.indexOf('#');
-          if (sharp > -1) { hash = h.slice(sharp); h = h.slice(0, sharp); }
-          location.href = h + (h.indexOf('?') > -1 ? '&' : '?') + 'resume=1' + hash;
-        }
-      }
     });
   });
 }
@@ -892,70 +745,11 @@ function restoreFromHash() {
   if (ok) { __hashRestored = true; syncLangLinks(); } /* R5:恢復後同步一次切換器 */
 }
 
-/* ---------- 答题进度跨语言恢复(?resume=1) ---------- */
-var __resumeRestored = false; /* 幂等:仅成功续答才置位 */
-var RESUME_MSGS = {
-  zh: '已还原上次进度，第 {n} 题',
-  hk: '已還原上次進度，第 {n} 題',
-  en: 'Resumed from question {n}'
-};
-var RESUME_SUBMIT_MSGS = {
-  zh: '已还原上次进度，可以提交啦',
-  hk: '已還原上次進度，可以提交啦',
-  en: 'Progress restored. Ready to submit.'
-};
-/* 是否有未完成进度且当前处于答题流程(答题/结算/提交待定) */
-function quizResumePending() {
-  var raw = lsGet(getProgressKey());
-  if (!raw) return false;
-  try {
-    var d = JSON.parse(raw);
-    if (!d || !Array.isArray(d.answers) || !d.answers.length) return false;
-  } catch (e) { return false; }
-  var q = document.getElementById('page-quiz');
-  if (q && /\bactive\b/.test(q.className)) return true;
-  var l = document.getElementById('page-loading');
-  if (l && /\bactive\b/.test(l.className)) return true;
-  /* 提交待定态:已答全部题目且未提交(finish() 会清进度,结果页不会走到这里) */
-  if (typeof userAnswers !== 'undefined' && userAnswers && userAnswers.length >= getQuizLen()) return true;
-  return false;
-}
-/* 消费 ?resume=1 后从 URL 抹掉(与 ?lang= 同款,防分享链接污染) */
-function stripResumeParam() {
-  try {
-    var params = [];
-    var q = (location.search || '').replace(/^\?/, '');
-    if (q) {
-      q.split('&').forEach(function(pair) { if (!/^resume=/i.test(pair)) params.push(pair); });
-    }
-    history.replaceState(null, '', location.pathname + (params.length ? '?' + params.join('&') : '') + location.hash);
-  } catch (e) { /* file:// 或極舊 WebView 的 replaceState 限制,忽略 */ }
-}
-/* 语言切换带 ?resume=1 到达:直接续答到当前未答题 */
-function resumeFromSearch() {
-  if (__resumeRestored) return;
-  if (!/[?&]resume=1(?=&|$)/i.test(location.search)) return;
-  var saved = loadProgress();
-  if (!saved) return;
-  if (window.__nbtiRedirecting) return; /* 本页即将被自动分流替换,不渲染 */
-  __resumeRestored = true;
-  restoreProgress(saved);
-  stripResumeParam();
-  var total = getQuizLen();
-  if (typeof current !== 'undefined' && current >= total) {
-    toast(RESUME_SUBMIT_MSGS[CURRENT_LANG] || RESUME_SUBMIT_MSGS.zh);
-  } else {
-    var n = Math.min((typeof current === 'number' ? current : 0) + 1, total);
-    toast((RESUME_MSGS[CURRENT_LANG] || RESUME_MSGS.zh).replace('{n}', String(n)));
-  }
-}
-
 /* ---------- 初始化(唯一綁定點;hash 恢復在應用 script 執行後才安全) ---------- */
 document.addEventListener('DOMContentLoaded', function() {
   initLangSwitcher();   /* click 綁定,只此一處 */
   syncLangLinks();      /* href 覆寫為帶參數版本 */
   restoreFromHash();    /* 冪等:應用 script 初始化區已調用過則跳過 */
-  resumeFromSearch();   /* 答题进度跨语言恢复(?resume=1):直接续答当前未答题 */
 });
 window.addEventListener('hashchange', syncLangLinks);
 </script>
@@ -965,9 +759,7 @@ window.addEventListener('hashchange', syncLangLinks);
 
   <header class="app-header">
     <div class="brand">
-      <a href="https://neuralfin.ai" target="_blank" rel="noopener">
-        <img class="logo-image" id="brand-sign" src="NeuralFin.png" alt="NeuralFin">
-      </a>
+      <img class="logo-image" id="brand-sign" src="NeuralFin.png" alt="NeuralFin">
     </div>
     <div class="header-right">
       <span class="version">金融 NBTI v1.0</span>
@@ -1000,7 +792,7 @@ window.addEventListener('hashchange', syncLangLinks);
 
     <div class="home-section reveal" id="sec-clans">
       <h2 class="clan-section-title">四種氣質，<span class="highlight">你係邊一派</span></h2>
-      <p class="clan-section-subtitle">每一種派系，都係一種鮮明嘅投資人格畫像</p>
+      <p class="clan-section-subtitle">每一種派系，都係一種鮮明嘅投資性格畫像</p>
       <div class="clan-grid">
         <div class="clan-card" data-accent="red">
           <img src="clan-1.jpg" alt="衝動冒險派" class="clan-photo" loading="lazy">
@@ -1071,123 +863,49 @@ window.addEventListener('hashchange', syncLangLinks);
 </div>
 <div id="ticker"><div class="track" id="ticker-track"></div></div>
 
-      <!-- 分享卡 DOM 模板:2a 9:16(1080×1920,默认) + 2b 4:5(1080×1350);设计稿 NBTI 分享卡.dc.html -->
-  <div class="share-card-template t916" id="shareCardTemplate916">
-    <div class="sc-topbar"></div>
-    <div class="sc-badge-row">
-      <span class="sc-badge"></span>
-      <span class="sc-badge-label"></span>
-      <span class="sc-badge-no"></span>
+  <!-- 分享卡 DOM 模板(离屏渲染,html2canvas 导出静态图) -->
+  <div class="share-card-template" id="shareCardTemplate">
+    <div class="share-card-bg"></div>
+    <div class="share-card-topbar">
+      <img class="share-card-logo" alt="">
+      <span class="share-card-topname">金融 NBTI v1.0</span>
     </div>
-    <div class="sc-body">
-      <div class="sc-char-stage">
-        <img class="share-card-character" alt="" crossorigin="anonymous">
-        <div class="sc-stage-grad"></div>
-        <div class="sc-stage-match sc-match-block">
-          <span class="sc-match-num"></span>
-          <span class="sc-match-label"></span>
-        </div>
-        <span class="sc-clan-pill"></span>
-      </div>
-      <div class="sc-info">
-        <div class="sc-name-row">
-          <span class="sc-name-main"></span>
-          <span class="sc-name-sub"></span>
-        </div>
-        <div class="sc-match-info sc-match-block">
-          <span class="sc-match-num"></span>
-          <span class="sc-match-label"></span>
-        </div>
-        <div class="sc-stats">
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-        </div>
-      </div>
+    <div class="share-card-charwrap">
+      <img class="share-card-character" alt="" crossorigin="anonymous">
     </div>
-    <div class="sc-tagbox">
-      <div class="sc-tagline"></div>
-      <div class="sc-social"></div>
+    <div class="share-card-word"></div>
+    <div class="share-card-namebar">
+      <div class="share-card-title-cn"></div>
+      <div class="share-card-match" id="shareCardMatch"></div>
     </div>
-    <div class="sc-footer">
-      <div class="sc-foot-left">
-        <img class="sc-logo" alt="">
-        <div class="sc-version"></div>
-        <div class="sc-disclaimer"><div></div><div></div></div>
-      </div>
-      <div class="sc-foot-right">
-        <div class="sc-claim"><span class="sc-claim-1"></span><span class="sc-claim-2"></span></div>
-        <div class="sc-qrcode"><img alt="NeuralFin 二維碼" crossorigin="anonymous"></div>
-      </div>
+    <div class="sc-card share-card-tagline"></div>
+    <div class="sc-card share-card-social-proof"></div>
+    <div class="share-card-footer">
+      <div class="share-card-brand"><img class="share-card-brand-logo" src="NeuralFin.png" alt="NeuralFin"> 金融 NBTI</div>
+      <div class="share-card-qrcode"><img alt="NeuralFin 二維碼" crossorigin="anonymous"></div>
     </div>
   </div>
 
-  <div class="share-card-template t45" id="shareCardTemplate45">
-    <div class="sc-topbar"></div>
-    <div class="sc-badge-row">
-      <span class="sc-badge"></span>
-      <span class="sc-badge-label"></span>
-      <span class="sc-badge-no"></span>
-    </div>
-    <div class="sc-body">
-      <div class="sc-char-stage">
-        <img class="share-card-character" alt="" crossorigin="anonymous">
-        <div class="sc-stage-grad"></div>
-        <span class="sc-clan-pill"></span>
-      </div>
-      <div class="sc-info">
-        <div class="sc-name-row">
-          <span class="sc-name-main"></span>
-          <span class="sc-name-sub"></span>
-        </div>
-        <div class="sc-match-info sc-match-block">
-          <span class="sc-match-num"></span>
-          <span class="sc-match-label"></span>
-        </div>
-        <div class="sc-stats">
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-          <div class="sc-stat"><span class="sc-stat-label"></span><div class="sc-stat-bar"><div class="sc-stat-fill"></div></div><span class="sc-stat-val"></span></div>
-        </div>
-      </div>
-    </div>
-    <div class="sc-tagbox">
-      <div class="sc-tagline"></div>
-      <div class="sc-social"></div>
-    </div>
-    <div class="sc-footer">
-      <div class="sc-foot-left">
-        <img class="sc-logo" alt="">
-        <div class="sc-version"></div>
-        <div class="sc-disclaimer"><div></div><div></div></div>
-      </div>
-      <div class="sc-foot-right">
-        <div class="sc-claim"><span class="sc-claim-1"></span><span class="sc-claim-2"></span></div>
-        <div class="sc-qrcode"><img alt="NeuralFin 二維碼" crossorigin="anonymous"></div>
-      </div>
-    </div>
-  </div>
-
+  <!-- 分享卡预览弹层:分步预览+长按分享(不禁用 touch-callout) -->
   <div class="share-preview-modal" id="sharePreviewModal">
     <div class="share-preview-overlay" onclick="closeSharePreview()"></div>
     <div class="share-preview-content">
       <button class="share-preview-close" onclick="closeSharePreview()">✕</button>
-      <div class="share-ratio-row" role="group" aria-label="Share size">
-        <button type="button" class="share-ratio-chip" data-ratio="9:16" aria-pressed="true" onclick="onRatioChipClick('9:16')">Story 9:16</button>
-        <button type="button" class="share-ratio-chip" data-ratio="4:5" aria-pressed="false" onclick="onRatioChipClick('4:5')">Feed 4:5</button>
-      </div>
-      <div class="share-preview-imgwrap">
-        <img class="share-preview-image" id="sharePreviewImg" alt="分享卡片預覽">
-        <div class="share-preview-spin" id="sharePreviewSpin">生成中…</div>
-      </div>
+      <img class="share-preview-image" id="sharePreviewImg" alt="分享卡片預覽">
       <p class="share-preview-hint" id="sharePreviewHint"></p>
       <button class="share-preview-download-btn btn" id="sharePreviewDl" onclick="sharePreviewAction()">下載分享圖</button>
-      <button class="share-preview-download-btn btn" id="shareRetryBtn" style="display:none" onclick="retryShareGenerate()">重試</button>
-      <button class="share-preview-download-btn btn" id="shareFallbackBtn" style="display:none" onclick="fallbackShareGenerate()">改用備用方式生成</button>
     </div>
   </div>
+<div id="confirmModal" class="confirm-overlay" style="display:none;">
+  <div class="confirm-panel">
+    <div class="confirm-title" id="confirmTitle"></div>
+    <div class="confirm-desc" id="confirmDesc"></div>
+    <button class="btn" id="confirmPrimary"></button>
+    <button class="btn confirm-secondary" id="confirmSecondary"></button>
+  </div>
+</div>
+<div id="toast"></div>
+
 <script>
 /* QR Code generator (MIT, Kazuhiko Arase) - 内嵌，无外部依赖 */
 //---------------------------------------------------------------------
@@ -4033,7 +3751,7 @@ var QUESTIONS = {
         },
         {
           "text": "手震住撳確認鍵，口噏噏「唔好慌唔好慌」",
-          "code": "FC"
+          "code": "FP"
         },
         {
           "text": "邊加倉邊後悔，加完仲諗緊要唔要撤",
@@ -4285,7 +4003,7 @@ var QUESTIONS = {
       "options": [
         {
           "text": "「癲咗呀？雞蛋唔可以放喺一個籃」",
-          "code": "RS+HT"
+          "code": "RS"
         },
         {
           "text": "「呢啲先係信仰，穩喇」",
@@ -4293,7 +4011,7 @@ var QUESTIONS = {
         },
         {
           "text": "「揸三年？我三日都嫌耐」",
-          "code": "RG+HT"
+          "code": "HT"
         },
         {
           "text": "「可以試吓，反正都係閒錢」",
@@ -4311,7 +4029,7 @@ var QUESTIONS = {
       "options": [
         {
           "text": "最長：從未賣出嘅「壓箱底」藍籌；最短：從未過夜嘅題材股",
-          "code": "RS+HH"
+          "code": "HH+HT"
         },
         {
           "text": "最長：All-in 押上嘅夢想股；最短：幾乎唔做短線，太傷肝",
@@ -4319,7 +4037,7 @@ var QUESTIONS = {
         },
         {
           "text": "最長：幾乎冇，我信嘅係「T」；最短：我全部身家",
-          "code": "RG+HT"
+          "code": "HT+RG/RS"
         },
         {
           "text": "最長：政府債券，穩到發霉；最短：間中手痕做嘅即日鮮",
@@ -4367,11 +4085,11 @@ var QUESTIONS = {
         },
         {
           "text": "「癲咗，雞蛋唔可以放一個籃放足三年」",
-          "code": "RS+HT"
+          "code": "RS"
         },
         {
           "text": "「揸咁耐？一早應該做咗 T 啦」",
-          "code": "RG+HT"
+          "code": "HT"
         },
         {
           "text": "「細倉可以試吓，唔好賭晒成副身家」",
@@ -4501,11 +4219,11 @@ var QUESTIONS = {
         },
         {
           "text": "「All-in 過，後悔過，但仲想再 All-in 一次」",
-          "code": "RG+FC"
+          "code": "RG+FP"
         },
         {
           "text": "「細倉可以，All-in？諗都唔敢諗」",
-          "code": "RS+FP"
+          "code": "RS+FC"
         },
         {
           "text": "講唔清，好似樣樣都有啲",
@@ -4791,7 +4509,7 @@ var QUESTIONS = {
         },
         {
           "text": "幾年前啦，反正而家心態早就隨緣咗",
-          "code": "HT+FC"
+          "code": "HH+FC"
         },
         {
           "text": "講唔清，好似樣樣都有啲",
@@ -4828,7 +4546,6 @@ var QUESTIONS = {
   ]
 };
 
-/* shareText 为死数据,未渲染;若日后启用须先过合规审查 */
 var RESULTS = {
   "results": [
     { "code": "RGHC", "word": "SNIPER", "name": "狙擊手", "tagline": "你研究足十年先出手一次，隻獵物從未走甩——直到上次你喺半山腰撈底。", "traits": ["你係群組入面嘅「股神」，啲人輸錢先至嚟問你。", "你嘅問題唔係揀股，係揸唔住——邏輯啱晒，隻手唔聽話。", "冷靜係你嘅超能力，但冷靜得太耐，最肥嗰段永遠食唔到。"], "recommendedAsset": "你重倉嗰隻股票（你研究咗佢十年）", "shareText": "我係狙擊手型——研究十年，出手一次，從不 all-in。你呢？" },
@@ -4854,7 +4571,7 @@ var RESULTS = {
     "本測試純屬娛樂，唔好用嚟算命，更加唔好用嚟相睇。"
   ],
   "easterEggs": {
-    "allSameAnswer": { "persona": "人肉提款機", "note": "你連測試都唔敢企邊" },
+    "allSameAnswer": { "persona": "人肉提款機", "note": "AI 檢測到你已經失去理智，建議即刻刪晒所有交易 App。" },
     "rapidSubmit": { "note": "世界已經夠亂，起碼將啲題答完先。" },
     "abcdCycle": { "persona": "對稱美學鑑賞家", "note": "你連答題都要對稱，一定活得幾攰吓？" },
     "q9CNote": { "note": "放心，我哋嘅 AI 都俾人打過臉，佢而家學乖咗。" }
@@ -4864,11 +4581,9 @@ var RESULTS = {
 
 
 /* ============ 结果页数据:社交钩子统计 + 深度解读 + App二维码 ============ */
-/* total 为示意量级,非真实统计;展示时按 5,000+/10,000+/15,000+/20,000+ 分 4 档,勿直接渲染原值 */
-/* topic 已停用:社交证明改为分桶+派系两行式,此字段无渲染出口,勿再启用 */
 var PERSONA_STATS = {
   "SNIPER": { total: 9215, discussing: 216, topic: "呢隻票嘅年報到底應唔應該信" },
-  "TURTLE": { total: 14762, discussing: 58, topic: "仲要揸幾耐先返家鄉", note: "其他人都喺度瞓覺" },
+  "TURTLE": { total: 14762, discussing: 58, topic: "仲要揸幾耐先返家鄉", note: "其他人都在睡觉" },
   "BOT": { total: 6340, discussing: 512, topic: "今日個策略要唔要改參數" },
   "GRANDMA": { total: 13958, discussing: 189, topic: "呢筆到底值唔值得" },
   "PROPHET": { total: 7809, discussing: 743, topic: "要唔要撈底嗰隻信仰幣" },
@@ -5019,24 +4734,6 @@ var DEEP_DIVES = {
 var QR_APP_IMG = 'data:image/png;base64,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';
 /* ============ 状态 ============ */
 var userAnswers = [];
-/* ---- test_progress 埋点:maxQ + 每题耗时,完成/pagehide 各发 1 次 ---- */
-var qStart = 0;
-var perQuestionMs = [];
-var PROGRESS_META_KEY = 'nbti_progress_meta';
-function saveProgressMeta() {
-  try {
-    sessionStorage.setItem(PROGRESS_META_KEY, JSON.stringify({ maxQ: userAnswers.length, perQuestionMs: perQuestionMs }));
-  } catch (e) {}
-}
-function readProgressMeta() {
-  try {
-    var raw = sessionStorage.getItem(PROGRESS_META_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch (e) { return null; }
-}
-function clearProgressMeta() {
-  try { sessionStorage.removeItem(PROGRESS_META_KEY); } catch (e) {}
-}
 var pendingTimer = null; /* 当前题自动推进定时器(返回上一题时取消) */
 var current = 0;
 var loadTimer = null;
@@ -5087,6 +4784,7 @@ function initTicker() {
     '刷屏、學習、討論、行動、複利——將每日碌手機嘅碎片時間，變成你嘅專屬金融學習閉環',
     '關注專業人士、機構與博主，社區驅動學習，AI 將海量內容壓縮成可行動嘅洞察',
     '由發現到執行，同一個介面完成，學到嘅當下就能行動',
+    '已接入香港證監會持牌機構德林證券，受監管交易，安心起步',
     '你嘅測試結果只係起點，撳下面，開啟你嘅投資複利之旅 🚀'
   ];
   var marqueeText = '✦ ' + marqueeItems.join(' ✦ ') + ' ✦';
@@ -5129,8 +4827,7 @@ function goToPreviousQuestion() {
 }
 function startQuiz() {
   if (window._hmt) { window._hmt.push(['_trackEvent', 'test_flow', 'start']); } /* 百度统计:開始測試 */
-  if (window.gtag) { gtag('event', 'test_start',
-    { 'test_version': '48-hk' }); } track('test_start', { 'test_version': '48-hk' });  /* GA4:開始測試 */
+  if (window.gtag) { gtag('event', 'test_start', { 'test_version': '48-hk' }); } /* GA4:開始測試 */
   var saved = loadProgress();
   if (saved) {
     showConfirm({
@@ -5151,7 +4848,6 @@ function freshStart() {
   renderQuestion();
 }
 function renderQuestion() {
-  qStart = Date.now(); /* 本题计时起点(test_progress) */
   var q = QUESTIONS.questions[current];
   var n = String(current + 1).padStart(2, '0'), total = String(QUESTIONS.questions.length).padStart(2, '0');
   document.getElementById('q-count').textContent = '第 ' + n + ' 題 / 共 ' + total + ' 題';
@@ -5184,8 +4880,6 @@ function choose(i, btn) {
   /* 记录优先:保存本题选择(对象含索引+计分码),计分延后统一计算 */
   userAnswers[current] = { selectedOptionIndex: i, code: QUESTIONS.questions[current].options[i].code };
   saveProgress(); /* 自动保存进度,关页可续答 */
-  perQuestionMs[current] = Math.round(Date.now() - qStart); /* test_progress:本题耗时 */
-  saveProgressMeta();
   var btns = document.querySelectorAll('#q-options .opt');
   btns.forEach(function(b) { b.classList.remove('sel'); b.classList.add('locked'); });
   btn.classList.add('sel');
@@ -5257,7 +4951,7 @@ function score() {
   }
   QUESTIONS.questions.forEach(function(q, qi) {
     var ans = userAnswers[qi];
-    if (!ans || typeof ans.code !== 'string' || !q.options[ans.selectedOptionIndex]) return; // 防御:缺答/结构损坏跳过
+    if (!ans || !q.options[ans.selectedOptionIndex]) return; // 防御:缺答跳过
     parseCode(ans.code).forEach(function(v) {
       dims[v.d][v.p] += (v.w || 1);
     });
@@ -5291,45 +4985,20 @@ function finish() {
   if (egg) {
     var e = RESULTS.easterEggs[egg];
     renderEgg(e.persona, e.note, eggWordByKey(egg)); /* 与降级路径共用 EGG_MAP,日后加彩蛋只改一处 */
-        /* 彩蛋完成同样上报,保证漏斗不断 */
-    var eggWord = eggWordByKey(egg) || 'egg';
-    if (window._hmt) { window._hmt.push(['_trackEvent', 'test_completed', 'finish', eggWord]); }
-    if (window.gtag) { gtag('event', 'test_completed', { 'test_version': '48-hk', 'persona_result': eggWord }); }
-    track('test_completed', { 'test_version': '48-hk', 'persona_result': eggWord });
-    var metaEgg = readProgressMeta();
-    if (metaEgg) {
-      track('test_progress', { maxQ: metaEgg.maxQ, perQuestionMs: metaEgg.perQuestionMs, abandoned: false });
-      clearProgressMeta();
-    }
-    if (window.__refTag) {
-      track('ref_convert', { ref: window.__refTag.ref, refPersona: window.__refTag.refPersona || '', myPersona: eggWord });
-    }
     return;
   }
   var s = score();
   if (window._hmt) { window._hmt.push(['_trackEvent', 'test_completed', 'finish', s.code]); } /* 百度统计:完成测试(含人格代码) */
-  if (window.gtag) { gtag('event', 'test_completed',
-    { 'test_version': '48-hk', 'persona_result': s.code }); } track('test_completed', { 'test_version': '48-hk', 'persona_result': s.code });  /* GA4:完成测试 */
-  /* test_progress:完成时上报(单请求),清 sessionStorage 防 pagehide 重复 */
-  var metaDone = readProgressMeta();
-  if (metaDone) {
-    track('test_progress', { maxQ: metaDone.maxQ, perQuestionMs: metaDone.perQuestionMs, abandoned: false });
-    clearProgressMeta();
-  }
-  /* ref_convert:带 ref 的会话完成时上报 */
-  if (window.__refTag) {
-    track('ref_convert', { ref: window.__refTag.ref, refPersona: window.__refTag.refPersona || '', myPersona: s.code });
-  }
+  if (window.gtag) { gtag('event', 'test_completed', { 'test_version': '48-hk', 'persona_result': s.code }); } /* GA4:完成测试 */
   var persona = RESULTS.results.filter(function(r) { return r.code === s.code; })[0];
   renderResult(persona, s);
 }
 
 function renderEgg(name, note, word) {
-  warmCardAssets(null); /* 彩蛋无角色图,仅预热二维码 */
   show('page-result');
   document.getElementById('result-body').innerHTML =
     '<div class="egg-wrap">' +
-      '<img class="egg-img" loading="eager" alt="' + name + '" src="' + (word === 'ATM' ? 'atm' : 'abcd') + '.webp" onerror="this.onerror=null;this.src=\'' + (word === 'ATM' ? 'atm' : 'abcd') + '.png\';">' +
+      '<img class="egg-img" loading="eager" alt="' + name + '" src="/' + (word === 'ATM' ? 'atm' : 'abcd') + '.webp" onerror="this.onerror=null;this.src=\'/' + (word === 'ATM' ? 'atm' : 'abcd') + '.png\';">' +
       '<div class="egg-title">隱藏人格「' + name + '」</div>' +
       '<div class="card"><p style="text-align:center;line-height:2;">' + note + '</p></div>' +
       '<div class="share-card-wrap">' +
@@ -5342,7 +5011,6 @@ function renderEgg(name, note, word) {
       '<button class="home-link" onclick="goHome()">返回首頁</button>' +
     '</div>';
   lastShareReq = { persona: { word: word, name: name, tagline: note }, match: 100 };
-  shareCardUrls = {}; shareCardRatioReady = { '9:16': false, '4:5': false }; /* 新结果:旧分享卡缓存失效 */
   setResultHash('#result=' + eggHashByWord(word));
   saveResultToSession({ v: 1, isEgg: true, eggKey: eggHashByWord(word), eggName: name, eggNote: note, eggWord: word });
   syncLangLinks();
@@ -5372,7 +5040,7 @@ function renderResult(persona, s) {
       '<div class="char-glow"></div>' +
       '<img class="result-character-img" loading="eager" alt="' + persona.name + '" ' +
         'src="' + imgKey + '.webp" ' +
-        'onerror="this.onerror=null;console.error(\'[img] load failed:\',this.src);this.src=\'' + imgKey + '.png\';">' +
+        'onerror="this.onerror=null;console.error(\'[img] load failed:\',this.src);this.src=\'' + '/' + imgKey + '.png\';">' +
     '</div>' : '';
   document.getElementById('result-body').innerHTML =
     '<div class="result-layout">' +
@@ -5400,8 +5068,6 @@ function renderResult(persona, s) {
       '</div>' +
     '</div>';
   if (hasMatch) { lastShareReq = { persona: persona, match: s.match }; } /* 降级时不设 lastShareReq,防止以 0% 生成分享卡 */
-  warmCardAssets(persona); /* 结果页渲染完成即预热:点击生成时零请求 */
-  shareCardUrls = {}; shareCardRatioReady = { '9:16': false, '4:5': false }; /* 新结果:旧分享卡缓存失效 */
   if (hasMatch) { setResultHash('#result=' + persona.code + '-' + s.match); saveResultToSession({ v: 1, code: persona.code, match: s.match, edges: s.edges || [], isEgg: false }); syncLangLinks(); }
   track('deep_dive_preview_view', { personaCode: lastPersonaCode });
 }
@@ -5409,48 +5075,13 @@ function renderResult(persona, s) {
 
 /* ============ 社交钩子 + 深度解读 + 埋点 ============ */
 var lastPersonaCode = null;
-
-/* ============ 社交证明(合规版:分桶 + 派系第二行;无具体数字/操作/topic) ============ */
-/* total 为示意量级,展示按 5,000+/10,000+/15,000+ 分桶(桶不得更细,勿直接渲染原值) */
-function bucketTotal(n) {
-  /* 4 档粗桶(按 16 条 total 实际分布 5.9k-20.4k 重定;桶不得更细,勿直接渲染原值) */
-  if (n >= 20000) return '20,000+';
-  if (n >= 15000) return '15,000+';
-  if (n >= 10000) return '10,000+';
-  return '5,000+';
-}
-/* 派系 = 计分码前两位(D×R 降维,与 MBTI 四气质同构;勿手工分派,勿改) */
-var CLAN_MAP = { 'FG': '衝動冒險派', 'RG': '理性分析派', 'FS': '隨緣情感派', 'RS': '務實盡責派' };
-var CLAN_SLOGAN = { 'FG': '你唔係一個人衝', 'RG': '你唔係一個人計', 'FS': '你唔係一個人縮', 'RS': '你唔係一個人孭' };
+function fmtNum(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 function proofSentence(persona, proof) {
-  var slogan = CLAN_SLOGAN[persona.code.substr(0, 2)] || '';
-  return '全球 <b>' + bucketTotal(proof.total) + '</b> 人和你同型' + (slogan ? ' · ' + slogan : '');
+  var s = '全網有 <b>' + fmtNum(proof.total) + '</b> 人和你一樣係「' + persona.name + '」，' +
+    '其中 <b>' + fmtNum(proof.discussing) + '</b> 人正在 NeuralFin 討論「' + proof.topic + '」';
+  if (proof.note) s += '（' + proof.note + '）';
+  return s + '。';
 }
-
-/* ============ 分享卡配置(四维数值条,批次 2 渲染用) ============ */
-var SHOW_STAT_BARS = true; /* 四维条开关:D1 若 300px 缩图过噪,首个砍此(改 false 即隐藏) */
-var STAT_BAR_LABELS = ['信念值', '止蝕紀律', '翻睇頻率', '死撐指數']; /* 16 张卡统一标签(可比性=收藏感);hk 版「翻睇頻率/死撐指數」待港人同事确认 */
-/* 16×4 人设数值:[信念值, 止损纪律, 复盘频率, 嘴硬指数];纯人设描写非统计,无 % 无小数;
-   特殊写法全站仅 3 种:MAX(PROPHET 嘴硬) / MIN(MONK 嘴硬) / ∞(STALKER 复盘) */
-var PERSONA_STAT_BARS = {
-  'SNIPER': [85, 35, 99, 60],
-  'TURTLE': [98, 15, 3, 30],
-  'BOT': [70, 95, 99, 50],
-  'GRANDMA': [40, 90, 85, 45],
-  'PROPHET': [99, 12, 3, 'MAX'],
-  'MONK': [45, 75, 2, 'MIN'],
-  'God of Gamblers': [92, 20, 8, 88],
-  'GEAR': [35, 80, 65, 40],
-  'MARTYR': [90, 5, 55, 95],
-  'BAGHOLDER': [85, 10, 45, 90],
-  'FOMO': [65, 25, 70, 85],
-  'STALKER': [30, 40, '∞', 75],
-  'DREAMER': [97, 8, 15, 80],
-  'GHOST': [55, 70, 1, 85],
-  'YOLO': [88, 3, 10, 98],
-  'CHICKEN': [25, 8, 60, 70],
-};
-
 function deepDiveHtml(persona) {
   var dd = DEEP_DIVES[persona.word];
   if (!dd) return '';
@@ -5468,8 +5099,7 @@ function deepDiveHtml(persona) {
 }
 function unlockDeepDive() {
   track('deep_dive_unlock_click', { personaCode: lastPersonaCode });
-  if (window.gtag) { gtag('event', 'deep_dive_expand_click',
-    { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } track('deep_dive_expand_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode });  /* GA4:点击查看完整解读 */
+  if (window.gtag) { gtag('event', 'deep_dive_expand_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } /* GA4:点击查看完整解读 */
   var ov = document.getElementById('dd-overlay');
   var locked = document.querySelector('.dd-locked');
   if (locked) locked.classList.add('unlocked'); /* 修复:展开后容器自适应高度,防二维码被 overflow 裁切 */
@@ -5484,8 +5114,7 @@ function unlockDeepDive() {
     qimg.onload = function() { this.style.opacity = '1'; console.log('[qr] loaded', this.naturalWidth, this.naturalHeight); };
     qimg.onerror = function() { console.log('[qr] load failed'); };
     qimg.addEventListener('click', function() {
-      if (window.gtag) { gtag('event', 'deep_dive_qrcode_click',
-    { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } track('deep_dive_qrcode_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode });  /* GA4:点击二维码 */
+      if (window.gtag) { gtag('event', 'deep_dive_qrcode_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } /* GA4:点击二维码 */
     });
   }
   track('deep_dive_app_open_success', { personaCode: lastPersonaCode });
@@ -5501,41 +5130,12 @@ window.__events = window.__events || [];
 function track(name, payload) {
   var p = payload || {};
   p.lang = CURRENT_LANG; /* 三语维度:按语言拆分漏斗 */
-  /* 遥测归一化:uaBucket/memBucket/dprBucket(枚举见 uaBucket 定义) */
-  p.uaBucket = uaBucket(navigator.userAgent);
-  p.memBucket = memBucket(navigator.deviceMemory);
-  p.dprBucket = dprBucket(window.devicePixelRatio);
   var fm = (location.search.match(/[?&]from=([A-Za-z0-9_-]{1,64})(?:&|$)/) || [])[1];
   if (fm) p.from = fm; /* KOL 归因白名单 */
   var ev = { name: name, payload: p, ts: Date.now() };
   window.__events.push(ev);
-    if (window.console && window.console.log) window.console.log('[track]', name, JSON.stringify(p));
-  /* v1 自建管道:双写 Supabase(经 /api/event),失败静默 */
-  try {
-    var pv = location.pathname || '';
-    if (pv === '' || pv === '/') pv = '/index.html';
-    var payload = {
-      event_name: name,
-      params: p,
-      user_id: window.__nfUid || '',
-      lang: p.lang || '',
-      page: pv.split('/').pop() || 'index.html',
-      url: location.href,
-      ua: navigator.userAgent,
-      ts: new Date().toISOString()
-    };
-    var blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-    if (navigator.sendBeacon) navigator.sendBeacon('/api/event', blob);
-    else fetch('/api/event', { method: 'POST', body: blob, keepalive: true }).catch(function() {});
-  } catch (e) {}
+  if (window.console && window.console.log) window.console.log('[track]', name, JSON.stringify(p));
 }
-/* test_progress:pagehide 时补发(abandoned=true),仅当完成路径未清过 storage */
-window.addEventListener('pagehide', function() {
-  var meta = readProgressMeta();
-  if (!meta || !window.track) return;
-  window.track('test_progress', { maxQ: meta.maxQ, perQuestionMs: meta.perQuestionMs, abandoned: true });
-  clearProgressMeta();
-});
 if (typeof location !== 'undefined' && location.search && location.search.indexOf('from=') > -1) {
   track('share_card_click_from_friend', {});
 }
@@ -5554,8 +5154,10 @@ function isWeChatBrowser() { return /MicroMessenger/i.test(navigator.userAgent |
 function isMobileDevice() { return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || ''); }
 var isWechat = isWeChatBrowser();
 function proofTextPlain(persona, proof) {
-  var slogan = CLAN_SLOGAN[persona.code.substr(0, 2)] || '';
-  return '全球 ' + bucketTotal(proof.total) + ' 人和你同型' + (slogan ? '\n' + slogan : '');
+  var s = '全網有 ' + fmtNum(proof.total) + ' 人和你一樣係「' + persona.name + '」，其中 ' +
+    fmtNum(proof.discussing) + ' 人正在 NeuralFin 討論「' + proof.topic + '」';
+  if (proof.note) s += '（' + proof.note + '）';
+  return s + '。';
 }
 function matchRing(pct) {
   if (typeof pct !== 'number' || isNaN(pct) || pct < 0) return ''; /* 降级路径:隐藏匹配环,不显示假数字 */
@@ -5585,686 +5187,121 @@ function fitShareChar(tpl) {
   var char = tpl.querySelector('.share-card-character');
   if (!char || char.style.display === 'none') return;
   var wrap = tpl.querySelector('.share-card-charwrap');
-  var availW = wrap.clientWidth || 1080;
-  var availH = wrap.clientHeight || (tpl.className.indexOf('t45') > -1 ? 378 : 634);
+  var availW = wrap.clientWidth || 660;
+  var availH = wrap.clientHeight || 640;
   var ratio = (char.naturalHeight || 2560) / (char.naturalWidth || 1440);
   var w = Math.min(availW, availH / ratio);
   char.style.width = Math.round(w) + 'px';
   char.style.height = Math.round(w * ratio) + 'px';
 }
-/* ===== 分享预览弹窗 DOM 契约(防回归:7 个关键节点缺一即报警) ===== */
-var SHARE_DOM_IDS = ['sharePreviewModal', 'sharePreviewImg', 'sharePreviewSpin', 'sharePreviewDl', 'sharePreviewHint', 'shareCardTemplate916', 'shareCardTemplate45'];
-function safeEl(id) { return document.getElementById(id); }
-function safeFail(id) { console.error('[share] 缺少节点 #' + id + ',分享卡 DOM 契约被破坏'); return false; }
-function assertShareDom() {
-  var missing = SHARE_DOM_IDS.filter(function(id) { return !document.getElementById(id); });
-  if (!missing.length) return true;
-  console.error('[share] 关键节点缺失: ' + missing.join(', '));
-  try { track('share_dom_missing', { missing: missing.join(',') }); } catch (e) {}
-  var host = (location.hostname || '').toLowerCase();
-  var isPreview = host === 'localhost' || host === '127.0.0.1' ||
-    (host.indexOf('vercel.app') > -1 && host.indexOf('nbtimvp-16') === -1 && host.indexOf('nbtimvp-48') === -1);
-  if (isPreview) {
-    var badge = document.createElement('div');
-    badge.style.cssText = 'position:fixed;right:8px;bottom:8px;z-index:99999;background:#d33;color:#fff;padding:6px 10px;font:12px/1.4 monospace;border-radius:6px;';
-    badge.textContent = 'DOM 契约缺失: ' + missing.join(', ');
-    document.body.appendChild(badge);
-  }
-  return false;
-}
-/* 导出降级链:scale 2 → 1.5 → 服务端 /api/card → 报错。禁止 scale 1(糊图伤品牌) */
-var SHARE_SCALE_CHAIN = [2, 1.5];
-function withTimeout(promise, ms, label) {
-
-  return new Promise(function(resolve, reject) {
-    var timer = setTimeout(function() { reject(new Error(label + ' timeout ' + ms + 'ms')); }, ms);
-    promise.then(function(v) { clearTimeout(timer); resolve(v); }, function(e) { clearTimeout(timer); reject(e); });
-  });
-}
-/* ---- 遥测:失败/降级公共元数据(回答 WebKit 悬案:按 UA 归因) ---- */
-var SHARE_FLOW_START = 0;
-
-/* ---- 遥测归一化:uaBucket/memBucket/dprBucket(任务2 全量应用;内容断言已用) ---- */
-function uaBucket(ua) {
-  ua = ua || '';
-  var ios = /iPhone|iPad|iPod/i.test(ua);
-  var android = /Android/i.test(ua);
-  var wechat = /MicroMessenger/i.test(ua);
-  var webview = /Toutiao|aweme|NewsArticle|DingTalk|Alipay|UCBrowser|miniProgram|WebView/i.test(ua);
-  var chrome = /Chrome\//i.test(ua) && !/Edg\//i.test(ua);
-  var safari = /Safari\//i.test(ua) && !chrome;
-  if (ios) return wechat ? 'ios_wechat' : (webview ? 'ios_other_webview' : 'ios_safari');
-  if (android) return wechat ? 'android_wechat' : (webview ? 'android_other_webview' : 'android_chrome');
-  if (chrome) return 'desktop_chrome';
-  if (safari) return 'desktop_safari';
-  return 'desktop_other';
-}
-function memBucket(mem) {
-  if (mem === undefined || mem === null) return 'unknown';
-  if (mem < 4) return '<4';
-  if (mem <= 6) return '4-6';
-  return '>=8';
-}
-function dprBucket(dpr) {
-  if (dpr === 2) return '2';
-  if (dpr === 3) return '3';
-  return 'other';
-}
-function buildFailMeta(phase, reason, engine, scale, ratio) {
-  return {
-    phase: phase,
-    reason: String(reason || '').slice(0, 120),
-    engine: engine || 'html2canvas',
-    scale: scale || 2,
-    ratio: ratio,
-    elapsedMs: SHARE_FLOW_START ? Math.round(Date.now() - SHARE_FLOW_START) : 0,
-    ua: (navigator.userAgent || '').slice(0, 200),
-    deviceMemory: (navigator.deviceMemory !== undefined) ? navigator.deviceMemory : null,
-    dpr: window.devicePixelRatio || 1,
-    isWebView: /MicroMessenger|Toutiao|aweme|NewsArticle|DingTalk|Alipay|UCBrowser|miniProgram/i.test(navigator.userAgent || ''),
-    locale: CURRENT_LANG
-  };
-}
-
-function serverCardFallback(persona, match, ratio) {
-  /* 服务端出图 /api/card(接口未部署时快速失败,不阻塞 UI) */
-  return fetch('/api/card', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ personaCode: persona.code || persona.word || '', match: match, ratio: ratio }) })
-    .then(function(r) { if (!r.ok) throw new Error('server card HTTP ' + r.status); return r.json(); })
-    .then(function(d) {
-      if (!d || !d.ok || !d.dataUrl) throw new Error('server card bad payload');
-      if (d.dataUrl.length < 1000) throw new Error('server card empty image');
-      shareCardUrls[ratio] = d.dataUrl;
-      shareCardRatioReady[ratio] = true;
-      return true;
-    })
-    .catch(function(e) {
-      console.error('[shareCard] server fallback failed:', e);
-      shareCardUrls[ratio] = null;
-      track('share_card_generate_failed', buildFailMeta('server-fallback', e && e.message, 'server', 1.5, ratio));
-      return false;
-    });
-}
-
-/* ---- 导出内容断言:任一不过即判失败并降级(防白图/缺图/文字缺失) ----
- * 阈值标定自正常输出(Chromium, 2026-08-07):
- *   char 方差 2650 / qr 亮占比 63% / title 边缘占比 2.6% / full 方差 2570
- */
-var CARD_CONTENT_THRESHOLDS = {
-  charVariance: 500,      /* 角色图区域像素方差(防纯色/缺图) */
-  qrBrightMin: 20,        /* 二维码黑白二值:亮像素占比下限 % */
-  qrBrightMax: 85,        /* 上限 % */
-  titleEdgeRatio: 1.0,    /* 主标题高对比边缘占比 %(防文字缺失) */
-  fullVariance: 500       /* 全图方差(防整体空白) */
-};
-function checkCardContent(canvas, ratio, tpl, scale) {
-  var ctx = canvas.getContext('2d');
-  var SCALE = scale || 2;
-  var rel = function(sel) {
-    var el = tpl.querySelector(sel);
-    var r = el.getBoundingClientRect();
-    var t = tpl.getBoundingClientRect();
-    return { x: Math.max(0, Math.round((r.left - t.left) * SCALE)), y: Math.max(0, Math.round((r.top - t.top) * SCALE)),
-             w: Math.round(r.width * SCALE), h: Math.round(r.height * SCALE) };
-  };
-  var region = function(sel) {
-    var reg = rel(sel);
-    if (reg.w <= 1 || reg.h <= 1) return null; /* 元素不可见(display:none 等):判该规则失败 */
-    reg.x = Math.min(reg.x, canvas.width - 2); reg.y = Math.min(reg.y, canvas.height - 2);
-    reg.w = Math.min(reg.w, canvas.width - reg.x); reg.h = Math.min(reg.h, canvas.height - reg.y);
-    return reg;
-  };
-  var stats = function(reg) {
-    var d = ctx.getImageData(reg.x, reg.y, reg.w, reg.h).data;
-    var sum = 0, sum2 = 0, n = reg.w * reg.h, bright = 0, edges = 0, edgeN = 0;
-    for (var i = 0; i < d.length; i += 4) {
-      var v = (d[i] + d[i+1] + d[i+2]) / 3;
-      sum += v; sum2 += v * v;
-      if (v > 128) bright++;
-    }
-    for (var y = 0; y < reg.h; y += 2) {
-      for (var x = 1; x < reg.w; x += 2) {
-        var idx = (y * reg.w + x) * 4;
-        var a = (d[idx] + d[idx+1] + d[idx+2]) / 3, b = (d[idx-4] + d[idx-3] + d[idx-2]) / 3;
-        if (Math.abs(a - b) > 60) edges++;
-        edgeN++;
-      }
-    }
-    var mean = sum / n;
-    return { variance: sum2 / n - mean * mean, brightRatio: bright / n * 100, edgeRatio: edges / edgeN * 100 };
-  };
-  var failed = [];
-  var th = CARD_CONTENT_THRESHOLDS;
-  var charReg = region('.share-card-character');
-  if (!charReg) failed.push('char_variance');
-  else { var charS = stats(charReg); if (charS.variance < th.charVariance) failed.push('char_variance'); }
-  var qrReg = region('.sc-qrcode img');
-  if (!qrReg) failed.push('qr_binary');
-  else { var qrS = stats(qrReg); if (qrS.brightRatio < th.qrBrightMin || qrS.brightRatio > th.qrBrightMax) failed.push('qr_binary'); }
-  var titleReg = region('.sc-name-main');
-  if (!titleReg) failed.push('title_edges');
-  else { var titleS = stats(titleReg); if (titleS.edgeRatio < th.titleEdgeRatio) failed.push('title_edges'); }
-  var fullS = stats({ x: 0, y: 0, w: canvas.width, h: canvas.height });
-  if (fullS.variance < th.fullVariance) failed.push('full_variance');
-  return failed;
-}
-
-/* ---- 编码格式链:WebP q90 优先 → 不支持则 JPEG q92 → 兜底 PNG;fallback 上报 ---- */
-function encodeCard(canvas, ratio) {
-  return new Promise(function(resolve, reject) {
-    canvas.toBlob(function(blob) {
-      if (blob && blob.type === 'image/webp') {
-        resolve({ url: URL.createObjectURL(blob), format: 'webp' });
-      } else {
-        /* WebP 不支持(旧 Safari/WebView):JPEG q92 重编 */
-        canvas.toBlob(function(blob2) {
-          if (blob2) {
-            try { track('export_format_fallback', { from: 'webp', to: 'jpeg92', ratio: ratio, uaBucket: uaBucket(navigator.userAgent) }); } catch (e) {}
-            resolve({ url: URL.createObjectURL(blob2), format: 'jpeg92' });
-          } else {
-            resolve({ url: canvas.toDataURL('image/png'), format: 'png' });
-          }
-        }, 'image/jpeg', 0.92);
-      }
-    }, 'image/webp', 0.9);
-  });
-}
-function retryShareGenerate() { track('share_card_retry', { ratio: getShareRatio(), locale: CURRENT_LANG }); generateShareFlow(); }
-function fallbackShareGenerate() {
-  if (!lastShareReq) return;
-  var ratio = getShareRatio();
-  serverCardFallback(lastShareReq.persona, lastShareReq.match, ratio).then(function(ok) {
-    if (ok && shareCardUrls[ratio]) { openSharePreview(); }
-    else {
-      var hint = safeEl('sharePreviewHint');
-      if (hint) hint.textContent = FB_NA_MSG;
-    }
-  });
-}
-var FB_NA_MSG = '備用方式暫不可用，請點「重試」';
-if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', assertShareDom); }
-else { assertShareDom(); }
-
-/* 卡片资源 base64 内联缓存:角色图/二维码在生成时转为 dataURL,克隆 iframe 零网络请求 */
-var CARD_ASSET_B64 = {};
-var CARD_MIME = { 'webp': 'image/webp', 'png': 'image/png', 'jpg': 'image/jpeg', 'jpeg': 'image/jpeg', 'svg': 'image/svg+xml', 'gif': 'image/gif' };
-function cardAssetBase64(path) {
-  if (CARD_ASSET_B64[path]) return Promise.resolve(CARD_ASSET_B64[path]);
-  var ext = (path.split('.').pop() || '').toLowerCase();
-  var mime = CARD_MIME[ext] || 'application/octet-stream';
-  return fetch(path).then(function(r) {
-    if (!r.ok) throw new Error('card asset ' + r.status + ' ' + path);
-    return r.arrayBuffer();
-  }).then(function(buf) {
-    /* 显式 MIME:不依赖 blob.type(实测 webp 的 blob.type 为 octet-stream) */
-    var bytes = new Uint8Array(buf);
-    var bin = '';
-    var CHUNK = 0x8000;
-    for (var i = 0; i < bytes.length; i += CHUNK) {
-      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
-    }
-    var dataUrl = 'data:' + mime + ';base64,' + btoa(bin);
-    CARD_ASSET_B64[path] = dataUrl;
-    return dataUrl;
-  });
-}
-var CARD_QR_FILE = 'qrcode-48.png';
-function warmCardAssets(persona) {
-  /* 结果页渲染完成即预热当前人格资源(独立 3s 超时,失败静默,生成时回退原 <img src>) */
-  var imgKey = (persona && PERSONA_IMG[persona.word]) || null;
-  var jobs = [];
-  if (imgKey) jobs.push(cardAssetBase64(imgKey + '.webp'));
-  jobs.push(cardAssetBase64(CARD_QR_FILE));
-  Promise.race([Promise.all(jobs), new Promise(function(res) { setTimeout(res, 3000); })]).catch(function() {});
-}
-
 function waitForImagesLoaded(container) {
   var imgs = container.querySelectorAll('img');
   return Promise.all(Array.prototype.map.call(imgs, function(img) { return waitForImageLoad(img); }));
 }
-/* ============ 分享卡(9:16 默认 / 4:5;模板 + html2canvas 内嵌) ============ */
-var shareCardRatio = '9:16'; /* 当前已生成图的尺寸(切换后 stale 判定) */
-/* 稀有度可配置(待议):16 型全 SSR 不稀有,后续按真实分布改 UR/SR/SSR,只改此表 */
-var RARITY_CFG = { base: 'SSR', label: '稀有度 · 十六分之一', egg: '隱藏人格' };
-var SHARE_QR_TEXT = { claim: '掃碼認領你自己嗰張卡', meta: '48 條題 · 10 分鐘', url: 'neuralfin.ai', hint: '長按識別二維碼' };
-var SHARE_DISCLAIMER = ['本卡不構成任何投資建議 · 測試純屬娛樂', '只構成人格建議，且不接受申辯。'];
-var SHARE_LOWMEM = '你部機記憶體唔夠，已生成 Feed 尺寸';
-var SHARE_STALE = '已切換至 Feed 尺寸';
-var SHARE_DL_STALE = '按 Feed 尺寸生成並下載';
-function getShareRatio() {
-  try { return localStorage.getItem('nbti_share_ratio') === '4:5' ? '4:5' : '9:16'; } catch (e) { return '9:16'; }
-}
-function setShareRatio(r) {
-  try { localStorage.setItem('nbti_share_ratio', r === '4:5' ? '4:5' : '9:16'); } catch (e) {}
-}
-function personaNo(persona) {
-  for (var i = 0; i < RESULTS.results.length; i++) {
-    if (RESULTS.results[i].code === persona.code) { var n = i + 1; return ('0' + n).slice(-2); }
-  }
-  return '00';
-}
-/* ===== bindShareCard:两个比例共用同一份绑定(改一句文案只改此函数/上方配置) ===== */
-function bindShareCard(tpl, persona, match, ratio) {
-  /* ---- 共用部分(9:16 / 4:5 同一份,差异只在本函数末尾的 ratio 分支) ---- */
+function generateShareCard(persona, match) {
+  match = (match === undefined || match === null) ? 0 : match;
+  var tpl = document.getElementById('shareCardTemplate');
   var imgKey = PERSONA_IMG[persona.word] || null;
   var char = tpl.querySelector('.share-card-character');
   char.style.display = imgKey ? '' : 'none';
   if (imgKey) {
-    char.src = CARD_ASSET_B64[imgKey + '.webp'] || (imgKey + '.webp');
-    char.onerror = function() { this.onerror = null; this.src = CARD_ASSET_B64[imgKey + '.webp'] || (imgKey + '.png'); };
+    char.src = imgKey + '.webp';
+    char.onerror = function() { this.onerror = null; console.error('[shareCard] char image load failed:', this.src); this.src = imgKey + '.png'; };
   }
-  var isEgg = !persona.code; /* 彩蛋:word=ATM/OCD,无计分码 */
-  tpl.querySelector('.sc-badge').textContent = isEgg ? RARITY_CFG.egg : RARITY_CFG.base;
-  tpl.querySelector('.sc-badge-label').textContent = isEgg ? '' : RARITY_CFG.label;
-  tpl.querySelector('.sc-badge-no').textContent = isEgg ? '' : 'NO.' + personaNo(persona) + '/16';
-  tpl.querySelector('.sc-clan').textContent = isEgg ? '' : (CLAN_MAP[persona.code.substr(0, 2)] || '');
-  tpl.querySelector('.sc-name-main').textContent = persona.name || '';
-  tpl.querySelector('.sc-name-sub').textContent = (isEgg ? '' : persona.word);
-  tpl.querySelector('.sc-match').innerHTML = matchRing(match);
-  var bars = tpl.querySelector('.sc-stat-bars');
-  var data = PERSONA_STAT_BARS[persona.word];
-  if (SHOW_STAT_BARS && data) {
-    bars.style.display = '';
-    var items = bars.querySelectorAll('.sc-stat');
-    for (var i = 0; i < items.length; i++) {
-      var v = data[i];
-      items[i].querySelector('.sc-stat-val').textContent =
-        (typeof v === 'number' && v < 10) ? ('0' + v) : String(v);
-      items[i].querySelector('.sc-stat-label').textContent = STAT_BAR_LABELS[i];
-    }
-  } else {
-    bars.style.display = 'none'; /* 收起不留空洞 */
-  }
-  var tag = tpl.querySelector('.sc-tagline');
-  tag.textContent = persona.tagline || '';
-  fitTagline(tag, ratio);
-  var social = tpl.querySelector('.sc-social');
+  var wordEl = tpl.querySelector('.share-card-word');
+  wordEl.textContent = persona.word;
+  wordEl.style.fontSize = (persona.word || '').length > 12 ? '44px' : '76px';
+  tpl.querySelector('.share-card-title-cn').textContent = persona.name;
+  tpl.querySelector('.share-card-tagline').textContent = persona.tagline || '';
   var proof = PERSONA_STATS[persona.word];
-  if (proof) {
-    social.textContent = proofTextPlain(persona, proof);
-    social.style.display = '';
-  } else {
-    social.style.display = 'none';
-  }
-  tpl.querySelector('.sc-qrcode img').src = CARD_ASSET_B64['qrcode-48.png'] || 'qrcode-48.png';
-  var qt = tpl.querySelector('.sc-qr-text');
-  qt.querySelector('.sc-claim').textContent = SHARE_QR_TEXT.claim;
-  qt.querySelector('.sc-meta').textContent = SHARE_QR_TEXT.meta;
-  qt.querySelector('.sc-url').textContent = SHARE_QR_TEXT.url;
-  qt.querySelector('.sc-scanhint').textContent = SHARE_QR_TEXT.hint;
-  var disc = tpl.querySelectorAll('.sc-disclaimer > div');
-  disc[0].textContent = SHARE_DISCLAIMER[0];
-  disc[1].textContent = SHARE_DISCLAIMER[1];
-}
-/* tagline 自动缩字号:3 行起步,>40px 递减,仍溢出则容 4 行 */
-function fitTagline(el, ratio) {
-  var fs = (ratio === '4:5') ? 48 : 56;
-  var lines = 3;
-  el.style.fontSize = fs + 'px';
-  el.style.maxHeight = (lines * fs * 1.5) + 'px';
-  while (fs > 40 && el.scrollHeight > el.clientHeight + 2) {
-    fs -= 2;
-    el.style.fontSize = fs + 'px';
-    el.style.maxHeight = (lines * fs * 1.5) + 'px';
-  }
-  if (el.scrollHeight > el.clientHeight + 2) {
-    lines = 4;
-    el.style.maxHeight = (lines * fs * 1.5) + 'px';
-  }
-}
-/* ============ 分享卡 2a/2b(设计稿;9:16 默认 / 4:5;html2canvas 内嵌) ============ */
-var shareCardRatio = '9:16'; /* 当前选中尺寸(下载/文件名用) */
-var shareCardUrls = {};      /* 两尺寸已生成图:shareCardUrls[ratio] = dataURL */
-var shareCardRatioReady = { '9:16': false, '4:5': false }; /* 该尺寸图是否已生成 */
-var RARITY_CFG = { base: 'SSR', label: '稀有度 · 十六分之一', egg: '隱藏人格' };
-var SHARE_VER_LINE = '金融 NBTI v1.0 · neuralfin.ai';
-var SHARE_DISCLAIMER = ['本卡不構成任何投資建議 · 測試純屬娛樂', '只構成人格建議，且不接受申辯。'];
-var SHARE_CLAIM = ['掃碼認領', '你自己嗰張卡'];
-var SHARE_LOWMEM = '你部機記憶體唔夠，已生成 Feed 尺寸';
-var SHARE_LOADING = '生成中…';
-function getShareRatio() {
-  try { return localStorage.getItem('nbti_share_ratio') === '4:5' ? '4:5' : '9:16'; } catch (e) { return '9:16'; }
-}
-function setShareRatio(r) {
-  try { localStorage.setItem('nbti_share_ratio', r === '4:5' ? '4:5' : '9:16'); } catch (e) {}
-}
-function personaNo(persona) {
-  for (var i = 0; i < RESULTS.results.length; i++) {
-    if (RESULTS.results[i].code === persona.code) { var n = i + 1; return ('0' + n).slice(-2); }
-  }
-  return '00';
-}
-/* cover 裁切(html2canvas 不支持 object-fit:cover,按 max 缩放 + 定位实现;object-position 50% 6%) */
-function coverFit(img, stage, posY) {
-  var iw = img.naturalWidth || 1440, ih = img.naturalHeight || 2560;
-  var sw = stage.clientWidth || 1080, sh = stage.clientHeight || 1000;
-  var s = Math.max(sw / iw, sh / ih);
-  img.style.width = Math.round(iw * s) + 'px';
-  img.style.height = Math.round(ih * s) + 'px';
-  var pos = (posY === undefined) ? 0.06 : posY; /* 设计稿 object-position 50% 6% */
-  img.style.left = Math.round((sw - iw * s) / 2) + 'px';
-  img.style.top = Math.round((sh - ih * s) * pos) + 'px';
-}
-/* ===== bindShareCard:2a/2b 共用同一份绑定(改一句文案只改此函数/上方配置) ===== */
-function bindShareCard(tpl, persona, match, ratio) {
-  var isEgg = !persona.code;
-  tpl.querySelector('.sc-badge').textContent = isEgg ? RARITY_CFG.egg : RARITY_CFG.base;
-  tpl.querySelector('.sc-badge-label').textContent = isEgg ? '' : RARITY_CFG.label;
-  tpl.querySelector('.sc-badge-no').textContent = isEgg ? '' : 'NO.' + personaNo(persona) + ' / 16';
-  var imgKey = PERSONA_IMG[persona.word] || null;
-  var stage = tpl.querySelector('.sc-char-stage');
-  var char = tpl.querySelector('.share-card-character');
-  if (imgKey) {
-    char.style.display = 'block';
-    char.src = CARD_ASSET_B64[imgKey + '.webp'] || (imgKey + '.webp');
-    char.onerror = function() { this.onerror = null; this.src = CARD_ASSET_B64[imgKey + '.webp'] || (imgKey + '.png'); };
-    char.onload = function() { coverFit(char, stage); };
-    if (char.complete && char.naturalWidth) { coverFit(char, stage); }
-  } else {
-    char.style.display = 'none';
-  }
-  /* 匹配度:2a 在插画内(104px),2b 在信息列(86px);两处都填,各模板 CSS 隐藏其一 */
-  var blocks = tpl.querySelectorAll('.sc-match-block');
-  for (var bi = 0; bi < blocks.length; bi++) {
-    blocks[bi].querySelector('.sc-match-num').innerHTML = match + '<span class="sc-match-pct">%</span>';
-    blocks[bi].querySelector('.sc-match-label').textContent = '匹配度';
-  }
-  tpl.querySelector('.sc-clan-pill').textContent = isEgg ? '' : (CLAN_MAP[persona.code.substr(0, 2)] || '');
-  tpl.querySelector('.sc-name-main').textContent = persona.name || '';
-  tpl.querySelector('.sc-name-sub').textContent = (isEgg ? '' : persona.word);
-  /* 四维条:数值→宽度%;MAX/∞→100% 金;MIN→0% 红;高值绿低值红 */
-  var data = PERSONA_STAT_BARS[persona.word];
-  var stats = tpl.querySelector('.sc-stats');
-  if (SHOW_STAT_BARS && data) {
-    stats.style.display = '';
-    var items = stats.querySelectorAll('.sc-stat');
-    for (var i = 0; i < items.length; i++) {
-      var v = data[i];
-      items[i].querySelector('.sc-stat-label').textContent = STAT_BAR_LABELS[i];
-      var valEl = items[i].querySelector('.sc-stat-val');
-      var fill = items[i].querySelector('.sc-stat-fill');
-      if (typeof v === 'number') {
-        valEl.textContent = (v < 10 ? '0' : '') + v;
-        valEl.className = 'sc-stat-val';
-        fill.className = 'sc-stat-fill' + (v >= 50 ? '' : ' low');
-        fill.style.width = Math.max(0, Math.min(100, v)) + '%';
-      } else if (v === 'MAX' || v === '∞') {
-        valEl.textContent = String(v);
-        valEl.className = 'sc-stat-val gold';
-        fill.className = 'sc-stat-fill gold';
-        fill.style.width = '100%';
-      } else {
-        valEl.textContent = String(v);
-        valEl.className = 'sc-stat-val';
-        fill.className = 'sc-stat-fill low';
-        fill.style.width = '0%';
-      }
-    }
-  } else {
-    stats.style.display = 'none';
-  }
-  /* tagline + 社交证明(分桶 + 派系第二行) */
-  var tag = tpl.querySelector('.sc-tagline');
-  tag.textContent = persona.tagline || '';
-  fitTagline(tag, ratio);
-  var social = tpl.querySelector('.sc-social');
-  var proof = PERSONA_STATS[persona.word];
-  if (proof) {
-    var s1 = '全球 <span class="sc-num">' + bucketTotal(proof.total) + '</span> 人和你同型';
-    var slogan = CLAN_SLOGAN[persona.code.substr(0, 2)] || '';
-    social.innerHTML = s1 + (slogan ? '\\n' + slogan : '');
-    social.style.display = '';
-  } else {
-    social.style.display = 'none';
-  }
-  /* 页脚:版本行 / 免责两行 / 扫码文案 / QR */
-  tpl.querySelector('.sc-version').textContent = SHARE_VER_LINE;
-  var disc = tpl.querySelectorAll('.sc-disclaimer > div');
-  disc[0].textContent = SHARE_DISCLAIMER[0];
-  disc[1].textContent = SHARE_DISCLAIMER[1];
-  var claim = tpl.querySelectorAll('.sc-claim span');
-  claim[0].textContent = SHARE_CLAIM[0];
-  claim[1].textContent = SHARE_CLAIM[1];
-  tpl.querySelector('.sc-qrcode img').src = CARD_ASSET_B64['qrcode-48.png'] || 'qrcode-48.png';
-  tpl.querySelector('.sc-logo').src = 'NeuralFin.png';
-}
-/* tagline 自动缩字号:3 行起步,>40px 递减,仍溢出则容 4 行 */
-function fitTagline(el, ratio) {
-  var fs = (ratio === '4:5') ? 33 : 36;
-  var lines = 3;
-  el.style.fontSize = fs + 'px';
-  el.style.maxHeight = (lines * fs * 1.45) + 'px';
-  while (fs > 24 && el.scrollHeight > el.clientHeight + 2) {
-    fs -= 1;
-    el.style.fontSize = fs + 'px';
-    el.style.maxHeight = (lines * fs * 1.45) + 'px';
-  }
-  if (el.scrollHeight > el.clientHeight + 2) {
-    lines = 4;
-    el.style.maxHeight = (lines * fs * 1.45) + 'px';
-  }
-}
-function generateShareCard(persona, match, ratio, scale, depth, onPhase) {
-  ratio = ratio || getShareRatio();
-  match = (match === undefined || match === null) ? 0 : match;
-  scale = scale || 2;
-  depth = depth || 0;
-  var state = 'idle'; /* idle → preparing → rendering → done | error | timeout;任何分支 finally 由调用方复位锁 */
-  var tplId = (ratio === '4:5' ? 'shareCardTemplate45' : 'shareCardTemplate916');
-  var tpl = safeEl(tplId);
-  if (!tpl) { console.error('[shareCard] 模板缺失 #' + tplId); return Promise.resolve(false); }
-  /* 阶段事件:驱动进度文案(状态机优先,wall-clock 只做兜底) */
-  function setPhase(p) { state = p; if (onPhase) onPhase(p); }
-  setPhase('preparing');
-  /* preparing(资源 base64 内联 + bind + 图片等待)3s 超时;rendering 5s 超时;超时即降级,绝不无限转圈 */
-  var prep = Promise.resolve().then(function() {
-    var imgKey2 = (persona && PERSONA_IMG[persona.word]) || null;
-    var assetJobs = [];
-    if (imgKey2) assetJobs.push(cardAssetBase64(imgKey2 + '.webp'));
-    assetJobs.push(cardAssetBase64(CARD_QR_FILE));
-    return Promise.all(assetJobs).then(function() {
-      bindShareCard(tpl, persona, match, ratio);
-      return waitForImagesLoaded(tpl);
-    });
-  });
-  return withTimeout(prep, 3000, 'preparing').then(function() {
-    setPhase('rendering:' + scale);
-    /* scale 由降级链传入:2 → 1.5 → 服务端;禁止 1。rendering 5s 超时(总降级链 ≤15s) */
-    return withTimeout(html2canvas(tpl, { scale: scale, backgroundColor: '#0A0A0A', width: 1080,
-      height: (ratio === '4:5' ? 1350 : 1920), useCORS: true,
-      onclone: function(doc) {
-        /* 克隆体只保留卡片渲染所需:移除统计/外链脚本与样式、非 base64 图片,防 iframe 内重新加载挂起 */
-        var els = doc.querySelectorAll('script, link[rel="stylesheet"][href^="http"], iframe');
-        for (var i = 0; i < els.length; i++) {
-          var p = els[i].parentNode;
-          if (p) p.removeChild(els[i]);
-        }
-        var imgs = doc.querySelectorAll('img');
-        for (var j = 0; j < imgs.length; j++) {
-          var s2 = imgs[j].getAttribute('src') || '';
-          if (s2.indexOf('data:') !== 0) imgs[j].removeAttribute('src');
-        }
-      } }), 5000, 'rendering');
+  tpl.querySelector('.share-card-social-proof').textContent = proof ? proofTextPlain(persona, proof) : '';
+  tpl.querySelector('.share-card-qrcode img').src = 'qrcode-48.png'; /* 静态二维码,同域无需 CORS */
+  tpl.querySelector('.share-card-logo').src = 'NeuralFin.png';
+  tpl.querySelector('#shareCardMatch').innerHTML = matchRing(match);
+  return waitForImagesLoaded(tpl).then(function() {
+    /* 按原始比例精算显式尺寸,防 html2canvas object-fit 渲染变形 */
+    fitShareChar(tpl);
+    /* 高度不预设:按 flex 内容实际撑开尺寸截图(html2canvas 默认取元素实际尺寸) */
+    return html2canvas(tpl, { scale: 3, backgroundColor: '#0A0A0A', width: 750, useCORS: true });
   }).then(function(canvas) {
-    setPhase('done');
-    /* 内容断言:任一不过即判失败并降级(防白图/缺图/文字缺失) */
-    var failedRules = checkCardContent(canvas, ratio, tpl, scale);
-    if (failedRules.length) {
-      var ccfMsg = failedRules.join(',');
-      track('share_card_content_check_failed', { failedRule: ccfMsg, ratio: ratio, persona: persona.code || persona.word || '', uaBucket: uaBucket(navigator.userAgent) });
-      throw new Error('content check failed: ' + ccfMsg);
-    }
-    return encodeCard(canvas, ratio).then(function(enc) {
-      if (!enc || !enc.url) throw new Error('empty canvas output');
-      if (scale < 2) toast(SHARE_LOWMEM);
-      /* 覆盖旧 blob URL 时释放,防内存泄漏 */
-      if (shareCardUrls[ratio] && shareCardUrls[ratio].indexOf('blob:') === 0) { try { URL.revokeObjectURL(shareCardUrls[ratio]); } catch (e) {} }
-      shareCardUrls[ratio] = enc.url;
-      shareCardRatioReady[ratio] = true;
-      if (window.gtag) { gtag('event', 'share_card_generate_success',
-        { 'test_version': '48-hk', 'persona_result': persona.code || persona.word || '', 'ratio': ratio, 'scale': scale, 'format': enc.format }); }
-      track('share_card_generate_success', { 'test_version': '48-hk', 'persona_result': persona.code || persona.word || '', 'ratio': ratio, 'scale': scale, 'format': enc.format });
-      return true;
-    });
+    shareCardUrl = canvas.toDataURL('image/png');
+    if (window.gtag) { gtag('event', 'share_card_generate_success', { 'test_version': '48-hk', 'persona_result': persona.code || persona.word || '' }); } /* GA4:生成成功 */
+    return true;
   }).catch(function(e) {
-    console.error('[shareCard] ' + state + ' failed:', e);
-    if (depth === 0 && scale === 2) {
-      track('share_card_fallback_used', buildFailMeta('fallback', '', 'html2canvas', 1.5, ratio));
-      return generateShareCard(persona, match, ratio, 1.5, 1, onPhase);
-    }
-    if (depth === 1 && scale === 1.5) {
-      setPhase('server-fallback');
-      track('share_card_fallback_used', buildFailMeta('server-fallback', '', 'server', 1.5, ratio));
-      return serverCardFallback(persona, match, ratio);
-    }
-    shareCardUrls[ratio] = null;
-    if (window.gtag) { gtag('event', 'share_card_generate_failed',
-      { 'test_version': '48-hk', 'ratio': ratio, 'scale': scale }); }
-    track('share_card_generate_failed', buildFailMeta(state, e && e.message, 'html2canvas', scale, ratio));
+    shareCardUrl = null;
+    /* 详细错误日志(开发排障用) */
+    console.error('[shareCard] generation failed:', e);
+    if (window.gtag) { gtag('event', 'share_card_generate_failed', { 'test_version': '48-hk' }); } /* GA4:生成失败 */
     return false;
   });
 }
-var lastShareReq = null;
+var lastShareReq = null; /* 最近一次要生成分享卡的人格 */
 var shareGenerating = false;
 function generateShareFlow() {
   if (!lastShareReq || shareGenerating) return;
-  var ratio = getShareRatio();
-  SHARE_FLOW_START = Date.now(); /* 遥测:失败耗时基准 */
-  if (window.gtag) { gtag('event', 'share_card_generate_start',
-    { 'test_version': '48-hk', 'persona_result': lastShareReq.persona.code || '', 'ratio': ratio }); }
-  track('share_card_generate_start', { 'test_version': '48-hk', 'persona_result': lastShareReq.persona.code || '', 'ratio': ratio });
-  /* 已有缓存:直接展示,不重复渲染 */
-  if (shareCardUrls[ratio]) { openSharePreview(); return; }
+  if (window.gtag) { gtag('event', 'share_card_generate_start', { 'test_version': '48-hk', 'persona_result': lastShareReq.persona.code || '' }); } /* GA4:生成开始 */
   shareGenerating = true;
-  var btn = safeEl('btn-gen-share');
+  var btn = document.getElementById('btn-gen-share');
   if (btn) { btn.disabled = true; btn.textContent = '正在生成專屬分享卡...'; }
-  var persona = lastShareReq.persona, match = lastShareReq.match;
-  /* 状态机事件驱动文案:preparing/rendering:2→「正在生成…」, rendering:1.5→「正在提升清晰度…」, server-fallback→「試緊第二種方式…」;wall-clock 只做兜底 */
-  var PH_TEXT = { 'preparing': '正在生成…', 'rendering:2': '正在生成…', 'rendering:1.5': '正在提升清晰度…', 'server-fallback': '試緊第二種方式…' };
-  var phaseTimers = [];
-  function startPhaseText() {
-    while (phaseTimers.length) clearTimeout(phaseTimers.pop());
-    phaseTimers.push(setTimeout(function() { if (btn && shareGenerating) btn.textContent = '正在提升清晰度…'; }, 3000));
-    phaseTimers.push(setTimeout(function() { if (btn && shareGenerating) btn.textContent = '試緊第二種方式…'; }, 8000));
-  }
-  function onPhase(p) {
-    var t = PH_TEXT[p];
-    if (t && btn && shareGenerating) btn.textContent = t;
-  }
-  startPhaseText();
-  /* 任何分支退出都必须复位锁,禁止按钮永久 disabled */
-  function resetShareState() {
-    while (phaseTimers.length) clearTimeout(phaseTimers.pop());
+  generateShareCard(lastShareReq.persona, lastShareReq.match).then(function(ok) {
     shareGenerating = false;
     if (btn) { btn.disabled = false; btn.textContent = '生成分享卡片'; }
-  }
-  try {
-    generateShareCard(persona, match, ratio, 2, 0, onPhase).then(function(ok) {
-      resetShareState();
-      if (ok && shareCardUrls[ratio]) { openSharePreview(); }
-      else { openSharePreviewError('生成失敗，已嘗試多種方式。可點「重試」或「改用備用方式生成」'); }
-    }).catch(function(e) {
-      console.error('[shareCard] flow error:', e);
-      resetShareState();
-      openSharePreviewError('生成失敗，已嘗試多種方式。可點「重試」或「改用備用方式生成」');
-    });
-  } catch (e) {
-    console.error('[shareCard] flow sync error:', e);
-    resetShareState();
-    openSharePreviewError('生成失敗，已嘗試多種方式。可點「重試」或「改用備用方式生成」');
-  }
-}
-function renderRatioChips() {
-  var sel = getShareRatio();
-  var chips = document.querySelectorAll('.share-ratio-chip');
-  for (var i = 0; i < chips.length; i++) {
-    var on = chips[i].getAttribute('data-ratio') === sel;
-    chips[i].setAttribute('aria-pressed', on ? 'true' : 'false');
-    chips[i].className = 'share-ratio-chip' + (on ? ' active' : '');
-  }
-  updatePreview();
-}
-function onRatioChipClick(r) {
-  if (shareGenerating && !shareCardUrls[r]) { toast(SHARE_LOADING); }
-  var prevRatio = getShareRatio();
-  if (prevRatio !== r) track('card_ratio_switch', { from: prevRatio, to: r, locale: CURRENT_LANG });
-  setShareRatio(r);
-  renderRatioChips();
-  /* 未缓存且空闲 → 后台补渲染该尺寸(懒加载,结果缓存内存,同一结果不重复渲染) */
-  if (!shareCardUrls[r] && !shareGenerating && lastShareReq) {
-    shareGenerating = true;
-    generateShareCard(lastShareReq.persona, lastShareReq.match, r, 2, 0).then(function() {
-      shareGenerating = false;
-      updatePreview();
-    });
-  }
-}
-function updatePreview() {
-  var sel = getShareRatio();
-  var img = safeEl('sharePreviewImg');
-  var spin = safeEl('sharePreviewSpin');
-  var dlEl = safeEl('sharePreviewDl');
-  if (img && shareCardUrls[sel]) {
-    img.src = shareCardUrls[sel];
-    img.style.display = '';
-    if (spin) spin.className = 'share-preview-spin';
-  } else {
-    if (img) img.style.display = 'none'; /* 目标尺寸未就绪:隐藏旧图,避免误存上一尺寸 */
-    if (spin) spin.className = 'share-preview-spin show';
-  }
-  if (dlEl) {
-    if (isWechat) { dlEl.style.display = 'none'; }
-    else { dlEl.style.display = ''; dlEl.textContent = '下載分享圖'; }
-  }
+    if (ok) {
+      track('share_card_generate', { personaCode: lastShareReq.persona.code || '' });
+      openSharePreview();
+    } else {
+      openSharePreviewError();
+    }
+  });
 }
 function openSharePreview() {
-  var hint = safeEl('sharePreviewHint');
-  var m = safeEl('sharePreviewModal');
-  if (!hint || !m) return safeFail('sharePreviewHint/sharePreviewModal');
-  if (isWechat) { hint.textContent = '👆 長按上方圖片，揀「傳畀朋友」或「儲存圖片」'; track('share_card_longpress_shown', { ratio: getShareRatio(), locale: CURRENT_LANG }); }
-  else if (isMobileDevice()) { hint.textContent = '長按圖片儲存，或撳下面嘅掣下載'; }
-  else { hint.textContent = '撳下面嘅掣下載圖片，用手機掃描 QR Code 分享體驗更佳'; }
-  renderRatioChips();
+  var img = document.getElementById('sharePreviewImg');
+  img.style.display = '';
+  img.src = shareCardUrl;
+  var hint = document.getElementById('sharePreviewHint');
+  var dl = document.getElementById('sharePreviewDl');
+  dl.textContent = '下載分享圖';
+  if (isWechat) {
+    hint.textContent = '👆 長按上方圖片，揀「傳畀朋友」或「儲存圖片」';
+    dl.style.display = 'none';
+  } else if (isMobileDevice()) {
+    hint.textContent = '長按圖片儲存，或撳下面嘅掣下載';
+    dl.style.display = '';
+  } else {
+    hint.textContent = '撳下面嘅掣下載圖片，用手機掃描 QR Code 分享體驗更佳';
+    dl.style.display = '';
+  }
+  var m = document.getElementById('sharePreviewModal');
   m.classList.add('show'); m.classList.remove('hide');
-  var dl = safeEl('sharePreviewDl'); if (dl) dl.style.display = '';
-  var rb = safeEl('shareRetryBtn'); if (rb) rb.style.display = 'none';
-  var fb = safeEl('shareFallbackBtn'); if (fb) fb.style.display = 'none';
 }
-function openSharePreviewError(reason) {
-  var img = safeEl('sharePreviewImg'); if (img) img.style.display = 'none';
-  var hint = safeEl('sharePreviewHint');
-  var m = safeEl('sharePreviewModal');
-  if (!hint || !m) return safeFail('sharePreviewHint/sharePreviewModal');
-  hint.textContent = reason || '生成失敗，請重試';
-  var dl = safeEl('sharePreviewDl'); if (dl) dl.style.display = 'none';
-  var rb = safeEl('shareRetryBtn'); if (rb) rb.style.display = '';
-  var fb = safeEl('shareFallbackBtn'); if (fb) fb.style.display = '';
+function openSharePreviewError() {
+  document.getElementById('sharePreviewImg').style.display = 'none';
+  document.getElementById('sharePreviewHint').textContent = '生成失敗，請重試';
+  var dl = document.getElementById('sharePreviewDl');
+  dl.textContent = '重新生成';
+  dl.style.display = '';
+  var m = document.getElementById('sharePreviewModal');
   m.classList.add('show'); m.classList.remove('hide');
 }
 function closeSharePreview() {
-  var m = safeEl('sharePreviewModal');
-  if (!m) return safeFail('sharePreviewModal');
+  var m = document.getElementById('sharePreviewModal');
   m.classList.add('hide');
   setTimeout(function() { m.classList.remove('show'); m.classList.remove('hide'); }, 200);
 }
 function sharePreviewAction() {
-  if (!shareCardUrls[getShareRatio()]) { generateShareFlow(); return; }
+  if (!shareCardUrl) { generateShareFlow(); return; } /* 错误态:重新生成 */
   downloadCard();
 }
 function downloadCard() {
-  var ratio = getShareRatio();
-  var url = shareCardUrls[ratio];
-  if (!url) { toast('分享卡生成中，稍等片刻…'); return; }
-  var dlPersona = (lastShareReq && lastShareReq.persona.word) || '';
-  if (isWechat) { track('share_card_download', { ratio: ratio, persona: dlPersona, method: 'longpress', locale: CURRENT_LANG }); openSharePreview(); return; }
+  if (!shareCardUrl) { toast('分享卡生成中，稍等片刻…'); return; }
+  if (isWechat) { openSharePreview(); return; } /* 微信:download 不稳定,引导长按保存 */
   var a = document.createElement('a');
-  var word = (lastShareReq && lastShareReq.persona.word) || 'NBTI';
-  a.download = 'NBTI_' + word + '_' + (ratio === '4:5' ? '4x5' : '9x16') + '.png';
-  a.href = url;
+  a.download = 'neuralfin-nbti.png';
+  a.href = shareCardUrl;
   a.click();
-  track('share_card_download', { ratio: ratio, persona: dlPersona, method: 'download', locale: CURRENT_LANG });
   toast('圖片已儲存，可以去相簿搵返，打開微信傳畀朋友啦');
 }
+
 /* ============ 进度保存与续答(确认弹层) ============ */
 var PROGRESS_KEY = getProgressKey(); /* v1:语言解耦,保留题数维度 */
   migrateProgress(); /* 迁移旧语言后缀 key(幂等) */
@@ -6294,11 +5331,6 @@ function loadProgress() {
     var d = JSON.parse(raw);
     if (!d || !Array.isArray(d.answers) || !d.answers.length) return null;
     if (d.answers.length > QUESTIONS.questions.length) return null;
-    /* 逐条校验:旧版本/损坏数据(缺 code 字段)直接丢弃,防止 score() 抛错且进度已清 */
-    for (var i = 0; i < d.answers.length; i++) {
-      var a = d.answers[i];
-      if (!a || typeof a.selectedOptionIndex !== 'number' || typeof a.code !== 'string') return null;
-    }
     return d;
   } catch (e) { return null; }
 }
