@@ -79,6 +79,10 @@
   @media (max-width: 480px) { .logo-image { height: 36px; } } /* 移动端 36px(比例 3.556:1,宽约 128px,width:auto 自动等比) */
   .brand span { color: var(--brand-gold); font-weight: 800; font-size: 15px; letter-spacing: 1px; }
   .version { color: var(--text-disabled); font-size: 12px; }
+  /* logo 链接(跳转 neuralfin.ai 官网) */
+  .brand a { display: inline-flex; border-radius: 6px; }
+  .brand a:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 3px; }
+  .brand a:hover .logo-image { opacity: .88; }
 
   /* ---- 首页（滑动式） ---- */
   .header-right { display: flex; align-items: center; gap: 12px; }
@@ -582,7 +586,7 @@ function resolveRedirectTarget() {
   if (/bot|crawl|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|twitterbot|linkedinbot|embedly|discordbot|pinterest|applebot|quora link preview/i.test(ua)) return;
   var target = null;
   try { target = resolveRedirectTarget(); } catch (e) { target = null; }
-  if (target) location.replace(target); /* 本 IIFE 內不存在任何會跳過此行 replace 的 return(全部 return 僅出現在 resolveRedirectTarget 內,與執行層分離) */
+  if (target) { window.__nbtiRedirecting = true; location.replace(target); } /* 本 IIFE 內不存在任何會跳過此行 replace 的 return(全部 return 僅出現在 resolveRedirectTarget 內,與執行層分離) */
 })();
 
 /* 讀 navigator.languages 陣列,逐項判斷;統一正規化 + 前綴匹配(ES5) */
@@ -656,8 +660,17 @@ function syncLangLinks() {
 /* 偏好寫入綁定:只綁一次(DOMContentLoaded 內),syncLangLinks 可重複調用不重複綁定 */
 function initLangSwitcher() {
   eachLangOption(function(link) {
-    link.addEventListener('click', function() {
+    link.addEventListener('click', function(ev) {
       lsSet('nbti_preferred_lang', this.getAttribute('data-lang'));
+      /* 答题中切语言:目标 URL 补 ?resume=1,目标页加载后自动续答(仅普通左键点击) */
+      if (quizResumePending() && !/[?&]resume=1/i.test(this.href)) {
+        if (!ev.metaKey && !ev.ctrlKey && !ev.shiftKey && !ev.altKey) {
+          ev.preventDefault();
+          var h = this.href, hash = '', sharp = h.indexOf('#');
+          if (sharp > -1) { hash = h.slice(sharp); h = h.slice(0, sharp); }
+          location.href = h + (h.indexOf('?') > -1 ? '&' : '?') + 'resume=1' + hash;
+        }
+      }
     });
   });
 }
@@ -745,11 +758,70 @@ function restoreFromHash() {
   if (ok) { __hashRestored = true; syncLangLinks(); } /* R5:恢復後同步一次切換器 */
 }
 
+/* ---------- 答题进度跨语言恢复(?resume=1) ---------- */
+var __resumeRestored = false; /* 幂等:仅成功续答才置位 */
+var RESUME_MSGS = {
+  zh: '已还原上次进度，第 {n} 题',
+  hk: '已還原上次進度，第 {n} 題',
+  en: 'Resumed from question {n}'
+};
+var RESUME_SUBMIT_MSGS = {
+  zh: '已还原上次进度，可以提交啦',
+  hk: '已還原上次進度，可以提交啦',
+  en: 'Progress restored. Ready to submit.'
+};
+/* 是否有未完成进度且当前处于答题流程(答题/结算/提交待定) */
+function quizResumePending() {
+  var raw = lsGet(getProgressKey());
+  if (!raw) return false;
+  try {
+    var d = JSON.parse(raw);
+    if (!d || !Array.isArray(d.answers) || !d.answers.length) return false;
+  } catch (e) { return false; }
+  var q = document.getElementById('page-quiz');
+  if (q && /\bactive\b/.test(q.className)) return true;
+  var l = document.getElementById('page-loading');
+  if (l && /\bactive\b/.test(l.className)) return true;
+  /* 提交待定态:已答全部题目且未提交(finish() 会清进度,结果页不会走到这里) */
+  if (typeof userAnswers !== 'undefined' && userAnswers && userAnswers.length >= getQuizLen()) return true;
+  return false;
+}
+/* 消费 ?resume=1 后从 URL 抹掉(与 ?lang= 同款,防分享链接污染) */
+function stripResumeParam() {
+  try {
+    var params = [];
+    var q = (location.search || '').replace(/^\?/, '');
+    if (q) {
+      q.split('&').forEach(function(pair) { if (!/^resume=/i.test(pair)) params.push(pair); });
+    }
+    history.replaceState(null, '', location.pathname + (params.length ? '?' + params.join('&') : '') + location.hash);
+  } catch (e) { /* file:// 或極舊 WebView 的 replaceState 限制,忽略 */ }
+}
+/* 语言切换带 ?resume=1 到达:直接续答到当前未答题 */
+function resumeFromSearch() {
+  if (__resumeRestored) return;
+  if (!/[?&]resume=1(?=&|$)/i.test(location.search)) return;
+  var saved = loadProgress();
+  if (!saved) return;
+  if (window.__nbtiRedirecting) return; /* 本页即将被自动分流替换,不渲染 */
+  __resumeRestored = true;
+  restoreProgress(saved);
+  stripResumeParam();
+  var total = getQuizLen();
+  if (typeof current !== 'undefined' && current >= total) {
+    toast(RESUME_SUBMIT_MSGS[CURRENT_LANG] || RESUME_SUBMIT_MSGS.zh);
+  } else {
+    var n = Math.min((typeof current === 'number' ? current : 0) + 1, total);
+    toast((RESUME_MSGS[CURRENT_LANG] || RESUME_MSGS.zh).replace('{n}', String(n)));
+  }
+}
+
 /* ---------- 初始化(唯一綁定點;hash 恢復在應用 script 執行後才安全) ---------- */
 document.addEventListener('DOMContentLoaded', function() {
   initLangSwitcher();   /* click 綁定,只此一處 */
   syncLangLinks();      /* href 覆寫為帶參數版本 */
   restoreFromHash();    /* 冪等:應用 script 初始化區已調用過則跳過 */
+  resumeFromSearch();   /* 答题进度跨语言恢复(?resume=1):直接续答当前未答题 */
 });
 window.addEventListener('hashchange', syncLangLinks);
 </script>
@@ -759,7 +831,9 @@ window.addEventListener('hashchange', syncLangLinks);
 
   <header class="app-header">
     <div class="brand">
-      <img class="logo-image" id="brand-sign" src="NeuralFin.png" alt="NeuralFin">
+      <a href="https://neuralfin.ai" target="_blank" rel="noopener">
+        <img class="logo-image" id="brand-sign" src="NeuralFin.png" alt="NeuralFin">
+      </a>
     </div>
     <div class="header-right">
       <span class="version">金融 NBTI v1.0</span>
