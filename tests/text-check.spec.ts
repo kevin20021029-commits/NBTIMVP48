@@ -36,10 +36,12 @@ test.describe('分享卡文本层断言(B7)', () => {
       await page.waitForFunction(() => (window as any).RESULTS && (window as any).RESULTS.results.length > 0);
       const r = await page.evaluate(async () => {
         const out: any[] = [];
-        const p = (window as any).RESULTS.results[0];
-        const tpl = document.getElementById('shareCardTemplate916')!;
-        (window as any).bindShareCard(tpl, p, 87, '9:16');
-        out.push({ ratio: '9:16', fails: (window as any).checkShareCardText(tpl, p, 87, '9:16', (window as any).CURRENT_LANG) });
+        for (const ratio of ['9:16', '4:5']) {
+          const p = (window as any).RESULTS.results[0];
+          const tpl = document.getElementById(ratio === '4:5' ? 'shareCardTemplate45' : 'shareCardTemplate916')!;
+          (window as any).bindShareCard(tpl, p, 87, ratio);
+          out.push({ ratio, fails: (window as any).checkShareCardText(tpl, p, 87, ratio, (window as any).CURRENT_LANG) });
+        }
         return out;
       });
       for (const x of r) {
@@ -94,14 +96,16 @@ test.describe('内容断言回归(E3: 16 人格 × 2 比例 + 溢出断言)', ()
         const W = window as any;
         const out: any[] = [];
         for (const p of W.RESULTS.results) {
-          let ok = true, err = '';
-          try {
-            await W.generateShareCard(p, 87, '9:16', 2, 0);
-          } catch (e: any) {
-            ok = false;
-            err = String(e.message || e).slice(0, 80);
+          for (const ratio of ['9:16', '4:5']) {
+            let ok = true, err = '';
+            try {
+              await W.generateShareCard(p, 87, ratio, 2, 0);
+            } catch (e: any) {
+              ok = false;
+              err = String(e.message || e).slice(0, 80);
+            }
+            out.push({ word: p.word, ratio, ok, err });
           }
-          out.push({ word: p.word, ratio: '9:16', ok, err });
         }
         return out;
       });
