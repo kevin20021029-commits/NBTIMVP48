@@ -428,31 +428,31 @@
     background: rgba(255,255,255,.045); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); flex-shrink: 0; }
   .t916 .sc-tagbox { margin: 0 52px; }
   .t45 .sc-tagbox { margin: 0 46px; padding: 24px 26px; border-radius: 20px; gap: 12px; }
-  .sc-tagline { font-size: 36px; font-weight: 700; line-height: 1.45; color: #ffffff; overflow: hidden; }
+  .sc-tagline { font-size: 36px; font-weight: 700; line-height: 1.25; color: #ffffff; overflow: hidden; } /* E3 */
   .t45 .sc-tagline { font-size: 33px; }
-  .sc-social { font-size: 27px; line-height: 1.55; color: #98a29b; white-space: pre-line; }
+  .sc-social { font-size: 27px; line-height: 1.36; color: #98a29b; white-space: pre-line; } /* E3 */
   .t45 .sc-social { font-size: 25px; }
   .sc-social .sc-num { color: #00e5a0; font-family: 'Arial Narrow', Arial, sans-serif; }
   /* 页脚 */
   .sc-footer { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px;
     border-top: 1px solid rgba(255,255,255,.09); flex-shrink: 0; }
-  .t916 .sc-footer { padding: 26px 52px 56px; }
-  .t45 .sc-footer { padding: 22px 46px 40px; gap: 28px; }
-  .sc-foot-left { display: flex; flex-direction: column; gap: 12px; }
+  .t916 .sc-footer { padding: 20px 52px 12px; } /* E3 */
+  .t45 .sc-footer { padding: 18px 46px 24px; gap: 28px; } /* E3 */
+  .sc-foot-left { display: flex; flex-direction: column; gap: 12px; flex: 1 1 auto; min-width: 0; } /* E3: 占满可用宽, 防 shrink-to-fit 文字贴边被克隆度量裁切 */
   .t45 .sc-foot-left { gap: 10px; }
-  .sc-logo { height: 34px; width: auto; opacity: .9; }
-  .t45 .sc-logo { height: 30px; }
+  .sc-logo { height: 28px; width: auto; opacity: .9; align-self: flex-start; } /* E3: 防 foot-left stretch 拉宽变形 */
+  .t45 .sc-logo { height: 26px; } /* E3 */
   .sc-version { font-family: Consolas, 'Courier New', monospace; letter-spacing: .1em; color: #6d766f; }
-  .t916 .sc-version { font-size: 21px; }
-  .t45 .sc-version { font-size: 19px; }
+  .t916 .sc-version { font-size: 16px; } /* E3 */
+  .t45 .sc-version { font-size: 17px; } /* E3 */
   .sc-disclaimer { font-family: Consolas, 'Courier New', monospace; color: #6a736c; }
-  .t916 .sc-disclaimer { font-size: 19px; }
-  .t45 .sc-disclaimer { font-size: 17px; }
+  .t916 .sc-disclaimer { font-size: 15px; } /* E3: 法务文案右侧留余量, 防克隆字体度量裁切 */
+  .t45 .sc-disclaimer { font-size: 15px; } /* E3 */
   .t916 .sc-disclaimer div + div { margin-top: 4px; }
   .sc-foot-right { display: flex; align-items: center; gap: 18px; }
   .t45 .sc-foot-right { gap: 16px; }
-  .sc-claim { text-align: right; font-size: 24px; line-height: 1.4; color: #9aa49d; display: flex; flex-direction: column; }
-  .t45 .sc-claim { font-size: 22px; }
+  .sc-claim { text-align: right; font-size: 18px; line-height: 1.4; color: #9aa49d; display: flex; flex-direction: column; } /* E3 */
+  .t45 .sc-claim { font-size: 19px; } /* E3 */
   .sc-claim-2 { color: #00e5a0; font-weight: 700; }
   .sc-qrcode { padding: 10px; background: #fff; border-radius: 14px; flex-shrink: 0; }
   .t916 .sc-qrcode img { width: 128px; height: 128px; display: block; }
@@ -6162,6 +6162,18 @@ function generateShareCard(persona, match, ratio, scale, depth, onPhase) {
       /* B7: 文本层断言在渲染前执行,命中即抛错走降级链 */
       var textFails = checkShareCardText(tpl, persona, match, ratio, (typeof CURRENT_LANG !== 'undefined' ? CURRENT_LANG : ''));
       if (textFails.length) throw new Error('text check failed: ' + textFails.join(','));
+      /* E3: 溢出断言 — footer 底部超出卡片固定高即失败上报(法务文案不得被裁) */
+      var _ovfT = tpl.getBoundingClientRect();
+      var _ovfF = tpl.querySelector('.sc-footer');
+      if (_ovfF) {
+        var _ovfB = _ovfF.getBoundingClientRect().bottom;
+        if (_ovfB > _ovfT.bottom + 1) {
+          try { track('share_card_overflow', { ratio: ratio, overflowPx: Math.round(_ovfB - _ovfT.bottom),
+            persona: (persona && (persona.code || persona.word)) || '',
+            locale: (typeof CURRENT_LANG !== 'undefined' ? CURRENT_LANG : '') }); } catch (e) {}
+          throw new Error('share card overflow: ' + Math.round(_ovfB - _ovfT.bottom) + 'px');
+        }
+      }
       return waitForImagesLoaded(tpl);
     });
   });
@@ -6524,5 +6536,14 @@ restoreFromHash(); /* 幂等:head 的 DOMContentLoaded 亦会调用,已渲染则
   }, 2000);
 })();
 </script>
+<div id="confirmModal" class="confirm-overlay" style="display:none;">
+  <div class="confirm-panel">
+    <div class="confirm-title" id="confirmTitle"></div>
+    <div class="confirm-desc" id="confirmDesc"></div>
+    <button class="btn" id="confirmPrimary"></button>
+    <button class="btn confirm-secondary" id="confirmSecondary"></button>
+  </div>
+</div>
+<div id="toast"></div>
 </body>
 </html>

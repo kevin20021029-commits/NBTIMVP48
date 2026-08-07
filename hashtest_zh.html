@@ -6157,6 +6157,18 @@ function generateShareCard(persona, match, ratio, scale, depth, onPhase) {
       /* B7: 文本层断言在渲染前执行,命中即抛错走降级链 */
       var textFails = checkShareCardText(tpl, persona, match, ratio, (typeof CURRENT_LANG !== 'undefined' ? CURRENT_LANG : ''));
       if (textFails.length) throw new Error('text check failed: ' + textFails.join(','));
+      /* E3: 溢出断言 — footer 底部超出卡片固定高即失败上报(法务文案不得被裁) */
+      var _ovfT = tpl.getBoundingClientRect();
+      var _ovfF = tpl.querySelector('.sc-footer');
+      if (_ovfF) {
+        var _ovfB = _ovfF.getBoundingClientRect().bottom;
+        if (_ovfB > _ovfT.bottom + 1) {
+          try { track('share_card_overflow', { ratio: ratio, overflowPx: Math.round(_ovfB - _ovfT.bottom),
+            persona: (persona && (persona.code || persona.word)) || '',
+            locale: (typeof CURRENT_LANG !== 'undefined' ? CURRENT_LANG : '') }); } catch (e) {}
+          throw new Error('share card overflow: ' + Math.round(_ovfB - _ovfT.bottom) + 'px');
+        }
+      }
       return waitForImagesLoaded(tpl);
     });
   });
@@ -6466,5 +6478,14 @@ restoreFromHash(); /* 幂等:head 的 DOMContentLoaded 亦会调用,已渲染则
   }, 1500);
 })();
 </script>
+<div id="confirmModal" class="confirm-overlay" style="display:none;">
+  <div class="confirm-panel">
+    <div class="confirm-title" id="confirmTitle"></div>
+    <div class="confirm-desc" id="confirmDesc"></div>
+    <button class="btn" id="confirmPrimary"></button>
+    <button class="btn confirm-secondary" id="confirmSecondary"></button>
+  </div>
+</div>
+<div id="toast"></div>
 </body>
 </html>

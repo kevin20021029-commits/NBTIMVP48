@@ -86,23 +86,31 @@ test.describe('分享卡文本层断言(B7)', () => {
   });
 });
 
-test.describe('内容断言 12 组回归(预览/导出共用 generateShareCard)', () => {
+test.describe('内容断言回归(E3: 16 人格 × 2 比例 + 溢出断言)', () => {
   for (const file of files) {
-    test(`${file}: 内容断言 9:16/4:5 全过`, async ({ page }) => {
+    test(`${file}: 16 人格 × 9:16/4:5 全过(含 share_card_overflow 断言)`, async ({ page }) => {
       await blockExternal(page);
       await page.goto(`/${file}`, { waitUntil: 'domcontentloaded' });
       await page.waitForFunction(() => (window as any).RESULTS && (window as any).RESULTS.results.length > 0);
       const r = await page.evaluate(async () => {
+        const W = window as any;
         const out: any[] = [];
-        for (const ratio of ['9:16', '4:5']) {
-          const p = (window as any).RESULTS.results[0];
-          const ok = await (window as any).generateShareCard(p, 87, ratio, 2, 0);
-          out.push({ ratio, ok });
+        for (const p of W.RESULTS.results) {
+          for (const ratio of ['9:16', '4:5']) {
+            let ok = true, err = '';
+            try {
+              await W.generateShareCard(p, 87, ratio, 2, 0);
+            } catch (e: any) {
+              ok = false;
+              err = String(e.message || e).slice(0, 80);
+            }
+            out.push({ word: p.word, ratio, ok, err });
+          }
         }
         return out;
       });
       for (const x of r) {
-        expect(x.ok, `${file} ${x.ratio} 内容断言或渲染失败(已降级)`).toBe(true);
+        expect(x.ok, `${file} ${x.word} ${x.ratio} 失败: ${x.err}`).toBe(true);
       }
     });
   }
