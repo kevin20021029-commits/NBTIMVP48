@@ -5530,6 +5530,28 @@ function track(name, payload) {
     else fetch('/api/event', { method: 'POST', body: blob, keepalive: true }).catch(function() {});
   } catch (e) {}
 }
+/* E2-P3: 全局运行时错误上报 — 线上自报, 不再靠人眼截图发现(showConfirm 类错误连漏两轮) */
+window.addEventListener('error', function(ev) {
+  try {
+    track('js_runtime_error', {
+      message: String(ev.message || '').slice(0, 200),
+      stack: String((ev.error && ev.error.stack) || '').slice(0, 200),
+      page: location.pathname.split('/').pop() || location.pathname
+    });
+  } catch (e) {}
+});
+window.addEventListener('unhandledrejection', function(ev) {
+  try {
+    var reason = ev.reason || {};
+    track('js_runtime_error', {
+      message: String((reason && reason.message) || 'unhandledrejection').slice(0, 200),
+      stack: String((reason && reason.stack) || '').slice(0, 200),
+      page: location.pathname.split('/').pop() || location.pathname
+    });
+  } catch (e) {}
+});
+
+
 /* test_progress:pagehide 时补发(abandoned=true),仅当完成路径未清过 storage */
 window.addEventListener('pagehide', function() {
   var meta = readProgressMeta();
