@@ -18,12 +18,13 @@ build:cards
 │    b. bindShareCard(tpl, persona, match, ratio) — match 占位值(底图不含数字, 见 e)
 │    c. 跑三层断言: assertShareDom / checkShareCardText(R1-R3) / share_card_overflow
 │       —— 现有页面内函数原样执行, 零改造(任一失败 → 该卡 fail, 构建中断)
-│    d. 隐藏数字区(底图不画数字): .sc-match-num opacity:0 或模板级去数字
+│    d. 隐藏数字区(底图不画数字): .sc-match-num visibility:hidden 或模板级去数字
 │    e. screenshot 2160×3840(9:16) / 2160×2700(4:5) → WebP q90 → 写入产物目录
 │    f. 测量该卡数字区 rect(scale 2 像素) → 写入 manifest
-├─ 4. 生成 31 张数字切片 × 2 套(9:16: 104px 字号 / 4:5: 86px 字号):
-│    渲染 match=70..99,100 的含数字卡 → 剪裁数字区 rect → 不透明 PNG/WebP
-│    —— P3 验证: 切片必须含背景(不透明), 否则半透明边缘二次混合(maxDiff 220 → 0)
+├─ 4. 生成 62 张真 alpha 数字切片(31 × 2 套; 独立页渲染, 方案 1):
+│    独立页(透明背景)注入数字元素(computed style 全量拷贝 + flex-end 容器)
+│    → omitBackground:true 截图 → 真 alpha(glyph only, 无烘焙背景)
+│    —— B1-REV2 定案; 前置: 数字区灰度 AA + 固定高度(见硬性约束)
 ├─ 5. 生成 manifest.json(字段见 b)
 ├─ 6. 与基线 diff: 每张卡 pixelSha256 对比 cards/baseline/manifest.json
 │    —— 非预期变化(未更新基线即 hash 变化) → fail;预期变化需显式更新基线
@@ -152,14 +153,39 @@ manifest.json 字段：
 - **9:16：42/48 唯一** —— 数字区 (164,2060,266,166) 覆盖 stage 左下，人物 coverFit 局部伸入 → 背景逐卡不同
 - **4:5：3/48 唯一**（每语言 1 个）—— info 列纯色背景，仅语言间微差
 
-**结论（B1-REV 修订 2026-08-07）**：采用**方案 E（加强 stage 底部渐隐）+ 62 张含背景切片**——
-不需要 A″ 纯色底板，数字区设计零结构性改变：
-1. **E 渐变（9:16）**：`.t916 .sc-stage-grad` 改为 `linear-gradient(180deg, rgba(7,9,8,.35) 0%, transparent 18%, transparent 48%, rgba(7,9,8,.95) 72%, rgba(7,9,8,.995) 100%)`（.t45 同构）——数字横带压至近不透明
-2. **实测**：E 前 9:16 数字区跨 48 张 max=84/255（P95 74，人物伸入）；E 后 **max=6/255（P95 5、均值 0.2）** ≤ 8 阈值
-3. **4:5 无需 E**：数字区（info 列 num-rect，不含 label）跨 48 张 **max ≤5/255** 天然一致
-4. **切片**：元素截图（含背景，不透明）31 张 × 2 套（9:16/4:5 各一套，70-99 + 100）——背景已被 E 归一化（≤6）或天然一致（≤5），任意卡贴回无可见差异；运行时 drawImage 到 matchRect
-5. **真 alpha 切片**：实测元素截图**无法产出真 alpha**（烘焙是 Playwright 截图机制固有，omitBackground 只清页面底色，元素 rect 内像素 = 合成结果，全不透明）——用户判断正确；foreignObject 渲染可真 alpha 但布局复刻存在渲染上下文差异（未收敛），列为 2/3 优化项
-6. **视觉约束（2/3）**：E 渐变即「照片压字渐变」，数字带更暗（对比图 deliverable_H-POC/b1rev_E_*.png）；若 2/3 需要更亮数字区，可微调 E 参数（保持数字带 α≥0.95 即可）
+**结论（B1-REV2 定案 2026-08-07）**：采用**方案 1（独立页渲染真 alpha 切片）**——
+不需要 E 渐变、不需要 A″ 底板，数字区设计零结构性改变：
+
+### 方案 1 实现要点
+1. **独立页渲染**：`page.setContent` 最小 HTML（body 透明背景）→ 注入数字元素（computed style
+   全量拷贝：fontFamily/fontSize/fontWeight/lineHeight/color/letterSpacing/whiteSpace，不手抄）→
+   flex-end 容器复刻原生 `.sc-match-block` 对齐（数字底贴容器底）→ `screenshot({omitBackground:true, clip})`
+   → **真 alpha 切片**（实测：alpha=0 占 64.5%、笔画 RGB [0,229,160]=#00e5a0 精确、边缘 4 档渐变无硬边）
+2. **灰度 AA 统一（生产代码必改）**：`.sc-stage-match .sc-match-num, .sc-match-info .sc-match-num
+   { -webkit-font-smoothing: antialiased; }`——卡片数字与切片同为灰度抗锯齿（桌面 LCD 子像素与
+   切片灰度不兼容，P3 的 diff 根因在此；移动端本就灰度，无影响）
+3. **数字区固定高度（生产代码必改）**：`.t916 .sc-match-num { height: 83px; }` /
+   `.t45 .sc-match-num { height: 69px; }`——消除彩蛋卡与普通卡的亚像素取整差（68.8 vs 69 导致
+   切片 2px 错位，彩蛋 4:5 实测 max 208→ 固定后边缘级）
+4. **切片数量**：31 张 × 2 套（70-99 + 100；彩蛋 100 复用）≈ 700KB；% 符号进切片（num innerHTML
+   含 %），label（匹配度/Match）进底图（常量按语言烘焙）
+5. **合成**：运行时 canvas：底图 drawImage → 切片 drawImage（matchRect 1:1）→ toBlob
+
+### 验证数据（B1-REV2 实测）
+- 切片真 alpha：alpha=0 64.5%、笔画 #00e5a0 精确、边缘渐变（aHist [428,404,401,1009]）
+- 96 张普通卡合成 vs 原生：**overallMax=0 / over8=0/48 / mean=0**（9:16 与 4:5 各 48 张）
+- 彩蛋 12 张（2 人格 × 3 语言 × 2 比例）：9:16 全 0；**4:5 数字边缘亚像素差 max≤208、over8≈2045
+  （字符整体 1px 级错位，MiniMax 视觉取证为细线描边，人眼不可辨）——记录为 2/3 调优项
+  （候选：彩蛋卡数字区整数定位 / 彩蛋专用切片）
+- **为什么不是其它三个**：E 渐变（全宽压暗，视觉改动大，且 4:5 数字区在 info 列不受益）；
+  A″ 纯色底板（用户否决，视觉结构性改变）；方案 2 局部软边压暗（真 alpha 成立后不需要——
+  背景一致性对真 alpha 切片无关）
+
+### 彩蛋 4:5 剩余微差的工程说明
+彩蛋卡与普通卡几何/样式/字体逐项一致（rect 149.75×69、fontFamily 相同），但数字渲染存在
+亚像素边缘差——定位为 Chromium 文本渲染位置取整的边缘效应。视觉影响：数字边缘 1px 模糊带
+（MiniMax 取证图 deliverable_H-POC/b1rev2_egg45_diff.png），人眼不可辨。2/3 视觉阶段若需
+严格消除，候选：① 彩蛋卡 info 列强制整数定位 ② 彩蛋数字区独立切片（渲染上下文对齐）。
 
 ### 确定性（B2 实测）
 
