@@ -45,7 +45,7 @@ test.describe('生产页无裸 DOM 访问(E2-P3)', () => {
           const use = new RegExp(`\\b${v}\\.${ACCESS}`).exec(lines[j]);
           if (!use) continue;
           const seg = lines.slice(i, j + 1).join('\n');
-          if (new RegExp(`if\\s*\\(\\s*!${v}|${v}\\s*===\\s*null|if\\s*\\(\\s*${v}\\s*\\)`).test(seg)) break;
+          if (new RegExp(`if\\s*\\(\\s*!${v}|${v}\\s*===\\s*null|if\\s*\\(\\s*${v}\\s*\\)|if\\s*\\(\\s*${v}\\s*&&`).test(seg)) break;
           hits.push(`[B] ${j + 1}: ${lines[j].trim().slice(0, 90)}`);
           break;
         }

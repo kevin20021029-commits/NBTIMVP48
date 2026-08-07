@@ -5044,7 +5044,7 @@ function initHome() {
   box.innerHTML = Object.keys(dims).map(function(d) {
     return '<div class="dim-card dim-simple">' + names[d] + '</div>';
   }).join('');
-  var pb = document.getElementById('p-cards');
+  var pb = safeEl('p-cards'); if (!pb) return; /* E2-P1 */
   pb.innerHTML = RESULTS.results.map(function(r) {
     return '<div class="p-card">' +
       '<span class="p-name">' + r.name + '</span>' +
@@ -5075,7 +5075,7 @@ function initTicker() {
   ];
   var marqueeText = '✦ ' + marqueeItems.join(' ✦ ') + ' ✦';
   marqueeText = marqueeText.replace(/✦/g, '<span class="marquee-sep">✦</span>'); /* 分隔符品牌色 */
-  var box = document.getElementById('ticker-track');
+  var box = safeEl('ticker-track'); if (!box) return; /* E2-P1 */
   box.innerHTML = '<span>' + marqueeText + '</span><span>' + marqueeText + '</span>';
 }
 
@@ -5138,11 +5138,11 @@ function renderQuestion() {
   qStart = Date.now(); /* 本题计时起点(test_progress) */
   var q = QUESTIONS.questions[current];
   var n = String(current + 1).padStart(2, '0'), total = String(QUESTIONS.questions.length).padStart(2, '0');
-  document.getElementById('q-count').textContent = 'QUESTION ' + n + ' / ' + total;
-  document.getElementById('q-pct').textContent = Math.round(current / QUESTIONS.questions.length * 100) + '%';
-  document.getElementById('q-title').textContent = q.question;
-  document.getElementById('progress-fill').style.width = ((current) / QUESTIONS.questions.length * 100) + '%';
-  var box = document.getElementById('q-options');
+  var _qCount = safeEl('q-count'); if (_qCount) _qCount.textContent = 'QUESTION ' + n + ' / ' + total; /* E2-P1 */
+  var _qPct = safeEl('q-pct'); if (_qPct) _qPct.textContent = Math.round(current / QUESTIONS.questions.length * 100) + '%'; /* E2-P1 */
+  var _qTitle = safeEl('q-title'); if (_qTitle) _qTitle.textContent = q.question; /* E2-P1 */
+  var _pf = safeEl('progress-fill'); if (_pf) _pf.style.width = ((current) / QUESTIONS.questions.length * 100) + '%'; /* E2-P1 */
+  var box = safeEl('q-options'); if (!box) return; /* E2-P1 */
   box.innerHTML = '';
   var saved = userAnswers[current]; /* 返回上一题时回填高亮 */
   renderNavButton(); /* 第1题显示"返回首页",第2题起显示"上一题" */
@@ -5181,7 +5181,7 @@ function advance() {
   answerMoving = false;
   current++;
   if (current >= QUESTIONS.questions.length) {
-    document.getElementById('progress-fill').style.width = '100%';
+    var _pf = safeEl('progress-fill'); if (_pf) _pf.style.width = '100%'; /* E2-P1 */
     showSubmit();
     return;
   }
@@ -5189,7 +5189,7 @@ function advance() {
 }
 function showSubmit() {
   show('page-result');
-  document.getElementById('result-body').innerHTML =
+  var _rb = safeEl('result-body'); if (_rb) _rb.innerHTML = /* E2-P1 */
     '<div class="card"><p style="text-align:center;font-size:16px;line-height:2.2;">Done? Alright. You answered with such honesty (and such guilt),<br>hold your phone steady — it\'s time for the reveal.</p></div>' +
     '<button class="btn" id="submit-btn" onclick="submit()">Submit and let the AI read your fortune</button>';
 }
@@ -5198,7 +5198,7 @@ var LOAD_MSGS = ['Scanning your trading DNA…', 'Calculating drawdowns…', 'Ca
 function submit() {
   show('page-loading');
   var i = 0;
-  document.getElementById('load-text').textContent = LOAD_MSGS[0];
+  var _lt = safeEl('load-text'); if (_lt) _lt.textContent = LOAD_MSGS[0]; /* E2-P1 */
   loadActive = true;
   loadTimer = setInterval(function() {
     i++;
@@ -5206,7 +5206,7 @@ function submit() {
       clearInterval(loadTimer); loadTimer = null; loadActive = false;
       finish();
     } else {
-      document.getElementById('load-text').textContent = LOAD_MSGS[i];
+      var _lt = safeEl('load-text'); if (_lt) _lt.textContent = LOAD_MSGS[i]; /* E2-P1 */
     }
   }, 600);
 }
@@ -5311,7 +5311,7 @@ function finish() {
 function renderEgg(name, note, word) {
   warmCardAssets(null); /* 彩蛋无角色图,仅预热二维码 */
   show('page-result');
-  document.getElementById('result-body').innerHTML =
+  var _rb = safeEl('result-body'); if (_rb) _rb.innerHTML = /* E2-P1 */
     '<div class="egg-wrap">' +
       '<img class="egg-img" loading="eager" alt="' + name + '" src="' + (word === 'ATM' ? 'atm' : 'abcd') + '.webp" onerror="this.onerror=null;this.src=\'' + (word === 'ATM' ? 'atm' : 'abcd') + '.png\';">' +
       '<div class="egg-title">Hidden persona “' + name + '”</div>' +
@@ -5358,7 +5358,7 @@ function renderResult(persona, s) {
         'src="' + imgKey + '.webp" ' +
         'onerror="this.onerror=null;console.error(\'[img] load failed:\',this.src);this.src=\'' + imgKey + '.png\';">' +
     '</div>' : '';
-  document.getElementById('result-body').innerHTML =
+  var _rb = safeEl('result-body'); if (_rb) _rb.innerHTML = /* E2-P1 */
     '<div class="result-layout">' +
       '<div class="result-main">' +
         '<div class="result-head">' +
@@ -5454,7 +5454,7 @@ function unlockDeepDive() {
   track('deep_dive_unlock_click', { personaCode: lastPersonaCode });
   if (window.gtag) { gtag('event', 'deep_dive_expand_click',
     { 'test_version': '48-question', 'persona_result': lastPersonaCode }); } track('deep_dive_expand_click', { 'test_version': '48-question', 'persona_result': lastPersonaCode });  /* GA4:点击查看完整解读 */
-  var ov = document.getElementById('dd-overlay');
+  var ov = safeEl('dd-overlay'); if (!ov) return; /* E2-P1 */
   var locked = document.querySelector('.dd-locked');
   if (locked) locked.classList.add('unlocked'); /* 修复:展开后容器自适应高度,防二维码被 overflow 裁切 */
   ov.innerHTML = '<div class="qr-panel">' +
@@ -5475,7 +5475,7 @@ function unlockDeepDive() {
   track('deep_dive_app_open_success', { personaCode: lastPersonaCode });
 }
 function collapseDeepDive() {
-  var ov = document.getElementById('dd-overlay');
+  var ov = safeEl('dd-overlay'); if (!ov) return; /* E2-P1 */
   var locked = document.querySelector('.dd-locked');
   if (locked) locked.classList.remove('unlocked');
   ov.innerHTML = '<button class="unlock-btn" onclick="unlockDeepDive()">🔒 Unlock the full read on NeuralFin</button>';
@@ -6258,17 +6258,18 @@ function downloadCard() {
 var PROGRESS_KEY = getProgressKey(); /* v1:语言解耦,保留题数维度 */
   migrateProgress(); /* 迁移旧语言后缀 key(幂等) */
 function showConfirm(opts) {
-  document.getElementById('confirmTitle').textContent = opts.title;
-  document.getElementById('confirmDesc').textContent = opts.desc;
-  var p = document.getElementById('confirmPrimary');
-  var s = document.getElementById('confirmSecondary');
+  var _ct = safeEl('confirmTitle'); if (_ct) _ct.textContent = opts.title; /* E2-P1 */
+  var _cd = safeEl('confirmDesc'); if (_cd) _cd.textContent = opts.desc; /* E2-P1 */
+  var p = safeEl('confirmPrimary');
+  var s = safeEl('confirmSecondary');
+  if (!p || !s) return; /* E2-P1 */
   p.textContent = opts.primary;
   s.textContent = opts.secondary;
   p.onclick = function() { hideConfirm(); if (opts.onPrimary) opts.onPrimary(); };
   s.onclick = function() { hideConfirm(); if (opts.onSecondary) opts.onSecondary(); };
-  document.getElementById('confirmModal').style.display = 'flex';
+  var _cm = safeEl('confirmModal'); if (_cm) _cm.style.display = 'flex'; /* E2-P1 */
 }
-function hideConfirm() { document.getElementById('confirmModal').style.display = 'none'; }
+function hideConfirm() { var _cm = safeEl('confirmModal'); if (_cm) _cm.style.display = 'none'; /* E2-P1 */ }
 function saveProgress() {
   try {
     /* 存下一未答题索引:续答后直接落在未答题上 */
@@ -6310,7 +6311,7 @@ function goHome() {
 }
 var toastTimer = null;
 function toast(msg) {
-  var t = document.getElementById('toast');
+  var t = safeEl('toast'); if (!t) return; /* E2-P1 */
   t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2200);
@@ -6327,12 +6328,21 @@ window.onerror = function(msg, src, line, col, err) {
 };
 
 /* ============ 初始化 ============ */
-document.getElementById('brand-sign').src = 'NeuralFin.png';
-document.getElementById('sign-load').src = LOGO_SIGN;
-document.getElementById('logo-blue-foot').src = 'NeuralFin.png';
+var _bs = safeEl('brand-sign'); if (_bs) _bs.src = 'NeuralFin.png'; /* E2-P1 */
+var _sl = safeEl('sign-load'); if (_sl) _sl.src = LOGO_SIGN; /* E2-P1 */
+var _lb = safeEl('logo-blue-foot'); if (_lb) _lb.src = 'NeuralFin.png'; /* E2-P1 */
 initTicker();
 initHome();
 restoreFromHash(); /* 幂等:head 的 DOMContentLoaded 亦会调用,已渲染则跳过 */
 </script>
+<div id="confirmModal" class="confirm-overlay" style="display:none;">
+  <div class="confirm-panel">
+    <div class="confirm-title" id="confirmTitle"></div>
+    <div class="confirm-desc" id="confirmDesc"></div>
+    <button class="btn" id="confirmPrimary"></button>
+    <button class="btn confirm-secondary" id="confirmSecondary"></button>
+  </div>
+</div>
+<div id="toast"></div>
 </body>
 </html>
