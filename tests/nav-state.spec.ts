@@ -25,20 +25,26 @@ async function blockExternal(page: import('@playwright/test').Page) {
   });
 }
 
-/* hash-视图一致性: home/quiz → hash 空; result → #result= 存在 */
+/* I1-3: URL 状态参数与视图一致性 — hash(#result=) + resume(一次性状态参数)
+   home/result → hash 空(#result= 只在 result)+ resume 必须清;quiz → hash 空(resume 由 handler 按需补) */
 async function assertHashViewConsistent(page: import('@playwright/test').Page, expectedView: 'home' | 'quiz' | 'result') {
   const st = await page.evaluate(() => {
     const active = document.querySelector('#app section.active');
     const id = active ? active.id : '';
     const hash = location.hash;
+    const hasResume = /(^|&)resume=1/i.test((location.search || '').replace(/^\?/, ''));
     const view = id === 'page-home' ? 'home' : id === 'page-result' ? 'result' : id === 'page-quiz' || id === 'page-loading' ? 'quiz' : 'unknown';
-    return { id, hash, view };
+    return { id, hash, hasResume, view, search: location.search };
   });
   expect(st.view, `视图应为 ${expectedView}, 实际 ${st.view}(${st.id})`).toBe(expectedView);
   if (expectedView === 'result') {
     expect(st.hash, '结果页必须有 #result=').toMatch(/^#result=/);
+    expect(st.hasResume, 'result 视图 resume 状态参数必须清').toBe(false);
+  } else if (expectedView === 'home') {
+    expect(st.hash, 'home 下 hash 必须为空').toBe('');
+    expect(st.hasResume, 'home 视图 resume 状态参数必须清').toBe(false);
   } else {
-    expect(st.hash, 'home/quiz 下 hash 必须为空').toBe('');
+    expect(st.hash, 'quiz 下 hash 必须为空').toBe('');
   }
 }
 
@@ -211,6 +217,26 @@ test.describe('I1-2 导航状态机', () => {
       expect(await page.evaluate(() => (window as any).userAnswers.length)).toBeGreaterThanOrEqual(5);
     });
   }
+
+  test('Q1 组合场景: 答题中切语言→回首页→再切语言 → 停首页(不跳答题页)', async ({ page }) => {
+    await blockExternal(page);
+    await page.goto('/index.html?lang=zh', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => (window as any).RESULTS && (window as any).RESULTS.results.length > 0);
+    await answerQuestions(page, 8);
+    await assertHashViewConsistent(page, 'quiz');
+    // 切语言(答题中 → ?resume=1 到达 → 恢复)
+    await Promise.all([page.waitForNavigation(), page.click('a[data-lang=hk]')]);
+    await page.waitForFunction(() => (window as any).RESULTS && (window as any).RESULTS.results.length > 0);
+    await assertHashViewConsistent(page, 'quiz');
+    expect(await page.evaluate(() => (window as any).current + 1)).toBeGreaterThanOrEqual(8);
+    // 返回首页 → 再切语言 → 必须停首页(resume 不得残留/传播)
+    await page.evaluate(() => (window as any).goHome());
+    await assertHashViewConsistent(page, 'home');
+    await Promise.all([page.waitForNavigation(), page.click('a[data-lang=zh]')]);
+    await page.waitForFunction(() => (window as any).RESULTS && (window as any).RESULTS.results.length > 0);
+    await assertHashViewConsistent(page, 'home'); // Q1 回归: 不再被拉回答题页
+    expect(await page.evaluate(() => (window as any).current)).toBe(0);
+  });
 
   test('负例: 手动 #result=XXXX + 空 sessionStorage → shared 降级路径(好友结果 CTA)', async ({ page }) => {
     await blockExternal(page);
