@@ -7,6 +7,7 @@ hashtest_en.html
 hashtest_hk.html
 p02check.html
 tests/
+scripts/
 archive/
 docs/
 *.bak*

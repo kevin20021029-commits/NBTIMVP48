@@ -207,3 +207,30 @@ manifest.json 字段：
 - 风险: 低(差异面已完整取证)
 
 **触发条件**: 视觉阶段(2/3)完成 + 卡片上线后评估。
+
+---
+
+## L3 结构定案: 脚本入库 + 单向 canonical source(2026-08-08)
+
+**背景**: B4「强 shared」把校验对象(shared/card-runtime.js、text-assert.js)入了库, 但执行工具
+(build-cards.mjs、sync-shared.mjs)设计在仓库外(`../shared/`), 丢失后无法从 git 恢复 → 结构性失败。
+
+**L3 定案**:
+- 全部构建/同步脚本移入各仓库 `scripts/`(入库, 不再外部共享目录); `shared/` 只保留运行时 web 文件。
+- 硬约束: 单仓 `git clone` → `npm i` → `npm run build:cards` 跑通, 零仓库外依赖。
+
+**canonical source(单向, 硬编码)**:
+- `scripts/sync-shared.mjs` 顶部写死: `SOURCE_REPO='NBTIMVP16'`、`TARGET_REPO='NBTIMVP48'`, 禁止命令行参数反转方向。
+- **shared/ 与 scripts/ 只允许在 NBTIMVP16 修改**; NBTIMVP48 的对应文件视为只读镜像。
+- 直接改 48 会被下次 `sync:shared --apply` 覆盖且无额外提示; `npm run sync:shared`(默认 dry-run)的 diff 是唯一提示。
+- 方向依据(L3 方向核实): 历史 5 组共享集 commit 均为「16 先改、48 追」(I1-2/I1-3/B4/B5/K2, 时间线对照见 L3 汇报)。
+
+**sync:shared 用法**:
+- `npm run sync:shared` → 默认 dry-run, 只输出文件级 diff + 逐行摘要(+added/-removed 行数与行号), 不写入。
+- `npm run sync:shared -- --apply` → 显式确认后把 NBTIMVP16 的 shared/scripts/docs/tests/api/.gitattributes 覆盖到 NBTIMVP48。
+
+**api/ 目录契约（用户定，2026-08-08）**:
+> api/ 目录下的文件默认视为跨仓共享、必须 byte-identical。如需要引入仓库专属的 API（只在一侧存在），须在 shared-identity 测试中显式加入豁免清单，并在 PR 描述中注明理由。
+
+当前豁免清单（tests/shared-identity.spec.ts 与 scripts/sync-shared.mjs 的 EXEMPTIONS 同步维护）：
+- `api/stats.js` — dashboard 后端（仅 16 有 dashboard.html 调用，48 无 dashboard 无调用方）；同步裁决在 dashboard agent（不在本队），pending review。
