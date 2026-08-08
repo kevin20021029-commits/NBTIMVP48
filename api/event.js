@@ -62,7 +62,12 @@ const supabase = createClient(
   process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_KEY
 );
 
-const clean = (s, max) => (typeof s === 'string' && s.trim() ? s.slice(0, max) : null);
+/* L2-I1: UTF-8 有效性清洗 — 客户端 Blob 编码异常产生的替换符(U+FFFD)不入库 */
+const clean = (s, max) => {
+  if (typeof s !== 'string' || !s.trim()) return null;
+  if (s.indexOf('�') > -1) return null;
+  return s.slice(0, max);
+};
 
 /* 标准 Node 响应工具(L2-修复2: 替代 Express 风格 res.set/res.status/.json) */
 function setCors(res) {

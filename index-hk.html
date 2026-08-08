@@ -778,7 +778,7 @@ function initLangSwitcher() {
         else if ((_lsQ && /\bactive\b/.test(_lsQ.className)) || (_lsL && /\bactive\b/.test(_lsL.className))) _lsView = 'quiz';
         navigator.sendBeacon('/api/event', new Blob([JSON.stringify({
           event_name: 'lang_switch',
-          params: { from_locale: CURRENT_LANG, to_locale: this.getAttribute('data-lang'), view: _lsView, maxQ: (typeof current === 'number' ? current : 0) },
+          params: { 'test_version': '48-hk', from_locale: CURRENT_LANG, to_locale: this.getAttribute('data-lang'), view: _lsView, maxQ: (typeof current === 'number' ? current : 0) },
           user_id: window.__nfUid || '',
           lang: CURRENT_LANG,
           page: (location.pathname.split('/').pop() || 'index.html'),
@@ -5267,7 +5267,7 @@ function finish() {
     track('test_completed', { 'test_version': '48-hk', 'persona_result': eggWord });
     var metaEgg = readProgressMeta();
     if (metaEgg) {
-      track('test_progress', { maxQ: metaEgg.maxQ, perQuestionMs: metaEgg.perQuestionMs, abandoned: false });
+      track('test_progress', { 'test_version': '48-hk',  maxQ: metaEgg.maxQ, perQuestionMs: metaEgg.perQuestionMs, abandoned: false });
       clearProgressMeta();
     }
     if (window.__refTag) {
@@ -5282,7 +5282,7 @@ function finish() {
   /* test_progress:完成时上报(单请求),清 sessionStorage 防 pagehide 重复 */
   var metaDone = readProgressMeta();
   if (metaDone) {
-    track('test_progress', { maxQ: metaDone.maxQ, perQuestionMs: metaDone.perQuestionMs, abandoned: false });
+    track('test_progress', { 'test_version': '48-hk',  maxQ: metaDone.maxQ, perQuestionMs: metaDone.perQuestionMs, abandoned: false });
     clearProgressMeta();
   }
   /* ref_convert:带 ref 的会话完成时上报 */
@@ -5379,7 +5379,7 @@ function renderResult(persona, s, source) {
   warmCardAssets(persona); /* 结果页渲染完成即预热:点击生成时零请求 */
   shareCardUrls = {}; shareCardRatioReady = { '9:16': false } /* G1 */; /* 新结果:旧分享卡缓存失效 */
   if (hasMatch) { setResultHash('#result=' + persona.code + '-' + s.match); saveResultToSession({ v: 1, code: persona.code, match: s.match, edges: s.edges || [], isEgg: false }); syncLangLinks(); }
-  track('deep_dive_preview_view', { personaCode: lastPersonaCode });
+  track('deep_dive_preview_view', { 'test_version': '48-hk',  personaCode: lastPersonaCode });
 }
 
 
@@ -5449,7 +5449,7 @@ function deepDiveHtml(persona) {
     '</div></div>';
 }
 function unlockDeepDive() {
-  track('deep_dive_unlock_click', { personaCode: lastPersonaCode });
+  track('deep_dive_unlock_click', { 'test_version': '48-hk',  personaCode: lastPersonaCode });
   if (window.gtag) { gtag('event', 'deep_dive_expand_click',
     { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } track('deep_dive_expand_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode });  /* GA4:点击查看完整解读 */
   var ov = safeEl('dd-overlay'); if (!ov) return; /* E2-P1 */
@@ -5470,7 +5470,7 @@ function unlockDeepDive() {
     { 'test_version': '48-hk', 'persona_result': lastPersonaCode }); } track('deep_dive_qrcode_click', { 'test_version': '48-hk', 'persona_result': lastPersonaCode });  /* GA4:点击二维码 */
     });
   }
-  track('deep_dive_app_open_success', { personaCode: lastPersonaCode });
+  track('deep_dive_app_open_success', { 'test_version': '48-hk',  personaCode: lastPersonaCode });
 }
 function collapseDeepDive() {
   var ov = safeEl('dd-overlay'); if (!ov) return; /* E2-P1 */
@@ -5514,7 +5514,7 @@ function track(name, payload) {
 /* E2-P3: 全局运行时错误上报 — 线上自报, 不再靠人眼截图发现(showConfirm 类错误连漏两轮) */
 window.addEventListener('error', function(ev) {
   try {
-    track('js_runtime_error', {
+    track('js_runtime_error', { 'test_version': '48-hk', 
       message: String(ev.message || '').slice(0, 200),
       stack: String((ev.error && ev.error.stack) || '').slice(0, 200),
       page: location.pathname.split('/').pop() || location.pathname
@@ -5524,7 +5524,7 @@ window.addEventListener('error', function(ev) {
 window.addEventListener('unhandledrejection', function(ev) {
   try {
     var reason = ev.reason || {};
-    track('js_runtime_error', {
+    track('js_runtime_error', { 'test_version': '48-hk', 
       message: String((reason && reason.message) || 'unhandledrejection').slice(0, 200),
       stack: String((reason && reason.stack) || '').slice(0, 200),
       page: location.pathname.split('/').pop() || location.pathname
@@ -5537,7 +5537,7 @@ window.addEventListener('unhandledrejection', function(ev) {
 window.addEventListener('pagehide', function() {
   var meta = readProgressMeta();
   if (!meta || !window.track) return;
-  window.track('test_progress', { maxQ: meta.maxQ, perQuestionMs: meta.perQuestionMs, abandoned: true });
+  window.track('test_progress', { 'test_version': '48-hk',  maxQ: meta.maxQ, perQuestionMs: meta.perQuestionMs, abandoned: true });
   clearProgressMeta();
 });
 if (typeof location !== 'undefined' && location.search && location.search.indexOf('from=') > -1) {
