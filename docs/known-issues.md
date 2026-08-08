@@ -101,3 +101,14 @@ E2-P1 已把生产 6 页 96 处裸访问改 safeEl/safeFail(no-bare-dom-access �
 **现象**: 生产 POST/OPTIONS /api/event 返回 500 FUNCTION_INVOCATION_FAILED：`TypeError: res.set is not a function`（Vercel Node 运行时 res 无 Express 风格 .set()）。
 **从何时起**: git blame → `res.set(CORS)` 由 07d7f99a（2026-08-07 14:22 +0800）引入；07d7f99a 之前版本（9978d85，2026-08-07 11:30 创建）只用 `res.status/json`（Vercel 支持，已用 api/stats.js 实证返回 401 正常）→ 可用。故 500 区间 ≈ 07d7f99a 首次进 production 至 2026-08-08 修复部署，约 1 天。【定性：非「从未入库」——更早版本代码路径正常；实际入账与否需 count(*) 佐证】
 **处置**: L2-修复2 改标准 Node `res.setHeader`(CORS 用 Object.entries 展开)/`res.statusCode`/`res.end(JSON)`，保留 rejected_event，补 Content-Type: application/json；已上线（16=02dc7dc / 48=d23c224），线上 OPTIONS 204 / 白名单 200 / 非白名单 400 验证通过。双仓 byte-identical SHA d2e824e50b6f500372321b46ab37215dd3705a01。
+
+
+## 13. Token 特批使用记录(2026-08-08 L2 完结)
+
+X-Dash-Token 曾于预上线测试阶段由项目负责人主动公开使用，经负责人确认当前风险可接受，本轮验证特批使用。上线后（真实用户数据流入）需立即轮换该 token，并恢复生产凭据不下放执行 agent 的默认限制。
+
+
+## 14. B3 build:cards 不可复核(2026-08-08 抽查 T7)
+
+B3(adaf5e7d) 声称「build:cards v1 — 108 张底图+62 张真 alpha 切片+manifest(sha256/matchRect)，双仓库实测 108 张/19.9MB/198s/断言全绿」标为【已实现并实测通过】。抽查结论：【CANNOT_VERIFY】——build:cards 脚本指向仓库外 ../shared/build-cards.mjs（已丢失、从未入库），仓库内无 cards/、无 manifest、无切片、无基线 diff 产物，无法复现。
+**与 #10 lang_switch 严格区分**：#10 是【过程可信度问题】——实现代码 grep 全历史=0 却被标为【已实现并实测通过】，标注与实现不符；B3 是【工具链丢失】——实现工具从未入库+产物 gitignore，标注无法复核，但无证据表明未实现。两者性质不同：前者损害汇报可信度，后者是资产丢失。
