@@ -5,6 +5,8 @@
  *   SUPABASE_SERVICE_KEY   service_role key
  * 地域:从 Vercel 请求头免费获取 x-vercel-ip-country / x-vercel-ip-city
  * 已知取舍:无鉴权/限频(白名单只限事件名),小项目可接受;若被灌水再按 IP 限频。
+ * L2-修复2: res.set/res.status/.json 改标准 Node res.setHeader/res.statusCode/res.end
+ *   (Vercel Node 运行时 res 无 Express 风格 .set(), 此前全站事件 500 未入库)
  */
 const { createClient } = require('@supabase/supabase-js');
 
@@ -62,21 +64,31 @@ const supabase = createClient(
 
 const clean = (s, max) => (typeof s === 'string' && s.trim() ? s.slice(0, max) : null);
 
+/* 标准 Node 响应工具(L2-修复2: 替代 Express 风格 res.set/res.status/.json) */
+function setCors(res) {
+  Object.entries(CORS).forEach(([k, v]) => res.setHeader(k, v));
+}
+function sendJson(res, code, obj) {
+  res.statusCode = code;
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify(obj));
+}
+
 module.exports = async function handler(req, res) {
-  if (req.method === 'OPTIONS') { res.set(CORS); return res.status(204).end(); }
-  if (req.method !== 'POST') { res.set(CORS); return res.status(405).json({ ok: false }); }
+  if (req.method === 'OPTIONS') { setCors(res); res.statusCode = 204; res.end(); return; }
+  if (req.method !== 'POST') { setCors(res); return sendJson(res, 405, { ok: false }); }
 
   let body;
   try {
     body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
   } catch (e) {
-    res.set(CORS);
-    return res.status(400).json({ ok: false });
+    setCors(res);
+    return sendJson(res, 400, { ok: false });
   }
   /* 防 JSON.parse('null'|'[]'|数字) 等畸形体:缺 event_name 时直接 400,不抛未捕获 TypeError */
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
-    res.set(CORS);
-    return res.status(400).json({ ok: false });
+    setCors(res);
+    return sendJson(res, 400, { ok: false });
   }
   if (!ALLOWED_EVENTS.has(body.event_name)) {
     /* K2b: 非白名单事件不再静默丢弃 — server log + 入库 rejected_event(当天可见, 修白名单遗漏) */
@@ -95,8 +107,8 @@ module.exports = async function handler(req, res) {
     } catch (e) {
       console.error('[event] rejected insert failed:', e.message);
     }
-    res.set(CORS);
-    return res.status(400).json({ ok: false, rejected: body.event_name });
+    setCors(res);
+    return sendJson(res, 400, { ok: false, rejected: body.event_name });
   }
 
   const params = (body.params && typeof body.params === 'object') ? body.params : {};
@@ -117,9 +129,9 @@ module.exports = async function handler(req, res) {
   const { error } = await supabase.from('events').insert(row);
   if (error) {
     console.error('[event] supabase insert failed:', error.message);
-    res.set(CORS);
-    return res.status(500).json({ ok: false, error: error.message });
+    setCors(res);
+    return sendJson(res, 500, { ok: false, error: error.message });
   }
-  res.set(CORS);
-  return res.status(200).json({ ok: true });
+  setCors(res);
+  return sendJson(res, 200, { ok: true });
 };
