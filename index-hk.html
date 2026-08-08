@@ -5753,13 +5753,47 @@ function checkCardContent(canvas, ratio, tpl, scale) {
  * MVP88-B: 受限 webview(微信/Instagram 等)用 data URL(非 blob) — WeChat 长按保存需 data URL, blob 在部分 webview 静默失败
  * A 方向: 全平台原生 — .png 扩展名必须配真 PNG 字节(iOS 相册/微信/ins 直接可看可发); 不用 WebP 扩展名 */
 function encodeCard(canvas, ratio) {
+  /* 方案A+格式修复: 主格式 JPEG q90(提速 + 体积小, 相册/微信/IG 全兼容); PNG 仅兜底。
+   * 格式修复: 受限 webview(微信/IG) toDataURL 可能静默返回 PNG data URL(即使请求 JPEG),
+   * 需按 data: 前缀校验真实格式, 消除「.jpg 名 + PNG 字节」错配。 */
+  function dataFmt(dataUrl) {
+    if (!dataUrl || dataUrl.length < 1000) return null;
+    if (dataUrl.indexOf('data:image/jpeg') === 0) return 'jpeg90';
+    if (dataUrl.indexOf('data:image/png') === 0) return 'png';
+    return 'png'; /* 未知格式一律按 PNG 处理(防错配) */
+  }
   if (IS_RESTRICTED_WEBVIEW) {
+    /* 非微信受限(Instagram 等): 尝试 toBlob(image/jpeg)+blob.type 校验拿真 JPEG(尝试性; IG 仍出 PNG 则接受) */
+    if (!isWechat) {
+      return new Promise(function(resolve, reject) {
+        try {
+          canvas.toBlob(function(blob) {
+            try {
+              if (blob && blob.type === 'image/jpeg') {
+                resolve({ url: URL.createObjectURL(blob), format: 'jpeg90' });
+              } else {
+                /* blob 非 JPEG 或失败 → 回退 data URL + 前缀校验 */
+                var u2 = canvas.toDataURL(RESTRICTED_FORMAT, RESTRICTED_QUALITY);
+                var f2 = dataFmt(u2);
+                if (!f2) throw new Error('empty data URL');
+                resolve({ url: u2, format: f2 });
+              }
+            } catch (e) {
+              try { resolve({ url: canvas.toDataURL('image/png'), format: 'png' }); }
+              catch (e2) { reject(e2); }
+            }
+          }, RESTRICTED_FORMAT, RESTRICTED_QUALITY);
+        } catch (e) {
+          reject(e);
+        }
+      });
+    }
+    /* 微信: data URL(长按保存需 data URL) + 前缀校验 */
     var lowUrl = null, lowFmt = null;
-    /* 方案A: 主格式 JPEG q90(提速 + 体积小, 相册/微信/IG 全兼容); PNG 仅兜底 */
     try {
       lowUrl = canvas.toDataURL(RESTRICTED_FORMAT, RESTRICTED_QUALITY); /* image/jpeg q90: 1080×1920 ~200-400KB */
-      lowFmt = (RESTRICTED_FORMAT === 'image/png') ? 'png' : 'jpeg90';
-      if (!lowUrl || lowUrl.length < 1000) throw new Error('empty data URL');
+      lowFmt = dataFmt(lowUrl); /* 按真实 data: 前缀定格式, 消除错配 */
+      if (!lowFmt) throw new Error('empty data URL');
       return Promise.resolve({ url: lowUrl, format: lowFmt });
     } catch (e) {
       /* PNG 兜底(全支持) */
@@ -5778,7 +5812,8 @@ function encodeCard(canvas, ratio) {
             try { track('export_format_fallback', { from: 'jpeg', to: 'png', ratio: ratio, uaBucket: uaBucket(navigator.userAgent) }); } catch (e) {}
             resolve({ url: URL.createObjectURL(blob2), format: 'png' });
           } else {
-            resolve({ url: canvas.toDataURL('image/jpeg', 0.9), format: 'jpeg90' });
+            var u3 = canvas.toDataURL('image/jpeg', 0.9);
+            resolve({ url: u3, format: dataFmt(u3) });
           }
         }, 'image/png');
       }
