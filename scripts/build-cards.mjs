@@ -88,6 +88,9 @@ const browser = await chromium.launch();
 /** 创建指定 locale 的页面（DPR=2），加载并等待数据就绪，做 per-page 预热 */
 async function createLocalePage(locale, personas, eggs) {
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 2 });
+  // 禁用页面语言分流重定向（index-en/hk 的 IIFE 基于 navigator.languages；headless 默认 zh 会把 en/hk 踢回 zh）。
+  // 真实用户：英文浏览器 detectLang()='en'=CURRENT_LANG 不会跳；中文浏览器跳 zh 是设计行为。headless 撞边界 → 用 nbti_redirect_done 短路。
+  await page.addInitScript(() => { try { sessionStorage.setItem('nbti_redirect_done', '1'); } catch (e) {} });
   await page.goto(`${baseURL}/${LOCALE_FILE[locale]}`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.RESULTS && window.RESULTS.results.length > 0);
   // 注入共享断言单点（构建脚本与测试共用 shared/text-assert.js）
