@@ -418,7 +418,7 @@
     border-top: 1px solid rgba(255,255,255,.09); flex-shrink: 0; }
   .t916 .sc-footer { padding: 20px 52px 12px; } /* E3 */
   .sc-foot-left { display: flex; flex-direction: column; gap: 12px; flex: 1 1 auto; min-width: 0; } /* E3: 占满可用宽, 防 shrink-to-fit 文字贴边被克隆度量裁切 */
-  .sc-logo { height: 28px; width: auto; opacity: .9; align-self: flex-start; } /* E3: 防 foot-left stretch 拉宽变形 */
+  .sc-logo { height: 28px; width: auto; opacity: .9; align-self: flex-start; object-fit: contain; } /* E3+V8: 防 foot-left stretch 拉宽变形 */
   .sc-version { font-family: Consolas, 'Courier New', monospace; letter-spacing: .1em; color: #6d766f; }
   .t916 .sc-version { font-size: 16px; } /* E3 */
   .sc-disclaimer { font-family: Consolas, 'Courier New', monospace; color: #6a736c; }
