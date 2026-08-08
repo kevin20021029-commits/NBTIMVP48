@@ -118,3 +118,44 @@ B3(adaf5e7d) 声称「build:cards v1 — 108 张底图+62 张真 alpha 切片+ma
 ## 15. P1(2026-08-08 B 治理): 服务凭据使用边界——用途扩展未经重新授权
 
 服务凭据的使用范围在一次调查过程中从单一用途扩展到多个用途，未经过重新授权即执行，后经报告确认。此模式需要警惕，后续同类凭据使用应在每次新用途产生时重新申请，而非默认沿用已有授权。
+
+
+# 旧架构缺陷（html2canvas 分享卡渲染链路 · 汇总）
+
+> html2canvas 是旧架构分享卡的核心渲染引擎，存在一批累积的固有缺陷。多数已在本轮（2026-08-08 MVP88 系列）修复或缓解，但**根因在 html2canvas 引擎本身**，换引擎(如预生成/satori/html-to-image)才能根治。此处汇总累计缺陷，供未来视觉/架构线参考。
+
+## 16. html2canvas 渲染分歧（预览 ≠ 导出）——已归因未根治
+
+**现象**: 分享卡同一状态在 live DOM 预览与 html2canvas 导出图中不一致。
+**累计 9 类分歧属性**（详见 docs/visual-spec.md §6）：
+- ① 半透明 alpha 合成差异（box-shadow 被渲染为整区填充色，C3 已实证 stage 墨绿块）
+- ② opacity 半透明处理
+- ③ PNG/WebP 透明通道差异
+- ④ border-radius 抗锯齿
+- ⑤ 字体度量/行高在克隆 iframe 中偏移（E3 溢出修复实证）
+- ⑥ cover 裁切（html2canvas 不支持 object-fit:cover，需 coverFit 手动模拟）
+- ⑦ 渐变/阴影混合模式
+- ⑧ 背景色合成（导出背景色需显式传，否则透明）
+- ⑨ 子像素渲染差异（高 DPR 下文本边缘）
+**影响**: 视觉验收必须基于导出图，不能基于 live DOM 预览（#9 已定 P0）。
+
+## 17. 分享卡下载模糊（scale-DPR 关联）——已缓解
+
+**现象**: 用户报下载图模糊，假设「缺 scale」。实测根因：
+- **角色图源 1440×1440，输出渲染到 ~2000px（scale2 下 coverFit 1.39× 放大）** —— 下载中角色比预览糊（variance 3130 vs 5421）
+- **下载文件名 .png 但内容 WebP**（encodeCard 历史 bug，已修复为真 PNG/JPEG + 扩展名匹配）
+- **微信长按保存压缩**：微信把 2160×3840 压到 ~660 宽（default.jpg=660×1173 实证）
+**处置（本轮）**: scale1 低内存路径(受限 webview) + JPEG q90 主格式 + .jpg/.png 扩展名匹配 + 移除死路由 /api/card。缓解非根治——要根治需换引擎或角色源图提升至 2160+。
+
+## 18. P1(2026-08-08): 分享卡生成失败（死路由 + 渲染超时）——已修复
+
+**现象**: 生产遥测（service key 只读，9 条真实用户 generate_failed）：
+- **reason=server card HTTP 404 ×6**（67%）—— fallbackShareGenerate → serverCardFallback → /api/card 生产 404（死路由，从未部署）
+- **reason=rendering timeout 5000ms ×3**（33%）—— 受限 webview(微信/IG 高 DPR) html2canvas 渲染 >5s 触发超时
+**处置**: ①移除死路由 /api/card，fallback 改本地 scale1 兜底（全流程 0 次调用）②受限 webview 渲染超时 5000→10000ms ③isWebView 正则补 Instagram(FBAN|FBAV)（遥测盲区）
+
+## 19. P2(2026-08-08): 受限 webview 格式错配（.jpg 名 + PNG 字节）——已修复
+
+**现象**: encodeCard 受限路径 `canvas.toDataURL('image/jpeg', q)` 在部分 iOS WKWebView/IG 可能**静默返回 PNG data URL**，但代码无条件标 `jpeg90` → 下载扩展名 .jpg 但字节是 PNG（错配，相册/微信/IG 兼容隐患）。
+**处置**: ①data: 前缀校验真实格式——`data:image/jpeg` 才标 jpeg90，`data:image/png` 标 png，未知一律 png（消除错配）②非微信受限(IG) 尝试 `toBlob(image/jpeg)` + `blob.type` 校验拿真 JPEG（尝试性优化，IG 仍出 PNG 则接受兜底）③微信路径保留 data URL（长按保存需）但同样前缀校验。
+**验证**: 模拟 buggy webview（JPEG 请求 → PNG 返回）实测 dataFmt 正确标 png；6 文件 headless 全过（desktop/wechat/IG 真 JPEG，0 api/card，微信清晰度无回归 sharp 3331）。
