@@ -5550,7 +5550,8 @@ function isRestrictedWebview() {
 }
 var IS_RESTRICTED_WEBVIEW = isRestrictedWebview();
 var RESTRICTED_SCALE = 1;            /* 受限 webview 输出 1080×1920 */
-var RESTRICTED_FORMAT = 'image/png'; /* 全平台原生: .png 扩展名=PNG 字节; iOS 相册/微信/ins 直接可看可发 */
+var RESTRICTED_FORMAT = 'image/jpeg'; /* 方案A: JPEG q90 提速 — 1080×1920 ~200-400KB, 相册/微信/IG 全兼容 */
+var RESTRICTED_QUALITY = 0.9;         /* 方案A: JPEG q90(与主路径一致) */
 function matchRing(pct) {
   if (typeof pct !== 'number' || isNaN(pct) || pct < 0) return ''; /* 降级路径:隐藏匹配环,不显示假数字 */
   var r = 34, circ = 2 * Math.PI * r;
@@ -5607,7 +5608,7 @@ function assertShareDom() {
   }
   return false;
 }
-/* 导出降级链:scale 2 → 1.5 → 服务端 /api/card → 报错。禁止 scale 1(糊图伤品牌) */
+/* 导出降级链:scale 2 → 1.5 → 1(方案A: 移除死路由 /api/card, 本地 scale1 兜底) */
 var SHARE_SCALE_CHAIN = [2, 1.5];
 function withTimeout(promise, ms, label) {
 
@@ -5625,7 +5626,7 @@ function uaBucket(ua) {
   var ios = /iPhone|iPad|iPod/i.test(ua);
   var android = /Android/i.test(ua);
   var wechat = /MicroMessenger/i.test(ua);
-  var webview = /Toutiao|aweme|NewsArticle|DingTalk|Alipay|UCBrowser|miniProgram|WebView/i.test(ua);
+  var webview = /MicroMessenger|Instagram|FBAN|FBAV|Toutiao|aweme|NewsArticle|DingTalk|Alipay|UCBrowser|miniProgram|WebView/i.test(ua);
   var chrome = /Chrome\//i.test(ua) && !/Edg\//i.test(ua);
   var safari = /Safari\//i.test(ua) && !chrome;
   if (ios) return wechat ? 'ios_wechat' : (webview ? 'ios_other_webview' : 'ios_safari');
@@ -5656,29 +5657,15 @@ function buildFailMeta(phase, reason, engine, scale, ratio) {
     ua: (navigator.userAgent || '').slice(0, 200),
     deviceMemory: (navigator.deviceMemory !== undefined) ? navigator.deviceMemory : null,
     dpr: window.devicePixelRatio || 1,
-    isWebView: /MicroMessenger|Toutiao|aweme|NewsArticle|DingTalk|Alipay|UCBrowser|miniProgram/i.test(navigator.userAgent || ''),
+    isWebView: /MicroMessenger|Instagram|FBAN|FBAV|Toutiao|aweme|NewsArticle|DingTalk|Alipay|UCBrowser|miniProgram/i.test(navigator.userAgent || ''),
     locale: CURRENT_LANG
   };
 }
 
 function serverCardFallback(persona, match, ratio) {
-  /* 服务端出图 /api/card(接口未部署时快速失败,不阻塞 UI) */
-  return fetch('/api/card', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ personaCode: persona.code || persona.word || '', match: match, ratio: ratio }) })
-    .then(function(r) { if (!r.ok) throw new Error('server card HTTP ' + r.status); return r.json(); })
-    .then(function(d) {
-      if (!d || !d.ok || !d.dataUrl) throw new Error('server card bad payload');
-      if (d.dataUrl.length < 1000) throw new Error('server card empty image');
-      shareCardUrls[ratio] = d.dataUrl;
-      shareCardRatioReady[ratio] = true;
-      return true;
-    })
-    .catch(function(e) {
-      console.error('[shareCard] server fallback failed:', e);
-      shareCardUrls[ratio] = null;
-      track('share_card_generate_failed', buildFailMeta('server-fallback', e && e.message, 'server', 1.5, ratio));
-      return false;
-    });
+  /* 方案A: 移除死路由 /api/card(生产 404), 改为本地 scale1 重试 — 全流程不再调 /api/card */
+  return generateShareCard(persona, match, ratio, 1, 0, function() {})
+    .then(function(ok) { return !!ok; });
 }
 
 /* ---- 导出内容断言:任一不过即判失败并降级(防白图/缺图/文字缺失) ----
@@ -5750,33 +5737,34 @@ function checkCardContent(canvas, ratio, tpl, scale) {
 function encodeCard(canvas, ratio) {
   if (IS_RESTRICTED_WEBVIEW) {
     var lowUrl = null, lowFmt = null;
+    /* 方案A: 主格式 JPEG q90(提速 + 体积小, 相册/微信/IG 全兼容); PNG 仅兜底 */
     try {
-      lowUrl = canvas.toDataURL(RESTRICTED_FORMAT); /* image/png: 1080×1920 约 1-2MB 手机仍清晰 */
-      lowFmt = (RESTRICTED_FORMAT === 'image/png') ? 'png' : 'jpeg92';
+      lowUrl = canvas.toDataURL(RESTRICTED_FORMAT, RESTRICTED_QUALITY); /* image/jpeg q90: 1080×1920 ~200-400KB */
+      lowFmt = (RESTRICTED_FORMAT === 'image/png') ? 'png' : 'jpeg90';
       if (!lowUrl || lowUrl.length < 1000) throw new Error('empty data URL');
       return Promise.resolve({ url: lowUrl, format: lowFmt });
     } catch (e) {
-      /* JPEG q92 兜底(全支持; 体积更小) */
-      try { return Promise.resolve({ url: canvas.toDataURL('image/jpeg', 0.92), format: 'jpeg92' }); }
+      /* PNG 兜底(全支持) */
+      try { return Promise.resolve({ url: canvas.toDataURL('image/png'), format: 'png' }); }
       catch (e2) { return Promise.reject(e2); }
     }
   }
   return new Promise(function(resolve, reject) {
     canvas.toBlob(function(blob) {
-      if (blob && blob.type === 'image/png') {
-        resolve({ url: URL.createObjectURL(blob), format: 'png' });
+      if (blob && blob.type === 'image/jpeg') {
+        resolve({ url: URL.createObjectURL(blob), format: 'jpeg90' });
       } else {
-        /* PNG 不支持(罕见):JPEG q92 重编 */
+        /* JPEG 不支持(罕见):PNG 兜底 */
         canvas.toBlob(function(blob2) {
           if (blob2) {
-            try { track('export_format_fallback', { from: 'png', to: 'jpeg92', ratio: ratio, uaBucket: uaBucket(navigator.userAgent) }); } catch (e) {}
-            resolve({ url: URL.createObjectURL(blob2), format: 'jpeg92' });
+            try { track('export_format_fallback', { from: 'jpeg', to: 'png', ratio: ratio, uaBucket: uaBucket(navigator.userAgent) }); } catch (e) {}
+            resolve({ url: URL.createObjectURL(blob2), format: 'png' });
           } else {
-            resolve({ url: canvas.toDataURL('image/png'), format: 'png' });
+            resolve({ url: canvas.toDataURL('image/jpeg', 0.9), format: 'jpeg90' });
           }
-        }, 'image/jpeg', 0.92);
+        }, 'image/png');
       }
-    }, 'image/png');
+    }, 'image/jpeg', 0.9);
   });
 }
 function retryShareGenerate() { track('share_card_retry', { ratio: getShareRatio(), locale: CURRENT_LANG }); generateShareFlow(); }
@@ -5791,7 +5779,7 @@ function fallbackShareGenerate() {
     }
   });
 }
-var FB_NA_MSG = 'Fallback method unavailable — tap “Retry”.';
+var FB_NA_MSG = 'Fallback not successful — tap Retry';
 if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', assertShareDom); }
 else { assertShareDom(); }
 
@@ -6076,7 +6064,8 @@ function generateShareCard(persona, match, ratio, scale, depth, onPhase) {
   });
   return withTimeout(prep, 3000, 'preparing').then(function() {
     setPhase('rendering:' + scale);
-    /* scale 由降级链传入:2 → 1.5 → 服务端;禁止 1。rendering 5s 超时(总降级链 ≤15s) */
+    /* scale 由降级链传入:2 → 1.5 → 1。rendering 超时:受限 webview(微信/IG 高 DPR)放宽到 10s, 普通 5s */
+    var renderTimeout = IS_RESTRICTED_WEBVIEW ? 10000 : 5000;
     return withTimeout(html2canvas(tpl, { scale: scale, backgroundColor: '#0A0A0A', width: 1080,
       height: 1920, useCORS: true, /* G1 */
       onclone: function(doc) {
@@ -6091,7 +6080,7 @@ function generateShareCard(persona, match, ratio, scale, depth, onPhase) {
           var s2 = imgs[j].getAttribute('src') || '';
           if (s2.indexOf('data:') !== 0) imgs[j].removeAttribute('src');
         }
-      } }), 5000, 'rendering');
+      } }), renderTimeout, 'rendering');
   }).then(function(canvas) {
     setPhase('done');
     /* 内容断言:任一不过即判失败并降级(防白图/缺图/文字缺失) */
@@ -6152,7 +6141,7 @@ function generateShareFlow() {
   if (btn) { btn.disabled = true; btn.textContent = 'Generating your share card…'; }
   var persona = lastShareReq.persona, match = lastShareReq.match;
   /* 状态机事件驱动文案:preparing/rendering:2→「Generating…」, rendering:1.5→「Enhancing quality…」, server-fallback→「Trying another way…」;wall-clock 只做兜底 */
-  var PH_TEXT = { 'preparing': 'Generating…', 'rendering:2': 'Generating…', 'rendering:1.5': 'Enhancing quality…', 'rendering:1': 'Generating…', 'server-fallback': 'Trying another way…' };
+  var PH_TEXT = { 'preparing': 'Generating…', 'rendering:2': 'Generating…', 'rendering:1.5': 'Enhancing quality…', 'rendering:1': 'Generating…' };
   var phaseTimers = [];
   function startPhaseText() {
     while (phaseTimers.length) clearTimeout(phaseTimers.pop());
@@ -6254,8 +6243,8 @@ function downloadCard() {
   var a = document.createElement('a');
   var word = (lastShareReq && lastShareReq.persona.word) || 'NBTI';
   /* MVP88-B+A: 扩展名按实际格式(png/jpeg92), 修复「.png 名 + WebP 字节」错配 — 现在主格式是 PNG, 字节与 .png 名一致 */
-  var fmt = shareCardFormats[ratio] || 'png';
-  var ext = (fmt === 'jpeg92') ? 'jpg' : 'png';
+  var fmt = shareCardFormats[ratio] || 'jpeg90';
+  var ext = (fmt === 'png') ? 'png' : 'jpg'; /* 方案A: 主格式 JPEG, .jpg 扩展名; PNG 兜底才 .png */
   a.download = 'NBTI_' + word + '_9x16.' + ext; /* G1 */
   a.href = url;
   a.click();
