@@ -238,6 +238,21 @@ test.describe('I1-2 导航状态机', () => {
     expect(await page.evaluate(() => (window as any).current)).toBe(0);
   });
 
+  test('结果页→goHome→点切语言 → 停新语言首页(不跳结果页)', async ({ page }) => {
+    await blockExternal(page);
+    await page.goto('/index.html?lang=zh', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => (window as any).RESULTS && (window as any).RESULTS.results.length > 0);
+    await reachResult(page);
+    await assertHashViewConsistent(page, 'result');
+    // 返回首页 → hash 清空 + 三语链接重建(不残留 #result)
+    await page.evaluate(() => (window as any).goHome());
+    await assertHashViewConsistent(page, 'home');
+    // 点切语言 → 必须停新语言首页(陈旧 #result 不得带入新页)
+    await Promise.all([page.waitForNavigation(), page.click('a[data-lang=hk]')]);
+    await page.waitForFunction(() => (window as any).RESULTS && (window as any).RESULTS.results.length > 0);
+    await assertHashViewConsistent(page, 'home');
+  });
+
   test('负例: 手动 #result=XXXX + 空 sessionStorage → shared 降级路径(好友结果 CTA)', async ({ page }) => {
     await blockExternal(page);
     await page.goto('/index.html?lang=zh#result=RGHC-87', { waitUntil: 'domcontentloaded' });

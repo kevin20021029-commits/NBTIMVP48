@@ -4985,6 +4985,7 @@ function setView(view, pageId) {
     if (location.hash) {
       try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
     }
+    syncLangLinks(); /* L2-修复: 清 hash 后重建三语链接, 防陈旧 #result 带入新页 */
   }
   /* I1-3: 状态参数管理 — resume 一次性(消费/离开即清);归因参数(ref/refPersona/from)永不清除 */
   if (view === 'home' || view === 'result') {
