@@ -588,7 +588,11 @@
   var __refP = (location.search.match(/[?&]refPersona=([A-Za-z0-9_-]{1,40})/) || [])[1];
   if (__refM) { window.__refTag = { ref: __refM, refPersona: __refP || '' }; }
   var firePV = function() {
-    if (window.track) window.track('page_view', { 'test_version': '48题版' });
+    var _isLangSwitch = false;
+    try { _isLangSwitch = sessionStorage.getItem('nbti_lang_switch_flag') === '1'; sessionStorage.removeItem('nbti_lang_switch_flag'); } catch (e) {}
+    var _pvPayload = { 'test_version': '48题版' };
+    if (_isLangSwitch) _pvPayload.isLangSwitch = true; /* L2-4: 切语言到达标记, page_view 一次性, 漏斗去虚高 */
+    if (window.track) window.track('page_view', _pvPayload);
     if (__refM && window.track) window.track('ref_landing', { ref: __refM, refPersona: __refP || '', locale: CURRENT_LANG });
   };
   if (document.readyState !== 'loading') firePV();
@@ -745,6 +749,25 @@ function initLangSwitcher() {
     link.addEventListener('click', function(ev) {
       lsSet('nbti_preferred_lang', this.getAttribute('data-lang'));
       try { localStorage.setItem('nbti_lang_switch', '1'); } catch (e) {} /* I1-2: 切语言标记(新页上报 lang_switch, 防漏斗虚高误判) */
+      /* L2-4: lang_switch 事件(sendBeacon 不阻塞导航) + 一次性 flag(新页 page_view 带 isLangSwitch) */
+      try {
+        var _lsView = 'home';
+        var _lsR = safeEl('page-result');
+        var _lsQ = safeEl('page-quiz');
+        var _lsL = safeEl('page-loading');
+        if (_lsR && /\bactive\b/.test(_lsR.className)) _lsView = 'result';
+        else if ((_lsQ && /\bactive\b/.test(_lsQ.className)) || (_lsL && /\bactive\b/.test(_lsL.className))) _lsView = 'quiz';
+        navigator.sendBeacon('/api/event', new Blob([JSON.stringify({
+          event_name: 'lang_switch',
+          params: { from_locale: CURRENT_LANG, to_locale: this.getAttribute('data-lang'), view: _lsView, maxQ: (typeof current === 'number' ? current : 0) },
+          user_id: window.__nfUid || '',
+          lang: CURRENT_LANG,
+          page: (location.pathname.split('/').pop() || 'index.html'),
+          url: location.href,
+          ua: navigator.userAgent
+        })], { type: 'application/json' }));
+      } catch (e) {}
+      try { sessionStorage.setItem('nbti_lang_switch_flag', '1'); } catch (e) {}
       /* 答题中切语言:目标 URL 补 ?resume=1,目标页加载后自动续答(仅普通左键点击) */
       if (quizResumePending() && !/[?&]resume=1/i.test(this.href)) {
         if (!ev.metaKey && !ev.ctrlKey && !ev.shiftKey && !ev.altKey) {

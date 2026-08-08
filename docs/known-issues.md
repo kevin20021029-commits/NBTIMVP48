@@ -61,3 +61,28 @@ warm 失败 → 生成时阻塞重试 1 次 → 仍失败则输出「纯色占�
 E2-P1 已把生产 6 页 96 处裸访问改 safeEl/safeFail(no-bare-dom-access 红线 3/3 绿)。
 13 测试页(flowtest/hashtest × zh/en/hk × 两仓库 + p02check)的 374 处(H=263 M=111)
 **按 E2 指令不动**, 1C 测试页整体处理时一并修复(与第 7 条双 bindShareCard 同步)。
+
+
+## 9. P0(2026-08-07 C3): 预览 ≠ 导出 —— 视觉验收必须基于导出图,不能基于 live DOM 预览
+
+**现象**: 分享卡角色插画区(stage)在导出 PNG 中为整块墨绿,而 live DOM 预览中该区域正常(近黑底+人物)。
+
+**实测(C3, 同状态同尺寸 2160x3840, SNIPER 9:16)**:
+- stage 区域绿色占比: live DOM 截图 **0.5%** vs 导出 PNG **25.4%**(上半 41.3%);y=640-740 条带 live 0.0% vs 导出 89.4%。
+- 同坐标像素对(均为 BGR):
+  - (600,700) 墨绿块内: live=(14,15,13) vs 导出=(44,61,11)
+  - (104,1387) stage 左缘: live=(45,61,10)(墨绿 1px 描边) vs 导出=(14,16,11)
+  - (1080,1280) stage 中心(人物): live=(50,78,135) vs 导出=(50,76,136) —— 人物本身一致
+- 因果链: 角色图 webp 背景透明(绿块区 live 近黑像素 99.3% = 透出黑底)→ html2canvas 将 `.sc-char-stage` 的 `box-shadow: inset 0 0 0 1px rgba(0,229,160,.22)` 渲染成**整区填充色**(visual-spec §4 已证)→ 透明区透出墨绿。
+
+**结论**: 预览≠导出成立(P0 类)。现有全部基于预览的视觉验收方法无效;验收必须用导出图(html2canvas 产物)。
+**同类潜在分歧属性**: 半透明 alpha 合成(shadow/border/背景)、opacity、PNG/webp 透明通道、border-radius 抗锯齿。完整清单见 docs/visual-spec.md §6。
+**本轮不修**(2/3 整体重做 stage)。
+
+
+## 10. P1(2026-08-08 L2-4 核实): lang_switch「到达时上报」从未实现——【前任报了没做】
+
+**现象**: I1-3 汇报称 lang_switch 已入白名单并实现「到达时上报」，但双仓全历史 pickaxe 核实(git log --all -S)：
+- `track('lang_switch'` → 0 提交；`isLangSwitch` → 0 提交；`nbti_lang_switch` → 仅 I1-2(16:934deec6 / 48:ca612ca) 以 `localStorage.setItem('nbti_lang_switch','1')` 标记 SET 引入，无消费端(getItem/removeItem 均无)。
+- 结论: **lang_switch sender 从未实现**【前任报了没做】,非 grep 姿势问题。L2-4 已在 feat/ship-navfix 补实现(sendBeacon lang_switch + sessionStorage 一次性 flag + page_view isLangSwitch:true)。
+**教训**: 标着「已实测」的汇报条目可能有别项未做,需抽查复核。
