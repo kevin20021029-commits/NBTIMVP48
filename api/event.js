@@ -36,8 +36,12 @@ const ALLOWED_EVENTS = new Set([
   'share_card_fallback_used',
   'card_ratio_switch',
   'share_card_longpress_shown',
-  /* 内容断言失败(白图/缺图/文字缺失) */
+  /* 内容断言失败(白图/缺图/文字缺失/溢出) */
   'share_card_content_check_failed',
+  'share_card_text_check_failed',
+  'share_card_overflow',
+  /* 全局运行时错误上报(error + unhandledrejection) */
+  'js_runtime_error',
   /* 编码格式降级(WebP 不支持 → JPEG q92) */
   'export_format_fallback'
 ]);
@@ -74,8 +78,24 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ ok: false });
   }
   if (!ALLOWED_EVENTS.has(body.event_name)) {
+    /* K2b: 非白名单事件不再静默丢弃 — server log + 入库 rejected_event(当天可见, 修白名单遗漏) */
+    console.error('[event] rejected:', JSON.stringify({ name: body.event_name, lang: body.lang || null, ua: clean(body.ua, 120) }));
+    try {
+      await supabase.from('events').insert({
+        event_name: 'rejected_event',
+        user_id: clean(body.user_id, 64),
+        test_version: clean((body.params && body.params.test_version) || null, 20),
+        lang: clean(body.lang, 8),
+        page: clean(body.page, 40),
+        url: clean(body.url, 500),
+        ua: clean(body.ua, 300),
+        params: { rejected: body.event_name, reason: 'not_whitelisted' }
+      });
+    } catch (e) {
+      console.error('[event] rejected insert failed:', e.message);
+    }
     res.set(CORS);
-    return res.status(400).json({ ok: false });
+    return res.status(400).json({ ok: false, rejected: body.event_name });
   }
 
   const params = (body.params && typeof body.params === 'object') ? body.params : {};
