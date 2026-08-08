@@ -80,12 +80,13 @@ E2-P1 已把生产 6 页 96 处裸访问改 safeEl/safeFail(no-bare-dom-access �
 **本轮不修**(2/3 整体重做 stage)。
 
 
-## 10. P1(2026-08-08 L2-4 核实): lang_switch「到达时上报」从未实现——【前任报了没做】
+## 10. P1(2026-08-08 L2-4 核实): lang_switch「到达时上报」从未实现——【过程可信度问题】
 
 **现象**: I1-3 汇报称 lang_switch 已入白名单并实现「到达时上报」，但双仓全历史 pickaxe 核实(git log --all -S)：
 - `track('lang_switch'` → 0 提交；`isLangSwitch` → 0 提交；`nbti_lang_switch` → 仅 I1-2(16:934deec6 / 48:ca612ca) 以 `localStorage.setItem('nbti_lang_switch','1')` 标记 SET 引入，无消费端(getItem/removeItem 均无)。
 - 结论: **lang_switch sender 从未实现**【前任报了没做】,非 grep 姿势问题。L2-4 已在 feat/ship-navfix 补实现(sendBeacon lang_switch + sessionStorage 一次性 flag + page_view isLangSwitch:true)。
-**教训**: 标着「已实测」的汇报条目可能有别项未做,需抽查复核。
+**定性**: 这是【过程可信度问题】而非单纯技术遗留——前任至少一次把未实现功能标记为【已实现并实测通过】。对 5 条历史【已实现并实测通过】条目的抽查(T7)：4 条代码实证为真(E2-P3/B7/G3/H-P0)，1 条(B3)工具链丢失不可复核，未见系统性造假；但该误报表明「已实测」标注不可盲信。
+**教训**: 标着「已实测」的汇报条目可能有别项未做,需抽查复核；后续【已实现并实测通过】标注须附 commit_sha + 复现步骤。
 
 
 ## 11. P1(2026-08-08 L2 修复): nav-state 断言集系统性盲区 — 「结果页→goHome→点切语言」未被覆盖
@@ -93,3 +94,10 @@ E2-P1 已把生产 6 页 96 处裸访问改 safeEl/safeFail(no-bare-dom-access �
 **现象**: 原 nav-state.spec.ts 26 项(8 场景×3 语言 + Q1 + 负例)未覆盖「结果页→返回首页→点切语言」组合。场景4/5 覆盖「结果页→返回首页」但随后是 startQuiz/reload(不点语言链接)；Q1 覆盖「答题中→首页→切语言」(hash 本为空)。因此 I1-2 引入的「goHome 清 URL hash 但语言链接 href 不重建」未被测出——修复前 main 与 PoC 分支均可复现「切语言仍被拉回结果页」。
 **处置**: L2-修复1 补 syncLangLinks()(setView 清 hash 后重建三语链接) + 新增回归测试「结果页→goHome→点切语言 → 停新语言首页」；本地 42/42 全绿，线上三语验证通过。
 **教训**: 视图状态机断言需覆盖「动作组合」而非单个动作(goHome + 切语言 组合)。
+
+
+## 12. P1(2026-08-08 L2 修复): 生产 /api/event 全量 500（res.set is not a function）——已修复
+
+**现象**: 生产 POST/OPTIONS /api/event 返回 500 FUNCTION_INVOCATION_FAILED：`TypeError: res.set is not a function`（Vercel Node 运行时 res 无 Express 风格 .set()）。
+**从何时起**: git blame → `res.set(CORS)` 由 07d7f99a（2026-08-07 14:22 +0800）引入；07d7f99a 之前版本（9978d85，2026-08-07 11:30 创建）只用 `res.status/json`（Vercel 支持，已用 api/stats.js 实证返回 401 正常）→ 可用。故 500 区间 ≈ 07d7f99a 首次进 production 至 2026-08-08 修复部署，约 1 天。【定性：非「从未入库」——更早版本代码路径正常；实际入账与否需 count(*) 佐证】
+**处置**: L2-修复2 改标准 Node `res.setHeader`(CORS 用 Object.entries 展开)/`res.statusCode`/`res.end(JSON)`，保留 rejected_event，补 Content-Type: application/json；已上线（16=02dc7dc / 48=d23c224），线上 OPTIONS 204 / 白名单 200 / 非白名单 400 验证通过。双仓 byte-identical SHA d2e824e50b6f500372321b46ab37215dd3705a01。
