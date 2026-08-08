@@ -1,0 +1,2 @@
+# K2c: 全仓库文本文件统一 LF, 封掉 CRLF/LF 字节差异(双仓库 byte-identical 的前提)
+* text=auto eol=lf
