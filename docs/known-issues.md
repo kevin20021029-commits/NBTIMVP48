@@ -159,3 +159,13 @@ B3(adaf5e7d) 声称「build:cards v1 — 108 张底图+62 张真 alpha 切片+ma
 **现象**: encodeCard 受限路径 `canvas.toDataURL('image/jpeg', q)` 在部分 iOS WKWebView/IG 可能**静默返回 PNG data URL**，但代码无条件标 `jpeg90` → 下载扩展名 .jpg 但字节是 PNG（错配，相册/微信/IG 兼容隐患）。
 **处置**: ①data: 前缀校验真实格式——`data:image/jpeg` 才标 jpeg90，`data:image/png` 标 png，未知一律 png（消除错配）②非微信受限(IG) 尝试 `toBlob(image/jpeg)` + `blob.type` 校验拿真 JPEG（尝试性优化，IG 仍出 PNG 则接受兜底）③微信路径保留 data URL（长按保存需）但同样前缀校验。
 **验证**: 模拟 buggy webview（JPEG 请求 → PNG 返回）实测 dataFmt 正确标 png；6 文件 headless 全过（desktop/wechat/IG 真 JPEG，0 api/card，微信清晰度无回归 sharp 3331）。
+
+## 20. 卡片社会认同数据(总完成人数/同型占比)当前为占位符,非真实统计,待接入数据管道
+
+**状态**: 占位符（非真实统计）。2026-08-09 随社会认同数据组上线（commit eafed1f，feat/mvp88-social-proof）。
+
+**现象**: 分享卡 `.sc-social` 在「全球 X 人和你同型 · slogan」下方新增两行：zh/hk「已有 12万+/12萬+ 人完成测试 / 其中 10,000+ 人与你同型，占约 8%」、en「120,000+ people have completed the test / 10,000+ people share your type, about 8%」。数值来自命名常量 `PLACEHOLDER_TOTAL_COMPLETED / PLACEHOLDER_SAME_TYPE / PLACEHOLDER_SAME_PCT`，均为概数占位。
+
+**风险**: 这些数字不是真实统计（真实总完成人数 / 同型人数 / 占比）。接入数据管道前，任何基于这些数字的市场/文案推断均无效；数值变更需同步更新常量（勿直接改模板字符串，防历史教训：占位符看不出是占位 = 违约）。
+
+**待办**: 接入真实数据管道（总完成人数 / 同型人数 / 占比）后，更新常量值并移除本条目。
