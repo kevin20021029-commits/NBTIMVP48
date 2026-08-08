@@ -86,3 +86,10 @@ E2-P1 已把生产 6 页 96 处裸访问改 safeEl/safeFail(no-bare-dom-access �
 - `track('lang_switch'` → 0 提交；`isLangSwitch` → 0 提交；`nbti_lang_switch` → 仅 I1-2(16:934deec6 / 48:ca612ca) 以 `localStorage.setItem('nbti_lang_switch','1')` 标记 SET 引入，无消费端(getItem/removeItem 均无)。
 - 结论: **lang_switch sender 从未实现**【前任报了没做】,非 grep 姿势问题。L2-4 已在 feat/ship-navfix 补实现(sendBeacon lang_switch + sessionStorage 一次性 flag + page_view isLangSwitch:true)。
 **教训**: 标着「已实测」的汇报条目可能有别项未做,需抽查复核。
+
+
+## 11. P1(2026-08-08 L2 修复): nav-state 断言集系统性盲区 — 「结果页→goHome→点切语言」未被覆盖
+
+**现象**: 原 nav-state.spec.ts 26 项(8 场景×3 语言 + Q1 + 负例)未覆盖「结果页→返回首页→点切语言」组合。场景4/5 覆盖「结果页→返回首页」但随后是 startQuiz/reload(不点语言链接)；Q1 覆盖「答题中→首页→切语言」(hash 本为空)。因此 I1-2 引入的「goHome 清 URL hash 但语言链接 href 不重建」未被测出——修复前 main 与 PoC 分支均可复现「切语言仍被拉回结果页」。
+**处置**: L2-修复1 补 syncLangLinks()(setView 清 hash 后重建三语链接) + 新增回归测试「结果页→goHome→点切语言 → 停新语言首页」；本地 42/42 全绿，线上三语验证通过。
+**教训**: 视图状态机断言需覆盖「动作组合」而非单个动作(goHome + 切语言 组合)。
