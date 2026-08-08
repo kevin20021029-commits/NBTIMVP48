@@ -47,7 +47,8 @@ export async function composeMatchNumber(ctx, match, ratio, rect) {
   const m = await loadManifest();
   const digit = m.digits && m.digits[ratio] && m.digits[ratio][String(match)];
   if (!digit) throw new Error('digit slice missing: ' + ratio + '/' + match);
-  const img = await loadImage(CARD_TOKENS.digitsDir + digit.file.split('/').pop());
+  /* digit.file 为相对 digits/ 的路径(如 '9x16/87.webp'), 保留 ratio 子目录 —— 两比例 match 号重叠, 扁平会碰撞 */
+  const img = await loadImage(CARD_TOKENS.digitsDir + digit.file);
   ctx.drawImage(img, rect.x, rect.y, rect.w, rect.h);
 }
 
