@@ -6,16 +6,16 @@
 <title>NeuralFin Finance NBTI — Investor Personality Test</title>
 <meta name="description" content="48 questions. 10 minutes. Find your investor personality — Finance NBTI, built for the scroll generation.">
 <meta property="og:site_name" content="NeuralFin">
-<meta property="og:title" content="Finance NBTI — What kind of investor are you?">
+<meta property="og:title" content="NeuralFin · Finance NBTI — What kind of investor are you?">
 <meta property="og:description" content="48 questions. 10 minutes. 16 investor personalities.">
-<meta property="og:image" content="https://nbtimvp-48.vercel.app/NeuralFin.png">
+<meta property="og:image" content="https://nbtimvp-48.vercel.app/og-en.png">
 <meta property="og:url" content="https://nbtimvp-48.vercel.app/index-en.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="zh_HK">
 <meta property="og:locale:alternate" content="zh_CN">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://nbtimvp-48.vercel.app/NeuralFin.png">
+<meta name="twitter:image" content="https://nbtimvp-48.vercel.app/og-en.png">
 <!-- hreflang 三版互指;noindex 期間(index-hk.html)被搜尋引擎忽略屬預期狀態,勿改 -->
 <link rel="canonical" href="https://nbtimvp-48.vercel.app/index-en.html">
 <link rel="alternate" hreflang="zh-Hans"    href="https://nbtimvp-48.vercel.app/index.html">
@@ -5550,7 +5550,7 @@ function isRestrictedWebview() {
 }
 var IS_RESTRICTED_WEBVIEW = isRestrictedWebview();
 var RESTRICTED_SCALE = 1;            /* 受限 webview 输出 1080×1920 */
-var RESTRICTED_FORMAT = 'image/jpeg'; /* WeChat 长按保存兼容; JPEG q92 优先, PNG 兜底 */
+var RESTRICTED_FORMAT = 'image/png'; /* 全平台原生: .png 扩展名=PNG 字节; iOS 相册/微信/ins 直接可看可发 */
 function matchRing(pct) {
   if (typeof pct !== 'number' || isNaN(pct) || pct < 0) return ''; /* 降级路径:隐藏匹配环,不显示假数字 */
   var r = 34, circ = 2 * Math.PI * r;
@@ -5744,38 +5744,39 @@ function checkCardContent(canvas, ratio, tpl, scale) {
   return failed;
 }
 
-/* ---- 编码格式链:WebP q90 优先 → 不支持则 JPEG q92 → 兜底 PNG;fallback 上报 ----
- * MVP88-B: 受限 webview(微信/Instagram 等)用 data URL(非 blob) — WeChat 长按保存需 data URL, blob 在部分 webview 静默失败 */
+/* ---- 编码格式链:PNG 优先 → 不支持则 JPEG q92 → 兜底 data URL PNG;fallback 上报 ----
+ * MVP88-B: 受限 webview(微信/Instagram 等)用 data URL(非 blob) — WeChat 长按保存需 data URL, blob 在部分 webview 静默失败
+ * A 方向: 全平台原生 — .png 扩展名必须配真 PNG 字节(iOS 相册/微信/ins 直接可看可发); 不用 WebP 扩展名 */
 function encodeCard(canvas, ratio) {
   if (IS_RESTRICTED_WEBVIEW) {
     var lowUrl = null, lowFmt = null;
     try {
-      if (RESTRICTED_FORMAT === 'image/png') { lowUrl = canvas.toDataURL('image/png'); lowFmt = 'png'; }
-      else { lowUrl = canvas.toDataURL('image/jpeg', 0.92); lowFmt = 'jpeg92'; }
+      lowUrl = canvas.toDataURL(RESTRICTED_FORMAT); /* image/png: 1080×1920 约 1-2MB 手机仍清晰 */
+      lowFmt = (RESTRICTED_FORMAT === 'image/png') ? 'png' : 'jpeg92';
       if (!lowUrl || lowUrl.length < 1000) throw new Error('empty data URL');
       return Promise.resolve({ url: lowUrl, format: lowFmt });
     } catch (e) {
-      /* PNG 兜底(全支持; 体积大但对 1080×1920 可接受) */
-      try { return Promise.resolve({ url: canvas.toDataURL('image/png'), format: 'png' }); }
+      /* JPEG q92 兜底(全支持; 体积更小) */
+      try { return Promise.resolve({ url: canvas.toDataURL('image/jpeg', 0.92), format: 'jpeg92' }); }
       catch (e2) { return Promise.reject(e2); }
     }
   }
   return new Promise(function(resolve, reject) {
     canvas.toBlob(function(blob) {
-      if (blob && blob.type === 'image/webp') {
-        resolve({ url: URL.createObjectURL(blob), format: 'webp' });
+      if (blob && blob.type === 'image/png') {
+        resolve({ url: URL.createObjectURL(blob), format: 'png' });
       } else {
-        /* WebP 不支持(旧 Safari/WebView):JPEG q92 重编 */
+        /* PNG 不支持(罕见):JPEG q92 重编 */
         canvas.toBlob(function(blob2) {
           if (blob2) {
-            try { track('export_format_fallback', { from: 'webp', to: 'jpeg92', ratio: ratio, uaBucket: uaBucket(navigator.userAgent) }); } catch (e) {}
+            try { track('export_format_fallback', { from: 'png', to: 'jpeg92', ratio: ratio, uaBucket: uaBucket(navigator.userAgent) }); } catch (e) {}
             resolve({ url: URL.createObjectURL(blob2), format: 'jpeg92' });
           } else {
             resolve({ url: canvas.toDataURL('image/png'), format: 'png' });
           }
         }, 'image/jpeg', 0.92);
       }
-    }, 'image/webp', 0.9);
+    }, 'image/png');
   });
 }
 function retryShareGenerate() { track('share_card_retry', { ratio: getShareRatio(), locale: CURRENT_LANG }); generateShareFlow(); }
@@ -6252,9 +6253,9 @@ function downloadCard() {
   if (isWechat) { track('share_card_download', { ratio: ratio, persona: dlPersona, method: 'longpress', locale: CURRENT_LANG }); openSharePreview(); return; }
   var a = document.createElement('a');
   var word = (lastShareReq && lastShareReq.persona.word) || 'NBTI';
-  /* MVP88-B: 扩展名按实际格式(webp/jpeg92/png), 修复「.png 名 + WebP 字节」错配 */
-  var fmt = shareCardFormats[ratio] || 'webp';
-  var ext = (fmt === 'jpeg92') ? 'jpg' : (fmt === 'png' ? 'png' : 'webp');
+  /* MVP88-B+A: 扩展名按实际格式(png/jpeg92), 修复「.png 名 + WebP 字节」错配 — 现在主格式是 PNG, 字节与 .png 名一致 */
+  var fmt = shareCardFormats[ratio] || 'png';
+  var ext = (fmt === 'jpeg92') ? 'jpg' : 'png';
   a.download = 'NBTI_' + word + '_9x16.' + ext; /* G1 */
   a.href = url;
   a.click();
